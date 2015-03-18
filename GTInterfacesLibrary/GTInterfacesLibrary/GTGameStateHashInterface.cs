@@ -7,4 +7,3 @@ namespace GTInterfacesLibrary
 		int evaluateState(GTGameSpaceInterface state);
 	}
 }
-

@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace GTInterfacesLibrary
 {
-	delegate void GTHandleNextStepAction(GTGameStepInterface step);
-
 	public interface GTArtificialIntelligenceInterface
 	{
-		GTGameStepInterface calculateNextStep(GTGameSpaceInterface gameSpace, GTGameStateGeneratorInterface generator, GTGameStateHashInterface hash);
-		void calculateNextStepAsynchronously(GTGameSpaceInterface gameSpace, GTGameStateGeneratorInterface generator, GTGameStateHashInterface hash, GTHandleNextStepAction action);
+		/**
+		 *  Implement this function with async directive.
+		 async*/ Task<GTGameStepInterface> calculateNextStep(GTGameSpaceInterface gameSpace, GTGameStateGeneratorInterface generator, GTGameStateHashInterface hash);
 	}
 }

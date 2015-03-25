@@ -40,6 +40,19 @@ namespace GTInterfacesLibrary
 				_y = value;
 			}
 		}
+
+		public override bool Equals(object obj) {
+			return Equals (obj as GTPosition);
+		}
+		public override int GetHashCode ()
+		{
+			return 1000 * x + y;
+		}
+
+		public bool Equals(IPosition other)
+		{
+			return this.x == other.x && this.y == other.y;
+		}
 	}
 }
 

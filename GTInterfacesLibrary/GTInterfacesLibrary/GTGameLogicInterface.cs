@@ -6,7 +6,7 @@ namespace GTInterfacesLibrary
 	{
 		// Input
 		void init();
-		void updateGameSpace(GTGameSpaceInterface gameSpace);
+		void updateGameSpace(GTGameStepInterface gameSpace);
 
 		// Output
 		Boolean isGameOver();

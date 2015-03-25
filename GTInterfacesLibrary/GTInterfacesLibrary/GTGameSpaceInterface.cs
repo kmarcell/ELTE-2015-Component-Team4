@@ -2,7 +2,7 @@
 
 namespace GTInterfacesLibrary
 {
-	public interface IPosition
+	public interface IPosition : IEquatable<IPosition>
 	{
 		int x
 		{
@@ -19,6 +19,7 @@ namespace GTInterfacesLibrary
 
 	public interface GTGameSpaceInterface
 	{
+		Boolean hasElementAt(IPosition position);
 		GTGameSpaceElementInterface elementAt(IPosition position);
 		void setElementAt(IPosition position, GTGameSpaceElementInterface element);
 		GTGameStepInterface differenceFromState(GTGameSpaceInterface previousState); // S = A - A' operator

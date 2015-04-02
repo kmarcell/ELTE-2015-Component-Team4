@@ -4,17 +4,7 @@ namespace GTInterfacesLibrary
 {
 	public interface IPosition : IEquatable<IPosition>
 	{
-		int x
-		{
-			get;
-			set;
-		}
-
-		int y
-		{
-			get;
-			set;
-		}
+		int[] coordinates();
 	}
 
 	public interface GTGameSpaceInterface

@@ -1,18 +1,21 @@
 ﻿using System;
+using GTInterfacesLibrary;
 
-namespace GTInterfacesLibrary
+namespace GTMillGameLogic
 {
-	public class GTPosition : IPosition
+	public class GTMillPosition : IPosition
 	{
 		// Fields: 
 		private int _x;
 		private int _y;
+		private int _z;
 
 		// Constructor: 
-		public GTPosition(int x, int y)
+		public GTMillPosition(int x, int y, int z)
 		{
 			_x = x;
 			_y = y;
+			_z = z;
 		}
 
 		// Property implementation: 
@@ -41,9 +44,21 @@ namespace GTInterfacesLibrary
 			}
 		}
 
-		public int[] coordinates()
+		public int z
 		{
-			return new int[]{_x, _y};
+			get
+			{
+				return _z;
+			}
+			set
+			{
+				_z = value;
+			}
+		}
+
+		public int[] coordinates ()
+		{
+			return new int[]{ _x, _y, _z };
 		}
 
 		public override bool Equals(object obj) {
@@ -51,15 +66,17 @@ namespace GTInterfacesLibrary
 		}
 		public override int GetHashCode ()
 		{
-			return 1000 * x + y;
+			return 1000000 * z + 1000 * x + y;
 		}
 
 		public bool Equals(IPosition other)
 		{
 			int[] _coordinates = other.coordinates();
-			return _coordinates.Length == 2 &&
+			return 
+				_coordinates.Length == 3 &&
 				this.x == _coordinates[0] &&
-				this.y == _coordinates[1];
+				this.y == _coordinates[1] &&
+				this.z == _coordinates[2];
 		}
 	}
 }

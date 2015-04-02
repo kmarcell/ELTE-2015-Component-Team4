@@ -3,13 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{317B8772-6AF4-4F18-8AED-DB22A5E6303F}</ProjectGuid>
+    <ProjectGuid>{36E45433-B357-47DE-86BE-49E5CEEEF47A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>GTMillGameLogic</RootNamespace>
-    <AssemblyName>GTMillGameLogic</AssemblyName>
+    <RootNamespace>GTMillGameLogicTests</RootNamespace>
+    <AssemblyName>GTMillGameLogicTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,17 +28,23 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GTMillGameLogic.cs" />
-    <Compile Include="GTMillGameElement.cs" />
-    <Compile Include="GTMillGameStep.cs" />
-    <Compile Include="GTMillGameStateGenerator.cs" />
-    <Compile Include="GTMillGameStateHash.cs" />
-    <Compile Include="GTMillGameSpace.cs" />
-    <Compile Include="GTMillPosition.cs" />
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="Test.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GTMillGameLogic\GTMillGameLogic.csproj">
+      <Project>{317B8772-6AF4-4F18-8AED-DB22A5E6303F}</Project>
+      <Name>GTMillGameLogic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj">
       <Project>{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}</Project>
       <Name>GTInterfacesLibrary</Name>

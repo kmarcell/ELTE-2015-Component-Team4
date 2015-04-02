@@ -3,7 +3,7 @@ using GTInterfacesLibrary;
 
 namespace GTMillGameLogic
 {
-	class GTMillGameElement : GTGameSpaceElementInterface
+	public class GTMillGameElement : GTGameSpaceElementInterface
 	{
 		private int _id;
 		private int _type;

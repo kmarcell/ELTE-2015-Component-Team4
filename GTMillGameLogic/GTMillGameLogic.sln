@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTMillGameLogic", "GTMillGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTInterfacesLibrary", "..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj", "{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTMillGameLogicTests", "GTMillGameLogicTests\GTMillGameLogicTests.csproj", "{36E45433-B357-47DE-86BE-49E5CEEEF47A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.ActiveCfg = Release|Any CPU

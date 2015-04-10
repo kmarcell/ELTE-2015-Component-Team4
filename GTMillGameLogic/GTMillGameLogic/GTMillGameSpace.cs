@@ -40,6 +40,14 @@ namespace GTMillGameLogic
 			}
 		}
 
+		public GTGameSpaceInterface<GTMillGameElement, GTMillPosition> stateWithStep(GTGameStepInterface<GTMillGameElement, GTMillPosition> step)
+		{
+			GTMillGameSpace newState = new GTMillGameSpace ();
+			newState.gameField = new Dictionary<GTMillPosition, GTMillGameElement> (this.gameField);
+			newState.mutateStateWith (step);
+			return newState;
+		}
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator ();

@@ -68,6 +68,11 @@ namespace GTMillGameLogicTests
 			Assert.AreEqual(true, gamespace.hasElementAt(position2));
 			Assert.AreEqual(figure1, gamespace.elementAt(position2));
 		}
+
+		[Test ()]
+		public void TestCaseStateGenerator ()
+		{
+		}
 	}
 }
 

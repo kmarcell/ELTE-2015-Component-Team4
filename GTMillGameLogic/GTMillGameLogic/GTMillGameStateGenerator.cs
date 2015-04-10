@@ -4,15 +4,15 @@ using GTInterfacesLibrary;
 
 namespace GTMillGameLogic
 {
-	public class GTMillGameStateGenerator : GTGameStateGeneratorInterface
+	public class GTMillGameStateGenerator : GTGameStateGeneratorInterface<GTMillGameElement, GTMillPosition>
 	{
-		public async Task<GTGameSpaceInterface[]> availableStatesFrom (GTGameSpaceInterface state)
+		public async Task<GTGameSpaceInterface<GTMillGameElement, GTMillPosition>[]> availableStatesFrom (GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state)
 		{
-			Task<GTGameSpaceInterface[]> t = Task.Factory.StartNew (() => {
-				return new GTGameSpaceInterface[0];
+			Task<GTMillGameSpace[]> t = Task.Factory.StartNew (() => {
+				return new GTMillGameSpace[0];
 			});
 
-			GTGameSpaceInterface[] states = await t;
+			GTMillGameSpace[] states = await t;
 			return states;
 		}
 	}

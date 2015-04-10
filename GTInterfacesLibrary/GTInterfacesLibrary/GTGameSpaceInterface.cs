@@ -7,13 +7,12 @@ namespace GTInterfacesLibrary
 		int[] coordinates();
 	}
 
-	public interface GTGameSpaceInterface
+	public interface GTGameSpaceInterface<E, P> where E : GTGameSpaceElementInterface where P : IPosition
 	{
-		Boolean hasElementAt(IPosition position);
-		GTGameSpaceElementInterface elementAt(IPosition position);
-		void setElementAt(IPosition position, GTGameSpaceElementInterface element);
-		GTGameStepInterface differenceFromState(GTGameSpaceInterface previousState); // S = A - A' operator
-		void mutateStateWith(GTGameStepInterface step); // A + S operator
+		Boolean hasElementAt(P position);
+		E elementAt(P position);
+		void setElementAt(P position, E element);
+		void mutateStateWith(GTGameStepInterface<E, P> step); // A + S operator
 	}
 }
 

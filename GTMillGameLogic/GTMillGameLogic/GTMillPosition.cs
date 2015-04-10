@@ -18,6 +18,11 @@ namespace GTMillGameLogic
 			_z = z;
 		}
 
+		public static GTMillPosition Nowhere()
+		{
+			return new GTMillPosition (int.MinValue, int.MinValue, int.MinValue);
+		}
+
 		// Property implementation: 
 		public int x
 		{
@@ -62,7 +67,7 @@ namespace GTMillGameLogic
 		}
 
 		public override bool Equals(object obj) {
-			return Equals (obj as GTPosition);
+			return Equals (obj as GTMillPosition);
 		}
 		public override int GetHashCode ()
 		{

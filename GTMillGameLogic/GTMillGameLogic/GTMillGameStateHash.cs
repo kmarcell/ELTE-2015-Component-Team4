@@ -3,9 +3,9 @@ using GTInterfacesLibrary;
 
 namespace GTMillGameLogic
 {
-	public class GTMillGameStateHash : GTGameStateHashInterface
+	public class GTMillGameStateHash : GTGameStateHashInterface<GTMillGameElement, GTMillPosition>
 	{
-		public int evaluateState (GTGameSpaceInterface state)
+		public int evaluateState (GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state)
 		{
 			throw new NotImplementedException ();
 		}

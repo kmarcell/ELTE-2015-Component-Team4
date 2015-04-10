@@ -5,61 +5,38 @@ using System.Collections.Generic;
 
 namespace GTMillGameLogic
 {
-	public class GTMillGameSpace : GTMillGameStep, GTGameSpaceInterface, IEnumerable<KeyValuePair<GTMillPosition, GTGameSpaceElementInterface>>
+	public class GTMillGameSpace : GTGameSpaceInterface<GTMillGameElement, GTMillPosition>, IEnumerable<KeyValuePair<GTMillPosition, GTMillGameElement>>
 	{
-		private Dictionary<int, GTGameSpaceElementInterface> elements;
+		private Dictionary<GTMillPosition, GTMillGameElement> gameField;
 
 		public GTMillGameSpace ()
 		{
-			this.elements = new Dictionary<int, GTGameSpaceElementInterface> ();
+			this.gameField = new Dictionary<GTMillPosition, GTMillGameElement> ();
 		}
 
-		public Boolean hasElementAt (IPosition position)
+		public Boolean hasElementAt (GTMillPosition position)
 		{
-			int[] coord = position.coordinates ();
-			if (coord.Length < 3) {
-				throw new ArgumentException ();
+			return this.gameField.ContainsKey(position);
+		}
+
+		public GTMillGameElement elementAt (GTMillPosition position)
+		{
+			return this.gameField [position];
+		}
+
+		public void setElementAt (GTMillPosition position, GTMillGameElement element)
+		{
+			this.gameField [position] = element;
+		}
+
+		public void mutateStateWith (GTGameStepInterface<GTMillGameElement, GTMillPosition> step)
+		{
+			if (step.from != GTMillPosition.Nowhere ()) {
+				this.gameField.Remove (step.from);
 			}
-			return this._gameField [new GTMillPosition (coord [0], coord [1], coord [2])] != 0;
-		}
 
-		public GTGameSpaceElementInterface elementAt (IPosition position)
-		{
-			int[] coord = position.coordinates ();
-			if (coord.Length < 3) {
-				throw new ArgumentException ();
-			}
-			int id = this._gameField [new GTMillPosition (coord [0], coord [1], coord [2])];
-			if (id == 0) {
-				return null;
-			}
-			return this.elements [id];
-		}
-
-		public void setElementAt (IPosition position, GTGameSpaceElementInterface element)
-		{
-			int[] coord = position.coordinates ();
-			if (coord.Length < 3) {
-				throw new ArgumentException ();
-			}
-			this.elements [element.id] = element;
-			this._gameField [new GTMillPosition (coord [0], coord [1], coord [2])] = element.id;
-		}
-
-		public GTGameStepInterface differenceFromState (GTGameSpaceInterface previousState)
-		{
-			return this - (previousState as GTMillGameSpace);
-		}
-
-		public void mutateStateWith (GTGameStepInterface step)
-		{
-			this.add (step);
-			HashSet<int> elementIDs = new HashSet<int> (this._gameField.Values);
-			foreach (int id in elements.Keys) {
-				if (!elementIDs.Contains (id)) {
-					// the element was removed from the game field
-					elements.Remove (id);
-				}
+			if (step.to != GTMillPosition.Nowhere ()) {
+				this.gameField [step.to] = step.element;
 			}
 		}
 
@@ -68,11 +45,9 @@ namespace GTMillGameLogic
 			return GetEnumerator ();
 		}
 
-		public IEnumerator<KeyValuePair<GTMillPosition, GTGameSpaceElementInterface>> GetEnumerator ()
+		public IEnumerator<KeyValuePair<GTMillPosition, GTMillGameElement>> GetEnumerator()
 		{
-			foreach (KeyValuePair<GTMillPosition, int> p in this._gameField) {
-				yield return new KeyValuePair<GTMillPosition, GTGameSpaceElementInterface> (p.Key, this.elements [p.Value]);
-			}
+			return this.gameField.GetEnumerator ();
 		}
 	}
 

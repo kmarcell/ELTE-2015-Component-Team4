@@ -9,12 +9,12 @@ namespace GTMillGameLogic
 		private int _type;
 		private int _owner;
 
-		public GTMillGameElement()
-		{
-		}
-
 		public GTMillGameElement(int id, int type, int owner)
 		{
+			if (id < 1) {
+				throw new ArgumentException();
+			}
+
 			this.id = id;
 			this.type = type;
 			this.owner = owner;

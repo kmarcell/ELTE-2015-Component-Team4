@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace GTInterfacesLibrary
 {
-	public interface GTArtificialIntelligenceInterface
+	public interface GTArtificialIntelligenceInterface<E, P> where E : GTGameSpaceElementInterface where P : IPosition
 	{
 		/**
 		 *  Implement this function with async directive.
-		 async*/ Task<GTGameStepInterface> calculateNextStep(GTGameSpaceInterface gameSpace, GTGameStateGeneratorInterface generator, GTGameStateHashInterface hash);
+		 async*/ Task<GTGameStepInterface<E, P>> calculateNextStep(GTGameSpaceInterface<E, P> gameSpace, GTGameStateGeneratorInterface<E, P> generator, GTGameStateHashInterface<E, P> hash);
 	}
 }

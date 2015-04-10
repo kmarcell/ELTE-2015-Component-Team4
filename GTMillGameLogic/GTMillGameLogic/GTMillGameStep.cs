@@ -4,47 +4,46 @@ using System.Collections.Generic;
 
 namespace GTMillGameLogic
 {
-	public class GTMillGameStep : GTGameStepInterface
+	public class GTMillGameStep : GTGameStepInterface<GTMillGameElement, GTMillPosition>
 	{
-		protected Dictionary<GTMillPosition, int> _gameField;
+		private GTMillPosition _from;
+		private GTMillPosition _to;
+		private GTMillGameElement _element;
 
-		public GTMillGameStep()
+		public GTGameStepInterface<GTMillGameElement, GTMillPosition> Create(GTMillGameElement element, GTMillPosition from, GTMillPosition to)
 		{
-			this._gameField = new Dictionary<GTMillPosition, int>();
+			return new GTMillGameStep (element, from, to);
 		}
 
-		protected GTMillGameStep(Dictionary<GTMillPosition, int> gameField)
+		public GTMillGameStep(GTMillGameElement element, GTMillPosition from, GTMillPosition to)
 		{
-			this._gameField = gameField;
+			this._from = from;
+			this._to = to;
+			this._element = element;
 		}
 
-		public static GTMillGameStep operator +(GTMillGameStep a, GTMillGameStep b)
+		public GTMillPosition from
 		{
-			GTMillGameStep newStep = new GTMillGameStep (new Dictionary<GTMillPosition, int>(a._gameField));
-			newStep.add(b);
-			return newStep;
-		}
-
-		public static GTMillGameStep operator -(GTMillGameStep a, GTMillGameStep b)
-		{
-			GTMillGameStep newStep = new GTMillGameStep (new Dictionary<GTMillPosition, int>(a._gameField));
-			newStep.substract(b);
-			return newStep;
-		}
-
-		public void add (GTGameStepInterface other)
-		{
-			foreach (GTMillPosition p in (other as GTMillGameStep)._gameField.Keys) {
-				_gameField [p] = _gameField [p] + (other as GTMillGameStep)._gameField [p];
-				if (_gameField[p] == 0) {
-					_gameField.Remove (p);
-				}
+			get
+			{
+				return _from;
 			}
 		}
 
-		public void substract (GTGameStepInterface other)
+		public GTMillPosition to
 		{
-			throw new NotImplementedException ();
+			get
+			{
+				return _to;
+			}
+		}
+
+		public GTMillGameElement element
+		{
+			get
+			{
+				return _element;
+			}
 		}
 	}
 

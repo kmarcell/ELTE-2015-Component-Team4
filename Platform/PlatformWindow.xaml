@@ -1,0 +1,27 @@
+﻿<Window x:Class="Platform.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Platform" Height="500" Width="525">
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Menu Margin="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <MenuItem Name="FileMenuItem" Header="File" >
+                <MenuItem Name="ServerMenuItem" Header="Server">
+                    <MenuItem Name="MenuServerConnectMenuItem" Header="Join" />
+                    <MenuItem Name="MenuServerDisconnectMenuItem" Header="Quit" />
+                    <Separator />
+                    <MenuItem Name="MenuServerSettingsMenuItem" Header="Settings" />
+                </MenuItem>
+                <MenuItem Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" />
+            </MenuItem>
+            <MenuItem Name="LoadMenuItem"  Header="Load">
+                <MenuItem Name="LoadAiMenuItem" Header="Load AI" />
+                <MenuItem Name="LoadGameMenuItem" Header="Load Game" />
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Window>

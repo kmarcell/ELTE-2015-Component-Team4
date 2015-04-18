@@ -9,10 +9,12 @@ namespace Server.Utilities
     }
 
     [XmlRoot]
-    [XmlInclude(typeof(Player)), XmlInclude(typeof(GameType)), 
-     XmlInclude(typeof(Game)), XmlInclude(typeof(MessageboardEntry)),
-     XmlInclude(typeof(Player[])), XmlInclude(typeof(Game[])),
-     XmlInclude(typeof(MessageboardEntry[])), XmlInclude(typeof(Byte[]))] // a beágyaztható típusoknak is XML szérializálhatóaknak kell lennie
+    [XmlInclude(typeof(Player)), 
+     XmlInclude(typeof(GameType)), 
+     XmlInclude(typeof(Game)), 
+     XmlInclude(typeof(Player[])), 
+     XmlInclude(typeof(Game[])),
+     XmlInclude(typeof(Byte[]))]
     public class Message
     {
         [XmlAttribute]

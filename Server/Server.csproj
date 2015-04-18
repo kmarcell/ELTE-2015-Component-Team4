@@ -49,7 +49,6 @@
     <Compile Include="Utilities\Game.cs" />
     <Compile Include="Utilities\GameType.cs" />
     <Compile Include="Utilities\Message.cs" />
-    <Compile Include="Utilities\MessageboardEntry.cs" />
     <Compile Include="Utilities\Player.cs" />
   </ItemGroup>
   <ItemGroup>

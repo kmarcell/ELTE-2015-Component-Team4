@@ -12,12 +12,12 @@ namespace Server
             
             if (manager.Running)
             {
-                Console.WriteLine("Server started! IP: {0}, port: {1}", manager.ServerIp, manager.ServerPort);
-                Console.WriteLine("Send key for stopping server!");
+                Console.WriteLine("Server started with ip address: {0}, port number: {1}", manager.ServerIp, manager.ServerPort);
+                Console.WriteLine("Press enter to stop the server!");
                 Console.ReadKey();
             }
 
-
+            Console.WriteLine("Attempting to stop, please wait, it will closed immediately.");
             manager.Stop();
         }
     }

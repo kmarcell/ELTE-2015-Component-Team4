@@ -53,6 +53,29 @@ namespace Server
 
         public void Start()
         {
+            try
+            {
+                var serverName = Dns.GetHostName();
+                var ipEntry = Dns.GetHostEntry(serverName);
+                var addressList = ipEntry.AddressList.Where(address => address.AddressFamily == AddressFamily.InterNetwork).ToList();
+
+                if (addressList.Count < 1)
+                {
+                    throw new Exception("Gameserver start error! No available local address.");
+                }
+
+                _mServerIp = addressList[0].ToString();
+                _ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _ServerSocket.Bind(new IPEndPoint(addressList[0], _mServerPort));
+                _ServerSocket.Listen(10);
+
+                _Running = true;
+            }
+            catch
+            {
+                Stop();
+            }
+
             var serverThread = new Thread(WatchNewConnections);
             serverThread.Start();
 
@@ -77,22 +100,6 @@ namespace Server
         {
             try
             {
-                var serverName = Dns.GetHostName();
-                var ipEntry = Dns.GetHostEntry(serverName);
-                var addressList = ipEntry.AddressList.Where(address => address.AddressFamily == AddressFamily.InterNetwork).ToList();
-
-                if (addressList.Count < 1)
-                {
-                    throw new Exception("Gameserver start error! No available local address.");
-                }
-                
-                _mServerIp = addressList[0].ToString();
-                _ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                _ServerSocket.Bind(new IPEndPoint(addressList[0], _mServerPort));
-                _ServerSocket.Listen(10);
-
-                _Running = true;
-
                 while (_Running)
                 {
                     var clientSocket = _ServerSocket.Accept();

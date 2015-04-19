@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform", "Platform\Platfo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{C26BF413-4BC3-4323-B94E-AC06DD2412BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionInterface", "ConnectionInterface\ConnectionInterface.csproj", "{084ADDF8-2DAA-43AB-B293-A43EABB955CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C26BF413-4BC3-4323-B94E-AC06DD2412BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C26BF413-4BC3-4323-B94E-AC06DD2412BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C26BF413-4BC3-4323-B94E-AC06DD2412BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

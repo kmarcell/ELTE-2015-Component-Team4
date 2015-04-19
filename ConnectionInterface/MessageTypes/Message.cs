@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Server.Utilities
+namespace ConnectionInterface.MessageTypes
 {
     public enum MessageCode {
         Login, Disconnect, ConnectAccepted, ConnectRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOnlinePlayers, GetGames, GetOpenGames

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using ConnectionInterface.MessageTypes;
 using Platform.Events;
-using Server.Utilities;
 
 namespace Platform.Model
 {

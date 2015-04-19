@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Server.Utilities;
+using ConnectionInterface.MessageTypes;
 
 namespace Server
 {

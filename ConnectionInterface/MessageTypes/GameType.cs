@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Server.Utilities
+namespace ConnectionInterface.MessageTypes
 {
     public class GameType
     {

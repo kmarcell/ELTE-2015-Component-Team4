@@ -115,9 +115,9 @@
     <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Server\Server.csproj">
-      <Project>{c26bf413-4bc3-4323-b94e-ac06dd2412bc}</Project>
-      <Name>Server</Name>
+    <ProjectReference Include="..\ConnectionInterface\ConnectionInterface.csproj">
+      <Project>{084addf8-2daa-43ab-b293-a43eabb955ce}</Project>
+      <Name>ConnectionInterface</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace ConnectionInterface.MessageTypes
 {
     public enum MessageCode {
-        Login, Disconnect, ConnectAccepted, ConnectRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOnlinePlayers, GetGames, GetOpenGames
+        Login, Disconnect, ConnectAccepted, ConnectRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOpenGames
     }
 
     [XmlRoot]

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using Platform.Events;
+using Platform.EventsGameRelated;
+using Platform.EventsServerRelated;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -16,6 +17,8 @@ namespace Platform
         private readonly GameManager _MGameManager;
         private readonly NetworkManager _MNetworkManager;
         private ServerConnectWindow _MServerConnectWindow;
+        private GameConfigurationWindow _MgGameConfigurationWindow;
+        private Boolean IsConnectedToServer;
 
         public MainWindow()
         {
@@ -25,19 +28,34 @@ namespace Platform
             // platform events
             Closing += OnClosing;
 
-            OnlineGameMenuItem.IsEnabled = false;
+            IsConnectedToServer = false;
+            CreateOnlineGameMenuItem.IsEnabled = false;
+            ConnectOnlineGameMenuItem.IsEnabled = false;
+            LeaveOnlineGameMenuItem.IsEnabled = false;
+
+
+            MenuServerConnectMenuItem.IsEnabled = true;
             MenuServerDisconnectMenuItem.IsEnabled = false;
-            GameMenuItem.IsEnabled = true;
+            SaveGameMenuItem.IsEnabled = false;
+            LoadGameMenuItem.IsEnabled = true;
+            EndGameMenuItem.IsEnabled = false;
+            StartGameMenuItem.IsEnabled = true;
+            LoadAiComponentMenuItem.IsEnabled = true;
+            LoadGameLogicComponentMenuItem.IsEnabled = true;
+
 
 
             _MGameManager = new GameManager();
+            _MGameManager.GameStartedEvent += MGameManager_OnGameStartedEvent;
+            _MGameManager.GameEndedEvent += MGameManager_OnGameEndedEvent;
+
 
             _MNetworkManager = new NetworkManager();
-            _MNetworkManager.ConnectionChangedEvent += NetworkManager_ConnectionChanged;
-            _MNetworkManager.ConnectAcceptedEvent += NetworkManager_ConnectAccepted;
-            _MNetworkManager.ConnectRejectedServerNotRespondingEvent += NetworkManagerConnectRejectedServerNotResponding;
-            _MNetworkManager.ConnectRejectedUsernameOccupied += NetworkManagerConnectRejectedUsernameOccupied;
-            _MNetworkManager.DisconnectedEvent += NetworkManager_Disconnected;
+            _MNetworkManager.ConnectionChangedEvent += NetworkManager_OnConnectionChangedEvent;
+            _MNetworkManager.ConnectAcceptedEvent += NetworkManager_OnConnectAcceptedEvent;
+            _MNetworkManager.ConnectRejectedServerNotRespondingEvent += NetworkManager_OnConnectRejectedServerNotRespondingEvent;
+            _MNetworkManager.ConnectRejectedUsernameOccupied += NetworkManager_OnConnectRejectedUsernameOccupiedEvent;
+            _MNetworkManager.DisconnectedEvent += NetworkManager_OnDisconnectedEvent;
         }
 
 
@@ -67,8 +85,13 @@ namespace Platform
 
         private void StartGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var gameConfigurationWindow = new GameConfigurationWindow();
-            gameConfigurationWindow.ShowDialog();
+            _MgGameConfigurationWindow = new GameConfigurationWindow(_MGameManager);
+            _MgGameConfigurationWindow.ShowDialog();
+        }
+
+        private void EndGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _MGameManager.EndGame();
         }
 
         private void LoadGameMenuItem_Click(object sender, RoutedEventArgs e)
@@ -102,11 +125,8 @@ namespace Platform
                     Filter = "Gamesaves|*.compgame"
                 };
 
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    _MGameManager.SaveGame(saveFileDialog.FileName);
-                }
-
+                saveFileDialog.ShowDialog();
+                _MGameManager.SaveGame(saveFileDialog.FileName);
 
                 MessageBox.Show("Game saved!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -117,39 +137,107 @@ namespace Platform
         }
 
 
+        #region Gamemanager events
+        private void MGameManager_OnGameStartedEvent(object sender, EventArgs eventArgs)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _MgGameConfigurationWindow.Close();
+                
+                SaveGameMenuItem.IsEnabled = true;
+                LoadGameMenuItem.IsEnabled = false;
+                EndGameMenuItem.IsEnabled = true;
+                StartGameMenuItem.IsEnabled = false;
+                MenuServerConnectMenuItem.IsEnabled = false;
+                LoadAiComponentMenuItem.IsEnabled = false;
+                LoadGameLogicComponentMenuItem.IsEnabled = false;
+            });
+        }
+
+        private void MGameManager_OnGameEndedEvent(object sender, GameEndedEventArgs eventArgs)
+        {
+            if (eventArgs.IsEnded && eventArgs.IsWin)
+            {
+                MessageBox.Show("Game finished. Congratulation you won!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);     
+            }
+            else if (eventArgs.IsEnded)
+            {
+                MessageBox.Show("Game finished. You lost!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Game canceled!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+
+            SaveGameMenuItem.IsEnabled = false;
+            LoadGameMenuItem.IsEnabled = true;
+            EndGameMenuItem.IsEnabled = false;
+            StartGameMenuItem.IsEnabled = true;
+            MenuServerConnectMenuItem.IsEnabled = true;
+            LoadAiComponentMenuItem.IsEnabled = true;
+            LoadGameLogicComponentMenuItem.IsEnabled = true;
+        }
+        #endregion
+
 
         #region Networkmanager events
-        private void NetworkManager_ConnectionChanged(object sender, ConnectionChangeEventArgs e)
+        private void NetworkManager_OnConnectionChangedEvent(object sender, ConnectionChangeEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
                 if (e.IsConnected)
                 {
-                    OnlineGameMenuItem.IsEnabled = true;
+                    CreateOnlineGameMenuItem.IsEnabled = true;
+                    ConnectOnlineGameMenuItem.IsEnabled = true;
+                    LeaveOnlineGameMenuItem.IsEnabled = true;
                     MenuServerDisconnectMenuItem.IsEnabled = true;
                     MenuServerConnectMenuItem.IsEnabled = false;
-                    GameMenuItem.IsEnabled = false;
+
+                    SaveGameMenuItem.IsEnabled = false;
+                    LoadGameMenuItem.IsEnabled = false;
+                    EndGameMenuItem.IsEnabled = false;
+                    StartGameMenuItem.IsEnabled = false;
+
+                    LoadAiComponentMenuItem.IsEnabled = false;
+                    LoadGameLogicComponentMenuItem.IsEnabled = false;
                 }
                 else
                 {
-                    OnlineGameMenuItem.IsEnabled = false;
+                    CreateOnlineGameMenuItem.IsEnabled = false;
+                    ConnectOnlineGameMenuItem.IsEnabled = false;
+                    LeaveOnlineGameMenuItem.IsEnabled = false;
                     MenuServerDisconnectMenuItem.IsEnabled = false;
                     MenuServerConnectMenuItem.IsEnabled = true;
-                    GameMenuItem.IsEnabled = true;
+
+                    SaveGameMenuItem.IsEnabled = false;
+                    LoadGameMenuItem.IsEnabled = true;
+                    EndGameMenuItem.IsEnabled = false;
+                    StartGameMenuItem.IsEnabled = true;
+
+                    LoadAiComponentMenuItem.IsEnabled = true;
+                    LoadGameLogicComponentMenuItem.IsEnabled = true;
+
+                    if (IsConnectedToServer)
+                    {
+                        IsConnectedToServer = false;
+                        MessageBox.Show("Unkown error!\nYou are disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    }
                 }
             });
         }
 
-        private void NetworkManager_ConnectAccepted(object sender, EventArgs e)
+        private void NetworkManager_OnConnectAcceptedEvent(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
-                _MServerConnectWindow.Hide();
+                _MServerConnectWindow.Close();
+                IsConnectedToServer = true;
                 MessageBox.Show("Connect to the server successful.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
 
-        private void NetworkManagerConnectRejectedServerNotResponding(object sender, EventArgs e)
+        private void NetworkManager_OnConnectRejectedServerNotRespondingEvent(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
@@ -157,7 +245,7 @@ namespace Platform
             });
         }
 
-        private void NetworkManagerConnectRejectedUsernameOccupied(object sender, EventArgs e)
+        private void NetworkManager_OnConnectRejectedUsernameOccupiedEvent(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
@@ -165,7 +253,7 @@ namespace Platform
             });
         }
 
-        private void NetworkManager_Disconnected(object sender, EventArgs e)
+        private void NetworkManager_OnDisconnectedEvent(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
             {

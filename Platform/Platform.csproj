@@ -53,8 +53,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Events\ConnectionChangeEventArgs.cs" />
-    <Compile Include="Events\DisconnectedEventArgs.cs" />
+    <Compile Include="EventsGameRelated\GameEndedEventArgs.cs" />
+    <Compile Include="EventsServerRelated\ConnectionChangeEventArgs.cs" />
+    <Compile Include="EventsServerRelated\DisconnectedEventArgs.cs" />
     <Compile Include="WindowGameRelated\GameConfigurationWindow.xaml.cs">
       <DependentUpon>GameConfigurationWindow.xaml</DependentUpon>
     </Compile>

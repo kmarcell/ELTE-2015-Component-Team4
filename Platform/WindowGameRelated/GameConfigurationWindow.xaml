@@ -1,8 +1,15 @@
 ﻿<Window x:Class="Platform.WindowGameRelated.GameConfigurationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="GameConfigurationWindow" Height="300" Width="500">
+        Name="ConfigurationOfGameWindow" Title="Game Configuration" Height="300" Width="260">
     <Grid>
-        
+        <Label Name="SelectDifficultLabel" Content="Select difficulty" HorizontalAlignment="Left" Margin="78,82,0,0" VerticalAlignment="Top"/>
+        <RadioButton Name="EasyRadioButton" IsChecked="True" Content="Easy" GroupName="DifficultSelectorGroup" HorizontalAlignment="Left" Margin="95,113,0,0" VerticalAlignment="Top"/>
+        <RadioButton Name="MediumRadioButton" Content="Medium" GroupName="DifficultSelectorGroup" HorizontalAlignment="Left" Margin="95,133,0,0" VerticalAlignment="Top"/>
+        <RadioButton Name="HardRadioButton" Content="Hard" GroupName="DifficultSelectorGroup" HorizontalAlignment="Left" Margin="95,153,0,0" VerticalAlignment="Top"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="112" Margin="21,73,0,0" VerticalAlignment="Top" Width="194" />
+        <Label Name="GameSelectorLabel" Content="Game:" HorizontalAlignment="Left" Margin="21,32,0,0" VerticalAlignment="Top" Width="59"/>
+        <ComboBox Name="GameSelectorComboBox" HorizontalAlignment="Left" Margin="95,32,0,0" VerticalAlignment="Top" Width="120" IsEditable="False"/>
+        <Button Name="StartGameButton" Content="Start Game" HorizontalAlignment="Left" Margin="21,212,0,0" VerticalAlignment="Top" Width="194" Click="StartGameButton_Click"/>
     </Grid>
 </Window>

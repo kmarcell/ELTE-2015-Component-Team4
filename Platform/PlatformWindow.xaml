@@ -20,14 +20,14 @@
                 </MenuItem>
                 <MenuItem Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" />
             </MenuItem>
-            <MenuItem Name="GameMenuItem"  Header="Game">
+            <MenuItem Name="GameMenuItem"  Header="Game" ToolTip="For local game please quit from the server (File)">
                 <MenuItem Name="LoadGameMenuItem" Header="Load Game" Click="LoadGameMenuItem_Click" />
                 <MenuItem Name="SaveGameMenuItem" Header="Save Game" Click="SaveGameMenuItem_Click" />
                 <Separator />
                 <MenuItem Name="StartGameMenuItem" Header="Start Game" Click="StartGameMenuItem_Click" />
-                <MenuItem Name="EndGameMenuItem" Header="End Game" />
+                <MenuItem Name="EndGameMenuItem" Header="End Game" Click="EndGameMenuItem_Click" />
             </MenuItem>
-            <MenuItem Name="OnlineGameMenuItem"  Header="Online game">
+            <MenuItem Name="OnlineGameMenuItem"  Header="Online game" ToolTip="For online game please join to the server (File)">
                 <MenuItem Name="CreateOnlineGameMenuItem" Header="Create Game" />
                 <Separator />
                 <MenuItem Name="ConnectOnlineGameMenuItem" Header="Connect Game" />

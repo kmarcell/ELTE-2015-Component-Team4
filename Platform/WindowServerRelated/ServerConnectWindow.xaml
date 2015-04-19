@@ -4,7 +4,7 @@
         Name="ConnectToServerWindow" Title="Connect to server" Height="204" Width="500">
     <Grid>
         <Label Name="ServerIpAddressLabel" Content="Server ip address:" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top"/>
-        <TextBox Name="ServerIpAddressTextBox" HorizontalAlignment="Left" Height="23" Margin="129,24,0,0" Text="192.168.0.1" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
+        <TextBox Name="ServerIpAddressTextBox" HorizontalAlignment="Left" Height="23" Margin="129,24,0,0" Text="192.168.86.1" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
         <Label Name="ServerPortNumberLabel" Content="Server portnumber:" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top"/>
         <TextBox Name="ServerPortNumberTextBox" HorizontalAlignment="Left" Height="23" Margin="129,64,0,0" TextWrapping="Wrap" Text="5503" VerticalAlignment="Top" Width="340"/>
         <Label Name="UsernameLabel" Content="Username:" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>

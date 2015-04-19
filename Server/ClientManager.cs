@@ -2,10 +2,11 @@
 using System.Net.Sockets;
 using System.Threading;
 using ConnectionInterface.MessageTypes;
+using ServerInterface;
 
 namespace Server
 {
-    public class ClientManager : IDisposable
+    public class ClientManager : IDisposable, IClientManager
     {
         private const Int32 BufferLength = 20000000;
         private readonly Socket _Socket;
@@ -19,11 +20,11 @@ namespace Server
         public ClientManager(Socket socket)
         {
             _Socket = socket;
-            var receiveThread = new Thread(CommunicateWithClient);
+            var receiveThread = new Thread(ReceiveMessage);
             receiveThread.Start();
         }
 
-        private void CommunicateWithClient()
+        private void ReceiveMessage()
         {
             try
             {
@@ -39,51 +40,35 @@ namespace Server
                             var playerToLogin = (message.Content as Player);
                             Player = DataManager.DataManagerInstance.LoginPlayer(playerToLogin.Name);
                             if (Player != null)
-                                SendMessage(MessageCode.ConnectAccepted);
+                                SendConnectionAccepted();
                             else
-                                SendMessage(MessageCode.ConnectRejected);
+                                SendConnectionRejected();
                             break;
                         case MessageCode.Disconnect:
                             Disconnect();
                             break;
-                        case MessageCode.GetGames:
-                            SendMessage(MessageCode.GetGames, DataManager.DataManagerInstance.OnlineGames);
-                            break;
                         case MessageCode.GetOpenGames:
-                            SendMessage(MessageCode.GetOpenGames, DataManager.DataManagerInstance.GetOpenGames(Player, Convert.ToInt32(message.Content)));
-                            break;
-                        case MessageCode.GetOnlinePlayers:
-                            SendMessage(MessageCode.GetOnlinePlayers, DataManager.DataManagerInstance.OnlinePlayers);
+                            SendOnlineGames();
                             break;
                         case MessageCode.CreateGame:
-                            CurrentGame = message.Content as Game;
-                            CurrentGame.FirstPlayer = Player;
-                            DataManager.DataManagerInstance.CreateGame(CurrentGame);
-                            SendMessage(MessageCode.CreateGame, CurrentGame);
+                            SendCreateGame(Player, message.Content as Game);
                             break;
                         case MessageCode.JoinGame:
                             if (DataManager.DataManagerInstance.JoinGame(Convert.ToInt32(message.Content), Player))
                             {
                                 CurrentGame = DataManager.DataManagerInstance.GetGame(Convert.ToInt32(message.Content));
-                                SendMessage(MessageCode.JoinAccepted, CurrentGame);
+                                SendJoinGameAccepted(CurrentGame);
                             }
                             else
                             {
-                                SendMessage(MessageCode.JoinRejected);
+                                SendJoinGameRejected();
                             }
                             break;
                         case MessageCode.ChangeGameState:
-                            if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
-                            {
-                                DataManager.DataManagerInstance.ChangeGameState(Player, CurrentGame, message.Content as Byte[]);
-                            }
+                            SendGameState(message.Content as Byte[]);
                             break;
                         case MessageCode.EndGame:
-                            if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
-                            {
-                                DataManager.DataManagerInstance.EndGame(CurrentGame, Player, message.Content as Player);
-                            }
-                            CurrentGame = null;
+                            SendEndGame(message.Content as Player);
                             break;
                     }
                 }
@@ -94,18 +79,14 @@ namespace Server
             }
         }
 
-        public void SendMessage(MessageCode code, Object content = null)
+        public void SendConnectionAccepted()
         {
-            try
-            {
-                Byte[] buffer = Message.Serialize(code, content);
-                if (buffer != null)
-                    _Socket.Send(buffer);
-            }
-            catch
-            {
-                Disconnect();
-            }
+            SendMessage(MessageCode.ConnectAccepted);
+        }
+
+        public void SendConnectionRejected()
+        {
+            SendMessage(MessageCode.ConnectAccepted);
         }
 
         public void Disconnect()
@@ -121,6 +102,59 @@ namespace Server
             
             _Socket.Shutdown(SocketShutdown.Both);
             _Socket.Close();
+        }
+
+        public void SendOnlineGames()
+        {
+            SendMessage(MessageCode.GetOpenGames, DataManager.DataManagerInstance.GetOpenGames(Player));
+        }
+
+        public void SendCreateGame(Player player, Game game)
+        {
+            CurrentGame.FirstPlayer = Player;
+            DataManager.DataManagerInstance.CreateGame(CurrentGame);
+            SendMessage(MessageCode.CreateGame, CurrentGame);
+        }
+
+        public void SendJoinGameAccepted(Game game)
+        {
+            SendMessage(MessageCode.JoinAccepted, game);
+        }
+
+        public void SendJoinGameRejected()
+        {
+            SendMessage(MessageCode.JoinRejected);
+        }
+
+        public void SendGameState(Byte[] gameState)
+        {
+            if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
+            {
+                DataManager.DataManagerInstance.ChangeGameState(Player, CurrentGame, gameState);
+            }
+        }
+
+        public void SendEndGame(Player player)
+        {
+            if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
+            {
+                DataManager.DataManagerInstance.EndGame(CurrentGame, Player, player);
+            }
+            CurrentGame = null;
+        }
+
+        public void SendMessage(MessageCode code, Object content = null)
+        {
+            try
+            {
+                Byte[] buffer = Message.Serialize(code, content);
+                if (buffer != null)
+                    _Socket.Send(buffer);
+            }
+            catch
+            {
+                Disconnect();
+            }
         }
 
         public void Dispose()

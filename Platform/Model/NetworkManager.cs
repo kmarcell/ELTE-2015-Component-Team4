@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using ConnectionInterface.MessageTypes;
-using Platform.Events;
+using Platform.EventsServerRelated;
 
 namespace Platform.Model
 {
@@ -58,10 +58,6 @@ namespace Platform.Model
             SendMessage(MessageCode.GetOpenGames, gameTypeId);
         }
 
-        public void GetOnlinePlayers()
-        {
-            SendMessage(MessageCode.GetOnlinePlayers);
-        }
 
         internal void CreateGame(Game game)
         {
@@ -151,9 +147,6 @@ namespace Platform.Model
                         break;
                     case MessageCode.ChangeGameState:
                         //GameStatusReceived(this, new GameStateEventArgs { GameState = message.Content as Byte[] });
-                        break;
-                    case MessageCode.GetOnlinePlayers:
-                        //PlayersReceived(this, new PlayersEventArgs { Players = message.Content as Player[] });
                         break;
                     case MessageCode.GetOpenGames:
                         //OpenGamesReceived(this, new GamesEventArgs { Games = message.Content as Game[] });

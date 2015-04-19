@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using ConnectionInterface.MessageTypes;
+using ServerInterface;
 
 namespace Server
 {
-    public class DataManager
+    public class DataManager : IDataManager
     {
         private static DataManager _mDataManagerInstance;
 
@@ -63,7 +64,7 @@ namespace Server
             }
         }
 
-        public Int32 CreateGame(Game game)
+        public void CreateGame(Game game)
         {
             var prevGame = _OnlineGames.FirstOrDefault(x => x.Phase != GamePhase.Completed && (game.FirstPlayer.Equals(x.FirstPlayer) || game.FirstPlayer.Equals(x.SecondPlayer)));
             if (prevGame != null)
@@ -71,7 +72,6 @@ namespace Server
 
             game.CreateTime = DateTime.Now;
             _OnlineGames.Add(game);
-           return game.GameId;
         }
 
         public Boolean JoinGame(Int32 gameId, Player player)
@@ -103,9 +103,9 @@ namespace Server
             return _OnlineGames.FirstOrDefault(x => x.GameId == gameId);
         }
 
-        public Game[] GetOpenGames(Player player, Int32 gameTypeId)
+        public Game[] GetOpenGames(Player player)
         {
-            return _OnlineGames.Where(x => x.Type.Id == gameTypeId && x.Phase == GamePhase.Open && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
+            return _OnlineGames.Where(x => x.Phase == GamePhase.Open && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
         }
 
         public void ChangeGameState(Player player, Game game, Byte[] state)

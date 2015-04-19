@@ -39,11 +39,11 @@ namespace Server
                             var playerToLogin = (message.Content as Player);
                             Player = DataManager.DataManagerInstance.LoginPlayer(playerToLogin.Name);
                             if (Player != null)
-                                SendMessage(MessageCode.LoginAccepted);
+                                SendMessage(MessageCode.ConnectAccepted);
                             else
-                                SendMessage(MessageCode.LoginRejected);
+                                SendMessage(MessageCode.ConnectRejected);
                             break;
-                        case MessageCode.Logout:
+                        case MessageCode.Disconnect:
                             Disconnect();
                             break;
                         case MessageCode.GetGames:

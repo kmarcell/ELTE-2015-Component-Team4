@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace Server.Utilities
 {
     public enum MessageCode {
-        Login, Logout, LoginAccepted, LoginRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOnlinePlayers, GetGames, GetOpenGames
+        Login, Disconnect, ConnectAccepted, ConnectRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOnlinePlayers, GetGames, GetOpenGames
     }
 
     [XmlRoot]

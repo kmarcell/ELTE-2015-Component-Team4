@@ -13,6 +13,7 @@ namespace Platform
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly GameManager _MGameManager;
         private readonly NetworkManager _MNetworkManager;
         private ServerConnectWindow _MServerConnectWindow;
 
@@ -29,6 +30,7 @@ namespace Platform
             GameMenuItem.IsEnabled = true;
 
 
+            _MGameManager = new GameManager();
 
             _MNetworkManager = new NetworkManager();
             _MNetworkManager.ConnectionChangedEvent += NetworkManager_ConnectionChanged;
@@ -69,6 +71,54 @@ namespace Platform
             gameConfigurationWindow.ShowDialog();
         }
 
+        private void LoadGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    Title = "Load game",
+                    Filter = "Gamesaves|*.compgame"
+                };
+
+                openFileDialog.ShowDialog();
+                _MGameManager.LoadGame(openFileDialog.FileName);
+
+                MessageBox.Show("Game loaded!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Loading game error!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SaveGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Title = "Save game",
+                    Filter = "Gamesaves|*.compgame"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    _MGameManager.SaveGame(saveFileDialog.FileName);
+                }
+
+
+                MessageBox.Show("Game saved!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Save game error!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
+        #region Networkmanager events
         private void NetworkManager_ConnectionChanged(object sender, ConnectionChangeEventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -122,5 +172,8 @@ namespace Platform
                 MessageBox.Show("You are successfuly disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
+        #endregion
+
+
     }
 }

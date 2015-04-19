@@ -21,8 +21,8 @@
                 <MenuItem Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" />
             </MenuItem>
             <MenuItem Name="GameMenuItem"  Header="Game">
-                <MenuItem Name="LoadGameMenuItem" Header="Load Game" />
-                <MenuItem Name="SaveGameMenuItem" Header="Save Game" />
+                <MenuItem Name="LoadGameMenuItem" Header="Load Game" Click="LoadGameMenuItem_Click" />
+                <MenuItem Name="SaveGameMenuItem" Header="Save Game" Click="SaveGameMenuItem_Click" />
                 <Separator />
                 <MenuItem Name="StartGameMenuItem" Header="Start Game" Click="StartGameMenuItem_Click" />
                 <MenuItem Name="EndGameMenuItem" Header="End Game" />

@@ -56,11 +56,19 @@
     <Compile Include="EventsGameRelated\GameEndedEventArgs.cs" />
     <Compile Include="EventsServerRelated\ConnectionChangeEventArgs.cs" />
     <Compile Include="EventsServerRelated\DisconnectedEventArgs.cs" />
+    <Compile Include="EventsServerRelated\GamesEventArgs.cs" />
+    <Compile Include="Model\DataManager.cs" />
     <Compile Include="WindowGameRelated\GameConfigurationWindow.xaml.cs">
       <DependentUpon>GameConfigurationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\GameManager.cs" />
     <Compile Include="Model\NetworkManager.cs" />
+    <Compile Include="WindowServerRelated\CreateGameWindow.xaml.cs">
+      <DependentUpon>CreateGameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowServerRelated\ListGameWindow.xaml.cs">
+      <DependentUpon>ListGameWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowServerRelated\ServerConnectWindow.xaml.cs">
       <DependentUpon>ServerConnectWindow.xaml</DependentUpon>
     </Compile>
@@ -77,6 +85,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowGameRelated\GameConfigurationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowServerRelated\CreateGameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowServerRelated\ListGameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

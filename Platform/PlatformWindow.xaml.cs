@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using ConnectionInterface.MessageTypes;
 using Platform.EventsGameRelated;
 using Platform.EventsServerRelated;
 using Platform.Model;
@@ -14,11 +16,17 @@ namespace Platform
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly GameManager _MGameManager;
         private readonly NetworkManager _MNetworkManager;
         private ServerConnectWindow _MServerConnectWindow;
-        private GameConfigurationWindow _MgGameConfigurationWindow;
-        private Boolean IsConnectedToServer;
+        private ListGameWindow _MListGameWindow;
+        private CreateGameWindow _MCreateGameWindow;
+
+        private readonly GameManager _MGameManager;
+        private GameConfigurationWindow _MGameConfigurationWindow;
+
+        private readonly DataManager _MDataManager;
+
+        private Boolean _MIsConnectedToServer;
 
         public MainWindow()
         {
@@ -28,9 +36,10 @@ namespace Platform
             // platform events
             Closing += OnClosing;
 
-            IsConnectedToServer = false;
-            CreateOnlineGameMenuItem.IsEnabled = false;
-            ConnectOnlineGameMenuItem.IsEnabled = false;
+            _MIsConnectedToServer = false;
+            //TODO
+            //CreateOnlineGameMenuItem.IsEnabled = false;
+            //ConnectOnlineGameMenuItem.IsEnabled = false;
             LeaveOnlineGameMenuItem.IsEnabled = false;
 
 
@@ -56,6 +65,10 @@ namespace Platform
             _MNetworkManager.ConnectRejectedServerNotRespondingEvent += NetworkManager_OnConnectRejectedServerNotRespondingEvent;
             _MNetworkManager.ConnectRejectedUsernameOccupied += NetworkManager_OnConnectRejectedUsernameOccupiedEvent;
             _MNetworkManager.DisconnectedEvent += NetworkManager_OnDisconnectedEvent;
+            _MNetworkManager.GameCreatedEvent += MNetworkManager_OnGameCreatedEvent;
+
+            _MDataManager = new DataManager();
+            
         }
 
 
@@ -85,13 +98,30 @@ namespace Platform
 
         private void StartGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _MgGameConfigurationWindow = new GameConfigurationWindow(_MGameManager);
-            _MgGameConfigurationWindow.ShowDialog();
+            _MGameConfigurationWindow = new GameConfigurationWindow(_MGameManager);
+            _MGameConfigurationWindow.ShowDialog();
         }
 
         private void EndGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
             _MGameManager.EndGame();
+        }
+
+        private void CreateOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _MCreateGameWindow = new CreateGameWindow(_MNetworkManager, _MDataManager);
+            _MCreateGameWindow.ShowDialog();
+        }
+
+        private void ConnectOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _MListGameWindow = new ListGameWindow(_MNetworkManager, _MDataManager);
+            _MListGameWindow.ShowDialog();
+        }
+
+        private void LeaveGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
         }
 
         private void LoadGameMenuItem_Click(object sender, RoutedEventArgs e)
@@ -142,7 +172,7 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                _MgGameConfigurationWindow.Close();
+                _MGameConfigurationWindow.Close();
                 
                 SaveGameMenuItem.IsEnabled = true;
                 LoadGameMenuItem.IsEnabled = false;
@@ -218,9 +248,9 @@ namespace Platform
                     LoadAiComponentMenuItem.IsEnabled = true;
                     LoadGameLogicComponentMenuItem.IsEnabled = true;
 
-                    if (IsConnectedToServer)
+                    if (_MIsConnectedToServer)
                     {
-                        IsConnectedToServer = false;
+                        _MIsConnectedToServer = false;
                         MessageBox.Show("Unkown error!\nYou are disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     }
                 }
@@ -232,7 +262,7 @@ namespace Platform
             Dispatcher.Invoke(() =>
             {
                 _MServerConnectWindow.Close();
-                IsConnectedToServer = true;
+                _MIsConnectedToServer = true;
                 MessageBox.Show("Connect to the server successful.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
@@ -260,7 +290,27 @@ namespace Platform
                 MessageBox.Show("You are successfuly disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
+        private void MNetworkManager_OnGameCreatedEvent(object sender, EventArgs eventArgs)
+        {
+            Dispatcher.Invoke(() => _MCreateGameWindow.Close());
+
+            // todo inform player and wait for connect another
+        }
         #endregion
+
+        private void RegisterGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO fix
+            // get game info from dll?!
+            //var gameToRegister = new List<string>
+            //{
+            //    "MillGame",
+            //    "CheckerGame"
+            //};
+
+            _MDataManager.RegisterGame(new Game{ GameId = 1, Type = new GameType{ Id = 1, Name = "MillGame", Description = "MillGame"}});
+            _MDataManager.RegisterGame(new Game { GameId = 2, Type = new GameType { Id = 2, Name = "CheckerGame", Description = "CheckerGame" } });
+        }
 
 
     }

@@ -16,7 +16,7 @@
                 </MenuItem>
                 <MenuItem Name="LoadMenuItem"  Header="Load">
                     <MenuItem Name="LoadAiComponentMenuItem" Header="Load AI Component" />
-                    <MenuItem Name="LoadGameLogicComponentMenuItem" Header="Load Game Logic Component" />
+                    <MenuItem Name="LoadGameLogicComponentMenuItem" Header="Load Game Logic Component"  Click="RegisterGameMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" />
             </MenuItem>
@@ -28,10 +28,10 @@
                 <MenuItem Name="EndGameMenuItem" Header="End Game" Click="EndGameMenuItem_Click" />
             </MenuItem>
             <MenuItem Name="OnlineGameMenuItem"  Header="Online game" ToolTip="For online game please join to the server (File)">
-                <MenuItem Name="CreateOnlineGameMenuItem" Header="Create Game" />
+                <MenuItem Name="CreateOnlineGameMenuItem" Header="Create Game" Click="CreateOnlineGameMenuItem_Click" />
                 <Separator />
-                <MenuItem Name="ConnectOnlineGameMenuItem" Header="Connect Game" />
-                <MenuItem Name="LeaveOnlineGameMenuItem" Header="Leave Game" />
+                <MenuItem Name="ConnectOnlineGameMenuItem" Header="Connect Game" Click="ConnectOnlineGameMenuItem_Click" />
+                <MenuItem Name="LeaveOnlineGameMenuItem" Header="Leave Game" Click="LeaveGameMenuItem_Click" />
             </MenuItem>
         </Menu>
     </Grid>

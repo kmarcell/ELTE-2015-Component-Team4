@@ -1,0 +1,17 @@
+﻿<Window x:Class="Platform.WindowServerRelated.ListGameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Name="GameListWindow" Title="List Game Window" Height="300" Width="300">
+    <Grid>
+        <DataGrid Name="OnlineGamesDataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="183" Margin="10,53,0,0" VerticalAlignment="Top" Width="272" SelectionMode="Single" SelectionUnit="FullRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Type.Name}" Header="Game name" IsReadOnly="True" Width="130" />
+                <DataGridTextColumn Binding="{Binding FirstPlayer.Name}" Header="Player" IsReadOnly="True" Width="140" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Name="ConnectGameButton" Content="Connect Game" HorizontalAlignment="Left" Margin="10,242,0,0" VerticalAlignment="Top" Width="272" Click="ConnectGameButton_Click"/>
+        <Label Name="GameSelectorLabel"  Content="Game:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <ComboBox Name="GameSelectorComboBox" HorizontalAlignment="Left" Margin="59,14,0,0" VerticalAlignment="Top" Width="223" SelectionChanged="GameSelectorComboBox_OnSelectionChanged"/>
+
+    </Grid>
+</Window>

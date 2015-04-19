@@ -21,6 +21,8 @@ namespace Platform.Model
         public event EventHandler<EventArgs> ConnectRejectedServerNotRespondingEvent;
         public event EventHandler<EventArgs> ConnectRejectedUsernameOccupied;
         public event EventHandler<EventArgs> DisconnectedEvent;
+        public event EventHandler<GamesEventArgs> OnlineGamesReceived;
+        public event EventHandler<EventArgs> GameCreatedEvent;
 
 
         public void Connect(String address, Int32 port, String player)
@@ -53,7 +55,7 @@ namespace Platform.Model
             }
         }
 
-        public void GetOpenGames(Int32 gameTypeId) 
+        public void GetOnlineGames(Int32 gameTypeId) 
         {
             SendMessage(MessageCode.GetOpenGames, gameTypeId);
         }
@@ -149,10 +151,10 @@ namespace Platform.Model
                         //GameStatusReceived(this, new GameStateEventArgs { GameState = message.Content as Byte[] });
                         break;
                     case MessageCode.GetOpenGames:
-                        //OpenGamesReceived(this, new GamesEventArgs { Games = message.Content as Game[] });
+                        OnlineGamesReceived(this, new GamesEventArgs { Games = message.Content as Game[] });
                         break;
                     case MessageCode.CreateGame:
-                        //GameCreated(this, new GameEventArgs { Game = message.Content as Game });
+                        GameCreatedEvent(this, EventArgs.Empty);
                         break;
                     case MessageCode.JoinGame:
                         //GameStarted(this, new GameEventArgs { Game = message.Content as Game });

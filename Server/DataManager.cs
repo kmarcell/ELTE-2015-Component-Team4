@@ -103,9 +103,9 @@ namespace Server
             return _OnlineGames.FirstOrDefault(x => x.GameId == gameId);
         }
 
-        public Game[] GetOpenGames(Player player)
+        public Game[] GetOpenGames(Player player, Int32 gameTypeId)
         {
-            return _OnlineGames.Where(x => x.Phase == GamePhase.Open && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
+            return _OnlineGames.Where(x => x.Phase == GamePhase.Open && x.Type.Id == gameTypeId && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
         }
 
         public void ChangeGameState(Player player, Game game, Byte[] state)

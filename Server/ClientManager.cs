@@ -48,7 +48,8 @@ namespace Server
                             Disconnect();
                             break;
                         case MessageCode.GetOpenGames:
-                            SendOnlineGames();
+                            var gameTypeId = Convert.ToInt32(message.Content);
+                            SendOnlineGames(gameTypeId);
                             break;
                         case MessageCode.CreateGame:
                             SendCreateGame(Player, message.Content as Game);
@@ -104,13 +105,14 @@ namespace Server
             _Socket.Close();
         }
 
-        public void SendOnlineGames()
+        public void SendOnlineGames(Int32 gameTypeId)
         {
-            SendMessage(MessageCode.GetOpenGames, DataManager.DataManagerInstance.GetOpenGames(Player));
+            SendMessage(MessageCode.GetOpenGames, DataManager.DataManagerInstance.GetOpenGames(Player, gameTypeId));
         }
 
         public void SendCreateGame(Player player, Game game)
         {
+            CurrentGame = game;
             CurrentGame.FirstPlayer = Player;
             DataManager.DataManagerInstance.CreateGame(CurrentGame);
             SendMessage(MessageCode.CreateGame, CurrentGame);

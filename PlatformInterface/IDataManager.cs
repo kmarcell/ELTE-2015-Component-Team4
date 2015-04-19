@@ -5,9 +5,7 @@ namespace PlatformInterface
 {
     public interface IDataManager
     {
-        List<Game> Games { get; }
-
-        Game GetCurrentGame { get; }
+        Game CurrentGame { get; }
 
         void RegisterGame(Game game);
     }

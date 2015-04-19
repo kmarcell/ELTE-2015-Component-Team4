@@ -7,18 +7,11 @@ namespace Platform.Model
 {
     public class DataManager : IDataManager
     {
-        public List<Game> Games { get; protected set; }
-
-        public Game GetCurrentGame { get { return Games[0]; } }
-
-        public DataManager()
-        {
-            Games = new List<Game>();
-        }
+        public Game CurrentGame { get; protected set; }
 
         public void RegisterGame(Game game)
         {
-            Games.Add(game);
+            CurrentGame = game;
         }
     }
 }

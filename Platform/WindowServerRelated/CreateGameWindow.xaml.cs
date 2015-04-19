@@ -24,18 +24,18 @@ namespace Platform.WindowServerRelated
             _MNetworkManager = networkManager;
             _MDataManager = dataManager;
 
-            GameSelectorComboBox.ItemsSource = dataManager.Games.Select(x => x.Type.Name);
+            LoadedGameLabel.Content = _MDataManager.CurrentGame.Type.Name;
         }
 
         private void CreateGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(GameSelectorComboBox.Text))
+            if (_MDataManager.CurrentGame == null)
             {
-                MessageBox.Show("Please select game from list first!", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("Please load game first (File)!", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
-            _MNetworkManager.CreateGame(_MDataManager.Games.First(x => x.Type.Name == GameSelectorComboBox.Text));
+            _MNetworkManager.CreateGame(_MDataManager.CurrentGame);
         }
     }
 }

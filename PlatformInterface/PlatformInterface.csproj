@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventsGameRelated\GameEndedEventArgs.cs" />
+    <Compile Include="EventsGameRelated\GameLoadedEventArgs.cs" />
+    <Compile Include="EventsGameRelated\GameSavedEventArgs.cs" />
     <Compile Include="EventsServerRelated\ConnectionChangeEventArgs.cs" />
     <Compile Include="EventsServerRelated\DisconnectedEventArgs.cs" />
     <Compile Include="EventsServerRelated\GamesEventArgs.cs" />

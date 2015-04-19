@@ -97,6 +97,12 @@ namespace Platform
 
         private void StartGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (_MDataManager.CurrentGame == null)
+            {
+                MessageBox.Show("Load game before start game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             _MGameConfigurationWindow = new GameConfigurationWindow(_MGameManager, _MDataManager);
             _MGameConfigurationWindow.ShowDialog();
         }
@@ -108,12 +114,24 @@ namespace Platform
 
         private void CreateOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (_MDataManager.CurrentGame == null)
+            {
+                MessageBox.Show("Load game before create to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             _MCreateGameWindow = new CreateGameWindow(_MNetworkManager, _MDataManager);
             _MCreateGameWindow.ShowDialog();
         }
 
         private void ConnectOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (_MDataManager.CurrentGame == null)
+            {
+                MessageBox.Show("Load game before connect to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             _MListGameWindow = new ListGameWindow(_MNetworkManager, _MDataManager);
             _MListGameWindow.ShowDialog();
         }
@@ -307,8 +325,7 @@ namespace Platform
             //    "CheckerGame"
             //};
 
-            _MDataManager.RegisterGame(new Game{ GameId = 1, Type = new GameType{ Id = 1, Name = "MillGame", Description = "MillGame"}});
-            _MDataManager.RegisterGame(new Game { GameId = 2, Type = new GameType { Id = 2, Name = "CheckerGame", Description = "CheckerGame" } });
+            _MDataManager.RegisterGame(new Game{ GameId = 1, Type = new GameType{ Id = 1, Name = "Mill Game", Description = "Mill Game"}});
         }
 
 

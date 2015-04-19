@@ -13,6 +13,7 @@ namespace Platform.Model
 
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
+        public event EventHandler<GameLoadedEventArgs> GameLoadedEvent;
         
         public void  StartGame(Game game)
         {
@@ -47,6 +48,7 @@ namespace Platform.Model
         public void LoadGame(String fileName)
         {
             var data = File.ReadAllBytes(fileName);
+            GameLoadedEvent(this, new GameLoadedEventArgs{ GameBytes = data });
             //TODO send data to the gamelogic
         }
     }

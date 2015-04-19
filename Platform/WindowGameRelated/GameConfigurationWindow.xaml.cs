@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using Platform.Model;
 
 namespace Platform.WindowGameRelated
@@ -22,18 +21,18 @@ namespace Platform.WindowGameRelated
         {
             _MGameManager = gameManager;
             _MDataManager = dataManager;
-            GameSelectorComboBox.ItemsSource = _MDataManager.Games.Select(x => x.Type.Name);
+            CurrentlyLoadedGameLabel.Content = _MDataManager.CurrentGame.Type.Name;
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(GameSelectorComboBox.Text))
+            if (_MDataManager.CurrentGame == null)
             {
-                MessageBox.Show("Please select game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please load game before play (File)!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _MGameManager.StartGame(_MDataManager.Games.First(x => x.Type.Name == GameSelectorComboBox.Text));
+            _MGameManager.StartGame(_MDataManager.CurrentGame);
         }
     }
 }

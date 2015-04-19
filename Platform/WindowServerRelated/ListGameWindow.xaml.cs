@@ -28,8 +28,9 @@ namespace Platform.WindowServerRelated
             _MNetworkManager = networkManager;
             _MDataManager = dataManager;
             _MNetworkManager.OnlineGamesReceived += MNetworkManager_OnOnlineGamesReceived;
-
-            GameSelectorComboBox.ItemsSource = _MDataManager.Games.Select(x => x.Type.Name);
+            LoadedGameLabel.Content = _MDataManager.CurrentGame.Type.Name;
+            _MNetworkManager.GetOnlineGames(_MDataManager.CurrentGame.Type.Id);
+            
         }
 
         private void MNetworkManager_OnOnlineGamesReceived(object sender, GamesEventArgs eventArgs)
@@ -51,12 +52,6 @@ namespace Platform.WindowServerRelated
             }
 
             MessageBox.Show("Please select game from list first!", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        }
-
-
-        private void GameSelectorComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _MNetworkManager.GetOnlineGames(_MDataManager.Games[GameSelectorComboBox.SelectedIndex].Type.Id);
         }
     }
 }

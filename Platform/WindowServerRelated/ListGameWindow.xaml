@@ -10,8 +10,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button Name="ConnectGameButton" Content="Connect Game" HorizontalAlignment="Left" Margin="10,242,0,0" VerticalAlignment="Top" Width="272" Click="ConnectGameButton_Click"/>
-        <Label Name="GameSelectorLabel"  Content="Game:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <ComboBox Name="GameSelectorComboBox" HorizontalAlignment="Left" Margin="59,14,0,0" VerticalAlignment="Top" Width="223" SelectionChanged="GameSelectorComboBox_OnSelectionChanged"/>
+        <Label Name="LoadedGameHelpLabel"  Content="Loaded Game: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label Name="LoadedGameLabel" Content="No game loaded" HorizontalAlignment="Left" Margin="104,10,0,0" VerticalAlignment="Top" Width="181" Height="26"/>
 
     </Grid>
 </Window>

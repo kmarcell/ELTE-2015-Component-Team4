@@ -4,8 +4,8 @@
         Name="GameToCreateWindow" Title="Create Game Window" Height="140" Width="300">
     <Grid>
         <Button Name="CreateGameButton"  Content="Create Game" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Width="272" Click="CreateGameButton_Click"/>
-        <ComboBox Name="GameSelectorComboBox"  HorizontalAlignment="Left" Margin="87,31,0,0" VerticalAlignment="Top" Width="195"/>
-        <Label Name="GameTypeLabel" Content="Game Type: " HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top" Width="72"/>
+        <Label Name="LoadedGameLabel" Content="No game loaded"  HorizontalAlignment="Left" Margin="108,27,0,0" VerticalAlignment="Top" Width="174"/>
+        <Label Name="LoadedGameHelpLabel" Content="Loaded Game: " HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top" Width="93"/>
 
     </Grid>
 </Window>

@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerInterface", "ServerIn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformInterface", "PlatformInterface\PlatformInterface.csproj", "{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTInterfacesLibrary", "GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj", "{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTMillGameLogic", "GTMillGameLogic\GTMillGameLogic\GTMillGameLogic.csproj", "{317B8772-6AF4-4F18-8AED-DB22A5E6303F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

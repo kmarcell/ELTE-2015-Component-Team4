@@ -8,8 +8,8 @@
         <RadioButton Name="MediumRadioButton" Content="Medium" GroupName="DifficultSelectorGroup" HorizontalAlignment="Left" Margin="95,133,0,0" VerticalAlignment="Top"/>
         <RadioButton Name="HardRadioButton" Content="Hard" GroupName="DifficultSelectorGroup" HorizontalAlignment="Left" Margin="95,153,0,0" VerticalAlignment="Top"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="112" Margin="21,73,0,0" VerticalAlignment="Top" Width="194" />
-        <Label Name="GameSelectorLabel" Content="Game:" HorizontalAlignment="Left" Margin="21,32,0,0" VerticalAlignment="Top" Width="59"/>
-        <ComboBox Name="GameSelectorComboBox" HorizontalAlignment="Left" Margin="95,32,0,0" VerticalAlignment="Top" Width="120" IsEditable="False"/>
+        <Label Name="CurrentlyLoadedGameHelpLabel" Content="Loaded game:" HorizontalAlignment="Left" Margin="21,32,0,0" VerticalAlignment="Top" Width="86"/>
+        <Label Name="CurrentlyLoadedGameLabel" Content="No game loaded" HorizontalAlignment="Left" Margin="107,32,0,0" VerticalAlignment="Top" Width="135"/>
         <Button Name="StartGameButton" Content="Start Game" HorizontalAlignment="Left" Margin="21,212,0,0" VerticalAlignment="Top" Width="194" Click="StartGameButton_Click"/>
     </Grid>
 </Window>

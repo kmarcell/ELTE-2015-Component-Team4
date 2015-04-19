@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
-using ConnectionInterface.MessageTypes;
 using Platform.Model;
 
 namespace Platform.WindowServerRelated
@@ -39,7 +37,5 @@ namespace Platform.WindowServerRelated
 
             _MNetworkManager.CreateGame(_MDataManager.Games.First(x => x.Type.Name == GameSelectorComboBox.Text));
         }
-
-
     }
 }

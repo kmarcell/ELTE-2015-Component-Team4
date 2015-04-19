@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using ConnectionInterface.MessageTypes;
-using Platform.EventsGameRelated;
-using Platform.EventsServerRelated;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
+using PlatformInterface.EventsGameRelated;
+using PlatformInterface.EventsServerRelated;
 
 namespace Platform
 {
@@ -87,7 +86,7 @@ namespace Platform
 
         private void JoinMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _MServerConnectWindow = new ServerConnectWindow(networkManager: _MNetworkManager);
+            _MServerConnectWindow = new ServerConnectWindow(_MNetworkManager);
             _MServerConnectWindow.ShowDialog();
         }
 
@@ -98,7 +97,7 @@ namespace Platform
 
         private void StartGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _MGameConfigurationWindow = new GameConfigurationWindow(_MGameManager);
+            _MGameConfigurationWindow = new GameConfigurationWindow(_MGameManager, _MDataManager);
             _MGameConfigurationWindow.ShowDialog();
         }
 

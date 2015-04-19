@@ -3,8 +3,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ConnectionInterface.MessageTypes;
-using Platform.EventsServerRelated;
 using Platform.Model;
+using PlatformInterface.EventsServerRelated;
 
 namespace Platform.WindowServerRelated
 {

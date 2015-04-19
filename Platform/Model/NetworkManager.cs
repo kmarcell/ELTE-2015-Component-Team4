@@ -2,11 +2,12 @@
 using System.Net;
 using System.Net.Sockets;
 using ConnectionInterface.MessageTypes;
-using Platform.EventsServerRelated;
+using PlatformInterface;
+using PlatformInterface.EventsServerRelated;
 
 namespace Platform.Model
 {
-    public class NetworkManager : IDisposable
+    public class NetworkManager : IDisposable, INetworkManager
     {
         private const Int32 BufferLength = 20000000;
 
@@ -61,23 +62,23 @@ namespace Platform.Model
         }
 
 
-        internal void CreateGame(Game game)
+        public void CreateGame(Game game)
         {
             game.FirstPlayer = Player;
             SendMessage(MessageCode.CreateGame, game);
         }
 
-        internal void JoinGame(Int32 gameId)
+        public void JoinGame(Int32 gameId)
         {
             SendMessage(MessageCode.JoinGame, gameId);
         }
 
-        internal void SendGameState(Byte[] state) 
+        public void SendGameState(Byte[] state) 
         {
             SendMessage(MessageCode.ChangeGameState, state);
         }
 
-        internal void EndGame(Player player = null)
+        public void EndGame(Player player = null)
         {
             SendMessage(MessageCode.EndGame, player);
         }

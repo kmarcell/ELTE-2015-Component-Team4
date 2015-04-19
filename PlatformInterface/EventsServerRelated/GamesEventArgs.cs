@@ -1,7 +1,7 @@
 ﻿using System;
 using ConnectionInterface.MessageTypes;
 
-namespace Platform.EventsServerRelated
+namespace PlatformInterface.EventsServerRelated
 {
     public class GamesEventArgs : EventArgs
     {

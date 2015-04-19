@@ -1,36 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using Platform.EventsGameRelated;
+using ConnectionInterface.MessageTypes;
+using PlatformInterface;
+using PlatformInterface.EventsGameRelated;
 
 namespace Platform.Model
 {
-    public class GameManager
+    public class GameManager : IGameManager
     {
-        public GameManager()
-        {
-            //todo load games from assembly
-            _MGameList = new List<string>
-            {
-                "MillGame",
-                "CheckerGame"
-            };
-        }
-
-        private readonly List<string> _MGameList;
-
         private Boolean _MGameEnded;
         private Boolean _MIsWin;
 
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
         
-        public List<string> GetGames()
-        {
-            return _MGameList;
-        }
-
-        public void  StartGame()
+        public void  StartGame(Game game)
         {
             _MGameEnded = false;
             _MIsWin = false;

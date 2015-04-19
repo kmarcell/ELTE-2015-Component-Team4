@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Platform.EventsServerRelated
+namespace PlatformInterface.EventsServerRelated
 {
     public class ConnectionChangeEventArgs : EventArgs
     {

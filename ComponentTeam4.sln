@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionInterface", "Conn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerInterface", "ServerInterface\ServerInterface.csproj", "{158DE2D9-EA11-487E-B348-EB6764B877B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformInterface", "PlatformInterface\PlatformInterface.csproj", "{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{158DE2D9-EA11-487E-B348-EB6764B877B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{158DE2D9-EA11-487E-B348-EB6764B877B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{158DE2D9-EA11-487E-B348-EB6764B877B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,10 +1,11 @@
 ﻿
 using System.Collections.Generic;
 using ConnectionInterface.MessageTypes;
+using PlatformInterface;
 
 namespace Platform.Model
 {
-    public class DataManager
+    public class DataManager : IDataManager
     {
         public List<Game> Games { get; protected set; }
 

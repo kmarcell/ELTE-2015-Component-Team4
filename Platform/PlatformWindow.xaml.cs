@@ -325,7 +325,16 @@ namespace Platform
 
             //var myGame = Assembly.Load(""); // MillGame is name of my dll
             var gameAssembly = Assembly.LoadFrom(@"C:\\Games\\MillGame.dll");
-            var gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+            Type gameType;
+
+            try
+            {
+                gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+            }
+            catch (ReflectionTypeLoadException)
+            {
+                gameType = null;
+            }
 
             if (gameType == null)
             {
@@ -338,7 +347,14 @@ namespace Platform
             var hasCode = DataManager.CurrentGame.GetHashCode();
 
             gameAssembly = Assembly.LoadFrom(@"C:\\Games\\CheckersGame.dll");
-            gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+            try
+            {
+                gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+            }
+            catch (ReflectionTypeLoadException)
+            {
+                gameType = null;
+            }
 
             if (gameType == null)
             {

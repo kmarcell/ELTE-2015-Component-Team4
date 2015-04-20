@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameEvents\GameStateChangedEventArgs.cs" />
+    <Compile Include="IArtificialIntelligence.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="MessageTypes\Game.cs" />
     <Compile Include="MessageTypes\GameType.cs" />

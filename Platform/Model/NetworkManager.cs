@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using ConnectionInterface;
+using ConnectionInterface.GameEvents;
 using ConnectionInterface.MessageTypes;
 using PlatformInterface;
 using PlatformInterface.EventsServerRelated;
@@ -67,10 +68,15 @@ namespace Platform.Model
         {
             var gameToServer = new Game
             {
-                Type = {Id = game.Id, Name = game.Name, Description = game.Description, HashCode = hashCode},
+                Type = new GameType{Id = game.Id, Name = game.Name, Description = game.Description, HashCode = hashCode},
                 FirstPlayer = Player
             };
             SendMessage(MessageCode.CreateGame, gameToServer);
+        }
+
+        private void Game_OnGameStateChanged(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
+        {
+            SendGameState(gameStateChangedEventArgs.GameState);
         }
 
         public void JoinGame(Int32 gameId)
@@ -160,12 +166,14 @@ namespace Platform.Model
                         OnlineGamesReceived(this, new GamesEventArgs { Games = message.Content as Game[] });
                         break;
                     case MessageCode.CreateGame:
+                        DataManager.CurrentGame.GameStateChanged += Game_OnGameStateChanged;
                         GameCreatedEvent(this, EventArgs.Empty);
                         break;
                     case MessageCode.JoinGame:
                         //GameStarted(this, new GameEventArgs { Game = message.Content as Game });
                         break;
                     case MessageCode.JoinAccepted:
+                        DataManager.CurrentGame.GameStateChanged += Game_OnGameStateChanged;
                         //GameStarted(this, new GameEventArgs { Game = message.Content as Game });
                         break;
                     case MessageCode.JoinRejected:

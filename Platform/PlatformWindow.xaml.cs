@@ -1,6 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
+using ConnectionInterface;
+using ConnectionInterface.MessageTypes;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -319,7 +323,32 @@ namespace Platform
             //    "CheckerGame"
             //};
 
-            DataManager.RegisterGame(new TempGame());
+            //var myGame = Assembly.Load(""); // MillGame is name of my dll
+            var gameAssembly = Assembly.LoadFrom(@"C:\\Games\\MillGame.dll");
+            var gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+
+            if (gameType == null)
+            {
+                MessageBox.Show("Load game error!\nPlease select sufficient game to play!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            object obj = Activator.CreateInstance(gameType);
+            DataManager.RegisterGame((IGame)obj);
+            var hasCode = DataManager.CurrentGame.GetHashCode();
+
+            gameAssembly = Assembly.LoadFrom(@"C:\\Games\\CheckersGame.dll");
+            gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+
+            if (gameType == null)
+            {
+                MessageBox.Show("Load game error!\nPlease select sufficient game to play!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            obj = Activator.CreateInstance(gameType);
+            DataManager.RegisterGame((IGame)obj);
+            var hasCode1 = DataManager.CurrentGame.GetHashCode();
         }
 
 

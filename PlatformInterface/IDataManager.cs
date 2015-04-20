@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using ConnectionInterface.MessageTypes;
+﻿using ConnectionInterface;
 
 namespace PlatformInterface
 {
     public interface IDataManager
     {
-        Game CurrentGame { get; }
+        IGame CurrentGame { get; }
 
-        void RegisterGame(Game game);
+        void RegisterGame(IGame game);
     }
 }

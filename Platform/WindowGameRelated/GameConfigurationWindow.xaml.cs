@@ -9,7 +9,6 @@ namespace Platform.WindowGameRelated
     public partial class GameConfigurationWindow : Window
     {
         private readonly GameManager _MGameManager;
-        private readonly DataManager _MDataManager;
 
         public GameConfigurationWindow()
         {
@@ -17,22 +16,21 @@ namespace Platform.WindowGameRelated
             ResizeMode = ResizeMode.NoResize;
         }
 
-        public GameConfigurationWindow(GameManager gameManager, DataManager dataManager) : this()
+        public GameConfigurationWindow(GameManager gameManager) : this()
         {
             _MGameManager = gameManager;
-            _MDataManager = dataManager;
-            CurrentlyLoadedGameLabel.Content = _MDataManager.CurrentGame.Type.Name;
+            CurrentlyLoadedGameLabel.Content = DataManager.CurrentGame.Name;
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_MDataManager.CurrentGame == null)
+            if (DataManager.CurrentGame == null)
             {
                 MessageBox.Show("Please load game before play (File)!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _MGameManager.StartGame(_MDataManager.CurrentGame);
+            _MGameManager.StartGame();
         }
     }
 }

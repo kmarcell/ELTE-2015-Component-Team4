@@ -1,5 +1,4 @@
 ﻿using System;
-using ConnectionInterface.MessageTypes;
 using PlatformInterface.EventsGameRelated;
 
 namespace PlatformInterface
@@ -10,7 +9,7 @@ namespace PlatformInterface
 
         event EventHandler<GameEndedEventArgs> GameEndedEvent;
 
-        void StartGame(Game game);
+        void StartGame();
 
         void EndGame();
 

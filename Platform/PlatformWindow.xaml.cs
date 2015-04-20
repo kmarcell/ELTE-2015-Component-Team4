@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using ConnectionInterface.MessageTypes;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -22,8 +21,6 @@ namespace Platform
 
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
-
-        private readonly DataManager _MDataManager;
 
         private Boolean _MIsConnectedToServer;
 
@@ -64,10 +61,7 @@ namespace Platform
             _MNetworkManager.ConnectRejectedServerNotRespondingEvent += NetworkManager_OnConnectRejectedServerNotRespondingEvent;
             _MNetworkManager.ConnectRejectedUsernameOccupied += NetworkManager_OnConnectRejectedUsernameOccupiedEvent;
             _MNetworkManager.DisconnectedEvent += NetworkManager_OnDisconnectedEvent;
-            _MNetworkManager.GameCreatedEvent += MNetworkManager_OnGameCreatedEvent;
-
-            _MDataManager = new DataManager();
-            
+            _MNetworkManager.GameCreatedEvent += MNetworkManager_OnGameCreatedEvent;           
         }
 
 
@@ -97,13 +91,13 @@ namespace Platform
 
         private void StartGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (_MDataManager.CurrentGame == null)
+            if (DataManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before start game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _MGameConfigurationWindow = new GameConfigurationWindow(_MGameManager, _MDataManager);
+            _MGameConfigurationWindow = new GameConfigurationWindow(_MGameManager);
             _MGameConfigurationWindow.ShowDialog();
         }
 
@@ -114,25 +108,25 @@ namespace Platform
 
         private void CreateOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (_MDataManager.CurrentGame == null)
+            if (DataManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before create to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _MCreateGameWindow = new CreateGameWindow(_MNetworkManager, _MDataManager);
+            _MCreateGameWindow = new CreateGameWindow(_MNetworkManager);
             _MCreateGameWindow.ShowDialog();
         }
 
         private void ConnectOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (_MDataManager.CurrentGame == null)
+            if (DataManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before connect to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _MListGameWindow = new ListGameWindow(_MNetworkManager, _MDataManager);
+            _MListGameWindow = new ListGameWindow(_MNetworkManager);
             _MListGameWindow.ShowDialog();
         }
 
@@ -325,7 +319,7 @@ namespace Platform
             //    "CheckerGame"
             //};
 
-            _MDataManager.RegisterGame(new Game{ GameId = 1, Type = new GameType{ Id = 1, Name = "Mill Game", Description = "Mill Game"}});
+            DataManager.RegisterGame(new TempGame());
         }
 
 

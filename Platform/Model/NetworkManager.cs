@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using ConnectionInterface;
 using ConnectionInterface.MessageTypes;
 using PlatformInterface;
 using PlatformInterface.EventsServerRelated;
@@ -56,16 +57,20 @@ namespace Platform.Model
             }
         }
 
-        public void GetOnlineGames(Int32 gameTypeId) 
+        public void GetOnlineGames(int hashCode) 
         {
-            SendMessage(MessageCode.GetOpenGames, gameTypeId);
+            SendMessage(MessageCode.GetOpenGames, hashCode);
         }
 
 
-        public void CreateGame(Game game)
+        public void CreateGame(IGame game, int hashCode)
         {
-            game.FirstPlayer = Player;
-            SendMessage(MessageCode.CreateGame, game);
+            var gameToServer = new Game
+            {
+                Type = {Id = game.Id, Name = game.Name, Description = game.Description, HashCode = hashCode},
+                FirstPlayer = Player
+            };
+            SendMessage(MessageCode.CreateGame, gameToServer);
         }
 
         public void JoinGame(Int32 gameId)

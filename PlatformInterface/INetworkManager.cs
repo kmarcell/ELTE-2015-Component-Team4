@@ -1,4 +1,5 @@
 ﻿using System;
+using ConnectionInterface;
 using ConnectionInterface.MessageTypes;
 using PlatformInterface.EventsServerRelated;
 
@@ -28,15 +29,14 @@ namespace PlatformInterface
 
         void Disconnect();
 
-        void GetOnlineGames(Int32 gameTypeId);
+        void GetOnlineGames(int hashCode);
 
-        void CreateGame(Game game);
+        void CreateGame(IGame game, int hashCode);
 
         void JoinGame(Int32 gameId);
 
         void SendGameState(Byte[] state);
 
         void EndGame(Player player = null);
-
     }
 }

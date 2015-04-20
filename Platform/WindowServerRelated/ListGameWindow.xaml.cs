@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using ConnectionInterface.MessageTypes;
 using Platform.Model;
 using PlatformInterface.EventsServerRelated;
@@ -20,16 +17,14 @@ namespace Platform.WindowServerRelated
 
         private Game[] _MGames;
         private readonly NetworkManager _MNetworkManager;
-        private readonly DataManager _MDataManager;
 
-        public ListGameWindow(NetworkManager networkManager, DataManager dataManager)
+        public ListGameWindow(NetworkManager networkManager)
             : this()
         {
             _MNetworkManager = networkManager;
-            _MDataManager = dataManager;
             _MNetworkManager.OnlineGamesReceived += MNetworkManager_OnOnlineGamesReceived;
-            LoadedGameLabel.Content = _MDataManager.CurrentGame.Type.Name;
-            _MNetworkManager.GetOnlineGames(_MDataManager.CurrentGame.Type.Id);
+            LoadedGameLabel.Content = DataManager.CurrentGame.Name;
+            _MNetworkManager.GetOnlineGames(DataManager.CurrentGame.GetHashCode());
             
         }
 

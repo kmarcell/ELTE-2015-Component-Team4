@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using System.Xml.Serialization;
 
 namespace ConnectionInterface.MessageTypes
@@ -13,5 +14,8 @@ namespace ConnectionInterface.MessageTypes
 
         [XmlAttribute]
         public String Description { get; set; }
+
+        [XmlAttribute]
+        public int HashCode { get; set; }
     }
 }

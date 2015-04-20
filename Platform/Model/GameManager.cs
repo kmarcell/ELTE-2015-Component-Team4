@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using ConnectionInterface.MessageTypes;
 using PlatformInterface;
 using PlatformInterface.EventsGameRelated;
 
@@ -15,7 +14,7 @@ namespace Platform.Model
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
         public event EventHandler<GameLoadedEventArgs> GameLoadedEvent;
         
-        public void  StartGame(Game game)
+        public void  StartGame()
         {
             _MGameEnded = false;
             _MIsWin = false;
@@ -40,16 +39,15 @@ namespace Platform.Model
             if(string.IsNullOrEmpty(fileName))
                 throw new Exception("Filename is empty.");
 
-            //TODO get data from gamelogic
-            var data = new byte[2];
+            var data = DataManager.CurrentGame.SaveGame();
             File.WriteAllBytes(fileName, data);
         }
 
         public void LoadGame(String fileName)
         {
             var data = File.ReadAllBytes(fileName);
+            DataManager.CurrentGame.LoadGame(data);
             GameLoadedEvent(this, new GameLoadedEventArgs{ GameBytes = data });
-            //TODO send data to the gamelogic
         }
     }
 }

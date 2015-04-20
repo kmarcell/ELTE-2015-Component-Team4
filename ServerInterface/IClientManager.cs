@@ -15,7 +15,7 @@ namespace ServerInterface
 
         void SendConnectionRejected();
 
-        void SendOnlineGames(Int32 gameTypeId);
+        void SendOnlineGames(int gameTypeHashCode);
 
         void SendCreateGame(Player player, Game game);
 

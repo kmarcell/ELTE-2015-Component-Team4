@@ -54,6 +54,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\DataManager.cs" />
+    <Compile Include="TempGame.cs" />
+    <Compile Include="TempGame1.cs" />
     <Compile Include="WindowGameRelated\GameConfigurationWindow.xaml.cs">
       <DependentUpon>GameConfigurationWindow.xaml</DependentUpon>
     </Compile>

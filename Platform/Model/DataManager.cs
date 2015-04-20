@@ -1,16 +1,14 @@
-﻿
-using System.Collections.Generic;
-using ConnectionInterface.MessageTypes;
-using PlatformInterface;
+﻿using ConnectionInterface;
 
 namespace Platform.Model
 {
-    public class DataManager : IDataManager
+    public static class DataManager
     {
-        public Game CurrentGame { get; protected set; }
+        public static IGame CurrentGame { get; private set; }
 
-        public void RegisterGame(Game game)
+        public static void RegisterGame(IGame game)
         {
+            // todo, generate gameId from dll
             CurrentGame = game;
         }
     }

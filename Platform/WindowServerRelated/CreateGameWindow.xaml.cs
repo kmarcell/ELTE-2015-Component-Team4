@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using Platform.Model;
 
 namespace Platform.WindowServerRelated
@@ -16,26 +15,23 @@ namespace Platform.WindowServerRelated
         }
 
         private readonly NetworkManager _MNetworkManager;
-        private readonly DataManager _MDataManager;
 
-        public CreateGameWindow(NetworkManager networkManager, DataManager dataManager)
+        public CreateGameWindow(NetworkManager networkManager)
             : this()
         {
             _MNetworkManager = networkManager;
-            _MDataManager = dataManager;
-
-            LoadedGameLabel.Content = _MDataManager.CurrentGame.Type.Name;
+            LoadedGameLabel.Content = DataManager.CurrentGame.Name;
         }
 
         private void CreateGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_MDataManager.CurrentGame == null)
+            if (DataManager.CurrentGame == null)
             {
                 MessageBox.Show("Please load game first (File)!", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
-            _MNetworkManager.CreateGame(_MDataManager.CurrentGame);
+            _MNetworkManager.CreateGame(DataManager.CurrentGame, DataManager.CurrentGame.GetHashCode());
         }
     }
 }

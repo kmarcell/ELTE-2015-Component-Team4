@@ -24,7 +24,7 @@ namespace Platform.WindowServerRelated
             _MNetworkManager = networkManager;
             _MNetworkManager.OnlineGamesReceived += MNetworkManager_OnOnlineGamesReceived;
             LoadedGameLabel.Content = GameManager.CurrentGame.Name;
-            _MNetworkManager.GetOnlineGames(GameManager.CurrentGame.GetHashCode());
+            _MNetworkManager.GetOnlineGames(GameManager.CurrentGame);
             
         }
 

@@ -19,7 +19,7 @@ namespace ServerInterface
 
         Game GetGame(Int32 gameId);
 
-        Game[] GetOpenGames(String player, int gameTypeHashCode);
+        Game[] GetOpenGames(String player, int id);
 
         void ChangeGameState(String player, Game game, Byte[] state);
 

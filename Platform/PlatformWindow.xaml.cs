@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Windows;
 using ConnectionInterface;
 using Platform.Model;
@@ -343,7 +345,10 @@ namespace Platform
 
                 var obj = Activator.CreateInstance(gameType);
                 _MGameManager.RegisterGame((IGame)obj);
-                var hasCode = GameManager.CurrentGame.GetHashCode();
+                //using (Stream dllStream = new FileStream(openFileDialog.FileName, FileMode.Open))
+                //{
+                //    var hash = SHA1.Create().ComputeHash(dllStream);
+                //}
 
                 MessageBox.Show("Game registered!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             }

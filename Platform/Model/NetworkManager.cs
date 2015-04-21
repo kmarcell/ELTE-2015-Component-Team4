@@ -58,9 +58,9 @@ namespace Platform.Model
             }
         }
 
-        public void GetOnlineGames(int hashCode) 
+        public void GetOnlineGames(IGame game) 
         {
-            SendMessage(MessageCode.GetOpenGames, hashCode);
+            SendMessage(MessageCode.GetOpenGames, game.Id);
         }
 
 
@@ -70,8 +70,7 @@ namespace Platform.Model
             {
                 Id = game.Id, 
                 Name = game.Name, 
-                Description = game.Description, 
-                HashCode = hashCode,
+                Description = game.Description,
                 FirstPlayer = PlayerName
             };
             SendMessage(MessageCode.CreateGame, gameToServer);

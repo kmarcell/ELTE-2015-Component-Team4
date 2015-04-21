@@ -29,7 +29,7 @@ namespace PlatformInterface
 
         void Disconnect();
 
-        void GetOnlineGames(int hashCode);
+        void GetOnlineGames(IGame game);
 
         void CreateGame(IGame game, int hashCode);
 

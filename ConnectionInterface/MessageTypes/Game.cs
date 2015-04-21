@@ -16,9 +16,6 @@ namespace ConnectionInterface.MessageTypes
         public String Description { get; set; }
 
         [XmlAttribute]
-        public int HashCode { get; set; }
-
-        [XmlAttribute]
         public String FirstPlayer { get; set; }
 
         [XmlAttribute]

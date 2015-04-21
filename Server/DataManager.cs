@@ -48,7 +48,7 @@ namespace Server
                 if (playerName != null)
                 {
                 
-                        _OnlinePlayers.Add(playerName);
+                    _OnlinePlayers.Add(playerName);
                     return playerName;
                 }
                 
@@ -101,9 +101,9 @@ namespace Server
             return _OnlineGames.FirstOrDefault(x => x.Id == gameId);
         }
 
-        public Game[] GetOpenGames(String player, int gameTypeHashCode)
+        public Game[] GetOpenGames(String player, int id)
         {
-            return _OnlineGames.Where(x => x.Phase == GamePhase.Opened && x.HashCode == gameTypeHashCode && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
+            return _OnlineGames.Where(x => x.Phase == GamePhase.Opened && x.Id == id && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
         }
 
         public void ChangeGameState(String player, Game game, Byte[] state)

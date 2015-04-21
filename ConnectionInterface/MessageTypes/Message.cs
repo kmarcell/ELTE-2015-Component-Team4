@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using ConnectionInterface.GameEvents;
 
 namespace ConnectionInterface.MessageTypes
 {
@@ -9,10 +10,9 @@ namespace ConnectionInterface.MessageTypes
     }
 
     [XmlRoot]
-    [XmlInclude(typeof(Player)), 
-     XmlInclude(typeof(GameType)), 
+    [XmlInclude(typeof(GamePhase)),
+     XmlInclude(typeof(MessageCode)), 
      XmlInclude(typeof(Game)), 
-     XmlInclude(typeof(Player[])), 
      XmlInclude(typeof(Game[])),
      XmlInclude(typeof(Byte[]))]
     public class Message

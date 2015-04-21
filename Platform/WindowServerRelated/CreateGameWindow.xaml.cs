@@ -20,18 +20,18 @@ namespace Platform.WindowServerRelated
             : this()
         {
             _MNetworkManager = networkManager;
-            LoadedGameLabel.Content = DataManager.CurrentGame.Name;
+            LoadedGameLabel.Content = GameManager.CurrentGame.Name;
         }
 
         private void CreateGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (DataManager.CurrentGame == null)
+            if (GameManager.CurrentGame == null)
             {
                 MessageBox.Show("Please load game first (File)!", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
-            _MNetworkManager.CreateGame(DataManager.CurrentGame, DataManager.CurrentGame.GetHashCode());
+            _MNetworkManager.CreateGame(GameManager.CurrentGame, GameManager.CurrentGame.GetHashCode());
         }
     }
 }

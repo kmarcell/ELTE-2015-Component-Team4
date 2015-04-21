@@ -17,7 +17,7 @@ namespace Platform.Model
 
         public Boolean Connected { get { return _Socket != null && _Socket.Connected; } }
 
-        public Player Player { get; private set; }
+        public String PlayerName { get; private set; }
 
         public event EventHandler<ConnectionChangeEventArgs> ConnectionChangedEvent;
         public event EventHandler<EventArgs> ConnectAcceptedEvent;
@@ -28,10 +28,10 @@ namespace Platform.Model
         public event EventHandler<EventArgs> GameCreatedEvent;
 
 
-        public void Connect(String address, Int32 port, String player)
+        public void Connect(String address, Int32 port, String playerName)
         {
             _Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Player = new Player { Name = player };
+            PlayerName = playerName;
 
             var socketAsyncEventArgs = new SocketAsyncEventArgs
             {
@@ -68,13 +68,16 @@ namespace Platform.Model
         {
             var gameToServer = new Game
             {
-                Type = new GameType{Id = game.Id, Name = game.Name, Description = game.Description, HashCode = hashCode},
-                FirstPlayer = Player
+                Id = game.Id, 
+                Name = game.Name, 
+                Description = game.Description, 
+                HashCode = hashCode,
+                FirstPlayer = PlayerName
             };
             SendMessage(MessageCode.CreateGame, gameToServer);
         }
 
-        private void Game_OnGameStateChanged(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
+        private void SendGameOnSendGameStateChangedEventArg(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
         {
             SendGameState(gameStateChangedEventArgs.GameState);
         }
@@ -89,7 +92,7 @@ namespace Platform.Model
             SendMessage(MessageCode.ChangeGameState, state);
         }
 
-        public void EndGame(Player player = null)
+        public void EndGame(String player = null)
         {
             SendMessage(MessageCode.EndGame, player);
         }
@@ -129,7 +132,7 @@ namespace Platform.Model
 
                 e.Dispose();
 
-                SendMessage(MessageCode.Login, Player);
+                SendMessage(MessageCode.Login, PlayerName);
             }
             else
             {
@@ -166,14 +169,14 @@ namespace Platform.Model
                         OnlineGamesReceived(this, new GamesEventArgs { Games = message.Content as Game[] });
                         break;
                     case MessageCode.CreateGame:
-                        DataManager.CurrentGame.GameStateChanged += Game_OnGameStateChanged;
+                        GameManager.CurrentGame.SendGameStateChangedEventArg += SendGameOnSendGameStateChangedEventArg;
                         GameCreatedEvent(this, EventArgs.Empty);
                         break;
                     case MessageCode.JoinGame:
                         //GameStarted(this, new GameEventArgs { Game = message.Content as Game });
                         break;
                     case MessageCode.JoinAccepted:
-                        DataManager.CurrentGame.GameStateChanged += Game_OnGameStateChanged;
+                        GameManager.CurrentGame.SendGameStateChangedEventArg += SendGameOnSendGameStateChangedEventArg;
                         //GameStarted(this, new GameEventArgs { Game = message.Content as Game });
                         break;
                     case MessageCode.JoinRejected:

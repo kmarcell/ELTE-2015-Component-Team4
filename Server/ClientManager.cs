@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
+using ConnectionInterface.GameEvents;
 using ConnectionInterface.MessageTypes;
 using ServerInterface;
 
@@ -11,7 +12,7 @@ namespace Server
         private const Int32 BufferLength = 20000000;
         private readonly Socket _Socket;
 
-        public Player Player { get; private set; }
+        public String Player { get; private set; }
 
         public Game CurrentGame { get; private set; }
 
@@ -37,8 +38,8 @@ namespace Server
                     switch (message.Code)
                     {
                         case MessageCode.Login:
-                            var playerToLogin = (message.Content as Player);
-                            Player = DataManager.DataManagerInstance.LoginPlayer(playerToLogin.Name);
+                            var playerNameToLogin = (message.Content as String);
+                            Player = DataManager.DataManagerInstance.LoginPlayer(playerNameToLogin);
                             if (Player != null)
                                 SendConnectionAccepted();
                             else
@@ -69,7 +70,7 @@ namespace Server
                             SendGameState(message.Content as Byte[]);
                             break;
                         case MessageCode.EndGame:
-                            SendEndGame(message.Content as Player);
+                            SendEndGame(message.Content as String);
                             break;
                     }
                 }
@@ -92,7 +93,7 @@ namespace Server
 
         public void Disconnect()
         {
-            if (CurrentGame != null && CurrentGame.Phase != GamePhase.Completed)
+            if (CurrentGame != null && CurrentGame.Phase != GamePhase.Opened)
             {
                 DataManager.DataManagerInstance.EndGame(CurrentGame, (Player == CurrentGame.FirstPlayer) ? CurrentGame.SecondPlayer : CurrentGame.FirstPlayer);
             }
@@ -110,7 +111,7 @@ namespace Server
             SendMessage(MessageCode.GetOpenGames, DataManager.DataManagerInstance.GetOpenGames(Player, gameTypeHashCode));
         }
 
-        public void SendCreateGame(Player player, Game game)
+        public void SendCreateGame(String player, Game game)
         {
             CurrentGame = game;
             CurrentGame.FirstPlayer = Player;
@@ -136,7 +137,7 @@ namespace Server
             }
         }
 
-        public void SendEndGame(Player player)
+        public void SendEndGame(String player)
         {
             if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
             {

@@ -129,7 +129,7 @@ namespace Server
             while (_Running);
         }
 
-        public void MessagePlayer(Player player, MessageCode messageCode, Object messageContent)
+        public void MessagePlayer(String player, MessageCode messageCode, Object messageContent)
         {
             ClientManager clientManager = _Clients.FirstOrDefault(x => x.Player.Equals(player));
             if (clientManager != null)

@@ -1,48 +1,33 @@
 ﻿using System;
 using System.Xml.Serialization;
+using ConnectionInterface.GameEvents;
 
 namespace ConnectionInterface.MessageTypes
 {
-    public enum GamePhase { Open, Playing, Completed }
-
-    [XmlInclude(typeof(Player))]
     public class Game
     {
         [XmlAttribute]
-        public Int32 GameId { get; set; }
-
-        [XmlElement]
-        public GameType Type { get; set; }
+        public Int32 Id { get; set; }
 
         [XmlAttribute]
-        public DateTime CreateTime { get; set; }
-
-        public DateTime? StartTime { get; set; }
-
-        public DateTime? EndTime { get; set; }
+        public String Name { get; set; }
 
         [XmlAttribute]
-        public String GameSize { get; set; }
+        public String Description { get; set; }
 
-        [XmlElement]
-        public Player FirstPlayer { get; set; }
+        [XmlAttribute]
+        public int HashCode { get; set; }
 
-        [XmlElement]
-        public Player SecondPlayer { get; set; }
+        [XmlAttribute]
+        public String FirstPlayer { get; set; }
 
-        [XmlElement]
-        public Player Winner { get; set; }
+        [XmlAttribute]
+        public String SecondPlayer { get; set; }
 
-        public GamePhase Phase 
-        {
-            get {
-                if (EndTime != null)
-                    return GamePhase.Completed;
-                if (StartTime != null)
-                    return GamePhase.Playing;
-                
-                return GamePhase.Open;
-            }
-        }
+        [XmlAttribute]
+        public String Winner { get; set; }
+
+        [XmlAttribute]
+        public GamePhase Phase { get; set; }
     }
 }

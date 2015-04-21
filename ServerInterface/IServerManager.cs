@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConnectionInterface.MessageTypes;
 
 namespace ServerInterface
@@ -19,6 +15,6 @@ namespace ServerInterface
 
         void Stop();
 
-        void MessagePlayer(Player player, MessageCode messageCode, Object messageContent);
+        void MessagePlayer(String player, MessageCode messageCode, Object messageContent);
     }
 }

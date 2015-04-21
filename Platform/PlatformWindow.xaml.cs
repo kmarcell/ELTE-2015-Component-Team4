@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using ConnectionInterface;
-using ConnectionInterface.MessageTypes;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -95,7 +94,7 @@ namespace Platform
 
         private void StartGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (DataManager.CurrentGame == null)
+            if (GameManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before start game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -112,7 +111,7 @@ namespace Platform
 
         private void CreateOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (DataManager.CurrentGame == null)
+            if (GameManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before create to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -124,7 +123,7 @@ namespace Platform
 
         private void ConnectOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (DataManager.CurrentGame == null)
+            if (GameManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before connect to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -315,58 +314,43 @@ namespace Platform
 
         private void RegisterGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // TODO fix
-            // get game info from dll?!
-            //var gameToRegister = new List<string>
-            //{
-            //    "MillGame",
-            //    "CheckerGame"
-            //};
-
-            //var myGame = Assembly.Load(""); // MillGame is name of my dll
-            var gameAssembly = Assembly.LoadFrom(@"C:\\Games\\MillGame.dll");
-            Type gameType;
-
             try
             {
-                gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
-            }
-            catch (ReflectionTypeLoadException)
-            {
-                gameType = null;
-            }
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    Title = "Register game",
+                    Filter = "dll|*.dll"
+                };
 
-            if (gameType == null)
-            {
-                MessageBox.Show("Load game error!\nPlease select sufficient game to play!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+                openFileDialog.ShowDialog();
+                var gameAssembly = Assembly.LoadFrom(openFileDialog.FileName);
+                Type gameType;
 
-            object obj = Activator.CreateInstance(gameType);
-            DataManager.RegisterGame((IGame)obj);
-            var hasCode = DataManager.CurrentGame.GetHashCode();
+                try
+                {
+                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    gameType = null;
+                }
 
-            gameAssembly = Assembly.LoadFrom(@"C:\\Games\\CheckersGame.dll");
-            try
-            {
-                gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
-            }
-            catch (ReflectionTypeLoadException)
-            {
-                gameType = null;
-            }
+                if (gameType == null)
+                {
+                    MessageBox.Show("Registering game error!\nPlease select sufficient game to play!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
-            if (gameType == null)
-            {
-                MessageBox.Show("Load game error!\nPlease select sufficient game to play!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+                var obj = Activator.CreateInstance(gameType);
+                _MGameManager.RegisterGame((IGame)obj);
+                var hasCode = GameManager.CurrentGame.GetHashCode();
 
-            obj = Activator.CreateInstance(gameType);
-            DataManager.RegisterGame((IGame)obj);
-            var hasCode1 = DataManager.CurrentGame.GetHashCode();
+                MessageBox.Show("Game registered!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Registering game error!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-
-
     }
 }

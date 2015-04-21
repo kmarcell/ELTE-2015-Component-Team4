@@ -5,7 +5,7 @@ namespace ServerInterface
 {
     public interface IClientManager
     {
-        Player Player { get; }
+        String Player { get; }
 
         Game CurrentGame { get; }
 
@@ -17,7 +17,7 @@ namespace ServerInterface
 
         void SendOnlineGames(int gameTypeHashCode);
 
-        void SendCreateGame(Player player, Game game);
+        void SendCreateGame(String player, Game game);
 
         void SendJoinGameAccepted(Game game);
 
@@ -25,7 +25,7 @@ namespace ServerInterface
 
         void SendGameState(Byte[] gameState);
 
-        void SendEndGame(Player player);
+        void SendEndGame(String player);
 
         void SendMessage(MessageCode code, Object content = null);
     }

@@ -23,8 +23,8 @@ namespace Platform.WindowServerRelated
         {
             _MNetworkManager = networkManager;
             _MNetworkManager.OnlineGamesReceived += MNetworkManager_OnOnlineGamesReceived;
-            LoadedGameLabel.Content = DataManager.CurrentGame.Name;
-            _MNetworkManager.GetOnlineGames(DataManager.CurrentGame.GetHashCode());
+            LoadedGameLabel.Content = GameManager.CurrentGame.Name;
+            _MNetworkManager.GetOnlineGames(GameManager.CurrentGame.GetHashCode());
             
         }
 
@@ -41,7 +41,7 @@ namespace Platform.WindowServerRelated
         {
             if (OnlineGamesDataGrid.SelectedItems.Count > 0)
             {
-                _MNetworkManager.JoinGame(_MGames[OnlineGamesDataGrid.SelectedIndex].GameId);
+                _MNetworkManager.JoinGame(_MGames[OnlineGamesDataGrid.SelectedIndex].Id);
                 Close();
                 return;
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConnectionInterface.GameEvents;
 using ConnectionInterface.MessageTypes;
 using ServerInterface;
 
@@ -19,44 +20,43 @@ namespace Server
         }
 
         private readonly List<Game> _OnlineGames;
-        private readonly List<Player> _OnlinePlayers;
+        private readonly List<String> _OnlinePlayers;
 
         public Game[] OnlineGames
         {
             get { return _OnlineGames.ToArray(); }
         }
 
-        public Player[] OnlinePlayers
+        public String[] OnlinePlayers
         {
             get { return _OnlinePlayers.ToArray(); }
         }
 
         private DataManager()
         {
-            _OnlinePlayers = new List<Player>();
+            _OnlinePlayers = new List<String>();
             _OnlineGames = new List<Game>();
         }
 
-        public Player LoginPlayer(String playerName)
+        public String LoginPlayer(String playerName)
         {
-            if (_OnlinePlayers.Count(x => x.Name == playerName) != 0)
-                return null;
-
-            if (playerName != null)
+            lock (OnlinePlayers)
             {
-                var player = new Player
-                {
-                    Name = playerName,
-                };
+                if (_OnlinePlayers.Count(x => x == playerName) != 0)
+                    return null;
 
-                _OnlinePlayers.Add(player);
-                return player;
-            }
+                if (playerName != null)
+                {
                 
-            return null;
+                        _OnlinePlayers.Add(playerName);
+                    return playerName;
+                }
+                
+                return null;
+            }
         }
 
-        public void LogoutPlayer(Player player)
+        public void LogoutPlayer(String player)
         {
             if (_OnlinePlayers.Contains(player))
             {
@@ -66,28 +66,26 @@ namespace Server
 
         public void CreateGame(Game game)
         {
-            var prevGame = _OnlineGames.FirstOrDefault(x => x.Phase != GamePhase.Completed && (game.FirstPlayer.Equals(x.FirstPlayer) || game.FirstPlayer.Equals(x.SecondPlayer)));
+            var prevGame = _OnlineGames.FirstOrDefault(x => x.Phase != GamePhase.Ended && (game.FirstPlayer.Equals(x.FirstPlayer) || game.FirstPlayer.Equals(x.SecondPlayer)));
             if (prevGame != null)
                 EndGame(prevGame, game.FirstPlayer);
 
-            game.CreateTime = DateTime.Now;
             _OnlineGames.Add(game);
         }
 
-        public Boolean JoinGame(Int32 gameId, Player player)
+        public Boolean JoinGame(Int32 gameId, String player)
         {
-            var prevGame = _OnlineGames.FirstOrDefault(x => x.Phase != GamePhase.Completed && (player.Equals(x.FirstPlayer) || player.Equals(x.SecondPlayer)));
+            var prevGame = _OnlineGames.FirstOrDefault(x => x.Phase != GamePhase.Ended && (player.Equals(x.FirstPlayer) || player.Equals(x.SecondPlayer)));
             if (prevGame != null)
                 EndGame(prevGame, player);
 
-            var game = _OnlineGames.FirstOrDefault(x => x.GameId == gameId);
+            var game = _OnlineGames.FirstOrDefault(x => x.Id == gameId);
             if (game != null)
                 lock (game)
                 {
-                    if (game.Phase == GamePhase.Open)
+                    if (game.Phase == GamePhase.Opened)
                     {
                         game.SecondPlayer = player;
-                        game.StartTime = DateTime.Now;
                         ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.JoinGame, game);
                         return true;
                     }
@@ -100,15 +98,15 @@ namespace Server
 
         public Game GetGame(Int32 gameId)
         {
-            return _OnlineGames.FirstOrDefault(x => x.GameId == gameId);
+            return _OnlineGames.FirstOrDefault(x => x.Id == gameId);
         }
 
-        public Game[] GetOpenGames(Player player, int gameTypeHashCode)
+        public Game[] GetOpenGames(String player, int gameTypeHashCode)
         {
-            return _OnlineGames.Where(x => x.Phase == GamePhase.Open && x.Type.HashCode == gameTypeHashCode && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
+            return _OnlineGames.Where(x => x.Phase == GamePhase.Opened && x.HashCode == gameTypeHashCode && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
         }
 
-        public void ChangeGameState(Player player, Game game, Byte[] state)
+        public void ChangeGameState(String player, Game game, Byte[] state)
         {
             lock (game)
             {
@@ -120,14 +118,13 @@ namespace Server
             }
         }
 
-        public void EndGame(Game game, Player player, Player winner = null)
+        public void EndGame(Game game, String player, String winner = null)
         {
             lock (game)
             {
                 if (game.Phase == GamePhase.Playing)
                 {
                     game.Winner = winner;
-                    game.EndTime = DateTime.Now;
                     ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.EndGame, game);
                     ServerManager.ServerManagerInstance.MessagePlayer(game.SecondPlayer, MessageCode.EndGame, game);
                 }

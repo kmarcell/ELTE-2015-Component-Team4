@@ -9,7 +9,7 @@ namespace PlatformInterface
     {
         Boolean Connected { get; }
 
-        Player Player { get; }
+        String PlayerName { get; }
 
         event EventHandler<ConnectionChangeEventArgs> ConnectionChangedEvent;
 
@@ -25,7 +25,7 @@ namespace PlatformInterface
 
         event EventHandler<EventArgs> GameCreatedEvent;
 
-        void Connect(String address, Int32 port, String player);
+        void Connect(String address, Int32 port, String playerName);
 
         void Disconnect();
 
@@ -37,6 +37,6 @@ namespace PlatformInterface
 
         void SendGameState(Byte[] state);
 
-        void EndGame(Player player = null);
+        void EndGame(String player = null);
     }
 }

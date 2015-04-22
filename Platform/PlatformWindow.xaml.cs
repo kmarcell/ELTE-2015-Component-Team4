@@ -66,7 +66,9 @@ namespace Platform
             _MNetworkManager.ConnectRejectedServerNotRespondingEvent += NetworkManager_OnConnectRejectedServerNotRespondingEvent;
             _MNetworkManager.ConnectRejectedUsernameOccupied += NetworkManager_OnConnectRejectedUsernameOccupiedEvent;
             _MNetworkManager.DisconnectedEvent += NetworkManager_OnDisconnectedEvent;
-            _MNetworkManager.GameCreatedEvent += MNetworkManager_OnGameCreatedEvent;           
+            _MNetworkManager.GameCreatedEvent += MNetworkManager_OnGameCreatedEvent;
+            _MNetworkManager.GameEndedEvent += MNetworkManager_OnGameEndedEvent;
+            _MNetworkManager.GameCancelledEvent += MNetworkManager_OnGameCancelledEvent;         
         }
 
 
@@ -137,7 +139,7 @@ namespace Platform
 
         private void LeaveGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            _MNetworkManager.EndGame();
         }
 
         private void LoadGameMenuItem_Click(object sender, RoutedEventArgs e)
@@ -311,6 +313,39 @@ namespace Platform
             Dispatcher.Invoke(() => _MCreateGameWindow.Close());
 
             // todo inform player and wait for connect another
+        }
+
+        private void MNetworkManager_OnGameEndedEvent(object sender, GameEventArgs eventArgs)
+        {
+            var isWon = eventArgs.Game.Winner == _MNetworkManager.PlayerName;
+            var message = isWon
+                ? "Game finished! Gratulation you won!"
+                : "Game finished! Sorry, you lost that round";
+            MessageBox.Show(message, "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            Dispatcher.Invoke(() =>
+            {
+                CreateOnlineGameMenuItem.IsEnabled = true;
+                ConnectOnlineGameMenuItem.IsEnabled = true;
+                LeaveOnlineGameMenuItem.IsEnabled = false;
+                MenuServerDisconnectMenuItem.IsEnabled = true;
+                MenuServerConnectMenuItem.IsEnabled = false;
+            });
+        }
+
+
+        private void MNetworkManager_OnGameCancelledEvent(object sender, GameEventArgs eventArgs)
+        {
+            MessageBox.Show("Sorry, the game is cancelled.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+            Dispatcher.Invoke(() =>
+            {
+                CreateOnlineGameMenuItem.IsEnabled = true;
+                ConnectOnlineGameMenuItem.IsEnabled = true;
+                LeaveOnlineGameMenuItem.IsEnabled = false;
+                MenuServerDisconnectMenuItem.IsEnabled = true;
+                MenuServerConnectMenuItem.IsEnabled = false;
+            });
         }
         #endregion
 

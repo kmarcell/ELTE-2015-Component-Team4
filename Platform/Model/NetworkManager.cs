@@ -26,6 +26,8 @@ namespace Platform.Model
         public event EventHandler<EventArgs> DisconnectedEvent;
         public event EventHandler<GamesEventArgs> OnlineGamesReceived;
         public event EventHandler<EventArgs> GameCreatedEvent;
+        public event EventHandler<GameEventArgs> GameEndedEvent;
+        public event EventHandler<GameEventArgs> GameCancelledEvent;
 
 
         public void Connect(String address, Int32 port, String playerName)
@@ -91,9 +93,9 @@ namespace Platform.Model
             SendMessage(MessageCode.ChangeGameState, state);
         }
 
-        public void EndGame(String player = null)
+        public void EndGame(String playerName = null)
         {
-            SendMessage(MessageCode.EndGame, player);
+            SendMessage(MessageCode.EndGame, playerName);
         }
 
         private void SendMessage(MessageCode code, Object content = null)
@@ -182,7 +184,11 @@ namespace Platform.Model
                         //GameJoinFailed(this, EventArgs.Empty);
                         break;
                     case MessageCode.EndGame:
-                        //GameEnded(this, new GameEventArgs { Game = message.Content as Game });
+                        var game = message.Content as Game;
+                        if(game != null && game.Phase == GamePhase.Ended)
+                            GameEndedEvent(this, new GameEventArgs { Game = game });
+                        else
+                            GameCancelledEvent(this, new GameEventArgs { Game = game });
                         break;
                 }
 

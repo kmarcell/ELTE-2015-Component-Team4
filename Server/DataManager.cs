@@ -85,6 +85,7 @@ namespace Server
                 {
                     if (game.Phase == GamePhase.Opened)
                     {
+                        game.Phase = GamePhase.Playing;
                         game.SecondPlayer = player;
                         ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.JoinGame, game);
                         return true;
@@ -124,9 +125,19 @@ namespace Server
             {
                 if (game.Phase == GamePhase.Playing)
                 {
-                    game.Winner = winner;
-                    ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.EndGame, game);
-                    ServerManager.ServerManagerInstance.MessagePlayer(game.SecondPlayer, MessageCode.EndGame, game);
+                    if (string.IsNullOrEmpty(winner))
+                    {
+                        game.Phase = GamePhase.Playing;
+                        ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.EndGame, game);
+                        ServerManager.ServerManagerInstance.MessagePlayer(game.SecondPlayer, MessageCode.EndGame, game);
+                    }
+                    else
+                    {
+                        game.Phase = GamePhase.Ended;
+                        game.Winner = winner;
+                        ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.EndGame, game);
+                        ServerManager.ServerManagerInstance.MessagePlayer(game.SecondPlayer, MessageCode.EndGame, game);
+                    }
                 }
 
                 _OnlineGames.Remove(game);

@@ -44,6 +44,7 @@
     <Compile Include="EventsGameRelated\GameSavedEventArgs.cs" />
     <Compile Include="EventsServerRelated\ConnectionChangeEventArgs.cs" />
     <Compile Include="EventsServerRelated\DisconnectedEventArgs.cs" />
+    <Compile Include="EventsServerRelated\GameEventArgs.cs" />
     <Compile Include="EventsServerRelated\GamesEventArgs.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IGameManager.cs" />

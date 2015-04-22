@@ -1,18 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using ConnectionInterface.GameEvents;
 
-namespace Server.Utilities
+namespace ConnectionInterface.MessageTypes
 {
     public enum MessageCode {
-        Login, Logout, LoginAccepted, LoginRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOnlinePlayers, GetGames, GetOpenGames
+        Login, Disconnect, ConnectAccepted, ConnectRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOpenGames
     }
 
     [XmlRoot]
-    [XmlInclude(typeof(Player)), 
-     XmlInclude(typeof(GameType)), 
+    [XmlInclude(typeof(GamePhase)),
+     XmlInclude(typeof(MessageCode)), 
      XmlInclude(typeof(Game)), 
-     XmlInclude(typeof(Player[])), 
      XmlInclude(typeof(Game[])),
      XmlInclude(typeof(Byte[]))]
     public class Message

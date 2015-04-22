@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C26BF413-4BC3-4323-B94E-AC06DD2412BC}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{084ADDF8-2DAA-43AB-B293-A43EABB955CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Server</RootNamespace>
-    <AssemblyName>Server</AssemblyName>
+    <RootNamespace>ConnectionInterface</RootNamespace>
+    <AssemblyName>ConnectionInterface</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,25 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientManager.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="GameEvents\GameStateChangedEventArgs.cs" />
+    <Compile Include="IArtificialIntelligence.cs" />
+    <Compile Include="IGame.cs" />
+    <Compile Include="IPlatformGameManager.cs" />
+    <Compile Include="MessageTypes\Game.cs" />
+    <Compile Include="MessageTypes\Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataManager.cs" />
-    <Compile Include="ServerManager.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConnectionInterface\ConnectionInterface.csproj">
-      <Project>{084addf8-2daa-43ab-b293-a43eabb955ce}</Project>
-      <Name>ConnectionInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ServerInterface\ServerInterface.csproj">
-      <Project>{158de2d9-ea11-487e-b348-eb6764b877b1}</Project>
-      <Name>ServerInterface</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

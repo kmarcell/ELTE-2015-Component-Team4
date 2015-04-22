@@ -4,28 +4,29 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Server.Utilities;
+using ConnectionInterface.MessageTypes;
+using ServerInterface;
 
 namespace Server
 {
-    public class ServerManager : IDisposable
+    public class ServerManager : IDisposable, IServerManager
     {
-        private const Int32 _mServerPort = 5503;
+        private const Int32 MServerPort = 5503;
         private static ServerManager _mServerManagerInstance;
         private Socket _ServerSocket;
         private Boolean _Running;
         private readonly List<ClientManager> _Clients;
 
-        private String _mServerIp { get; set; }
+        private String MServerIp { get; set; }
 
         public String ServerIp
         {
-            get { return _mServerIp; }
+            get { return MServerIp; }
         }
 
         public Int32 ServerPort
         {
-            get { return _mServerPort; }
+            get { return MServerPort; }
         }
 
         public static ServerManager ServerManagerInstance
@@ -64,9 +65,9 @@ namespace Server
                     throw new Exception("Gameserver start error! No available local address.");
                 }
 
-                _mServerIp = addressList[0].ToString();
+                MServerIp = addressList[0].ToString();
                 _ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                _ServerSocket.Bind(new IPEndPoint(addressList[0], _mServerPort));
+                _ServerSocket.Bind(new IPEndPoint(addressList[0], MServerPort));
                 _ServerSocket.Listen(10);
 
                 _Running = true;
@@ -96,7 +97,7 @@ namespace Server
                 _ServerSocket.Dispose();
         }
 
-         private void WatchNewConnections()
+        private void WatchNewConnections()
         {
             try
             {
@@ -128,7 +129,7 @@ namespace Server
             while (_Running);
         }
 
-        public void MessagePlayer(Player player, MessageCode messageCode, Object messageContent)
+        public void MessagePlayer(String player, MessageCode messageCode, Object messageContent)
         {
             ClientManager clientManager = _Clients.FirstOrDefault(x => x.Player.Equals(player));
             if (clientManager != null)

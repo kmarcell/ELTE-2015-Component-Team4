@@ -29,6 +29,12 @@ namespace ConnectionInterface
         void RegisterGameManager(IPlatformGameManager platformGameManager);
 
         /// <summary>
+        ///  The function where the platform can register the currently selected AI for the game.
+        /// </summary>
+        /// <param name="artificialIntelligence">The currently loaded/selected AI</param>
+        void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence);
+
+        /// <summary>
         /// The subscribe for event of platform game manager
         /// </summary>
         /// <param name="sender">the sender which is gamemanager of the platform</param>
@@ -63,11 +69,5 @@ namespace ConnectionInterface
         /// </summary>
         /// <returns>the byte array representation of the game</returns>
         Byte[] SaveGame();
-
-        /// <summary>
-        /// It generated automatically
-        /// </summary>
-        /// <returns>the hascode value</returns>
-        int GetHashCode();
     }
 }

@@ -27,6 +27,11 @@ namespace CheckersGame
             PlatformGameManager.SendGameStateChangedEventArg += RecieveGameState;
         }
 
+        public void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
         {
             throw new NotImplementedException();

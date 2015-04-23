@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using ConnectionInterface;
 using Platform.Model;
 
 namespace Platform.WindowGameRelated
@@ -9,7 +12,7 @@ namespace Platform.WindowGameRelated
     public partial class GameConfigurationWindow : Window
     {
         private readonly GameManager _MGameManager;
-
+        private readonly List<IArtificialIntelligence> _MArtificialIntelligences; 
         public GameConfigurationWindow()
         {
             InitializeComponent();
@@ -20,6 +23,8 @@ namespace Platform.WindowGameRelated
         {
             _MGameManager = gameManager;
             CurrentlyLoadedGameLabel.Content = GameManager.CurrentGame.Name;
+            _MArtificialIntelligences = _MGameManager.ArtificialIntelligences;
+            AiDataGrid.ItemsSource = _MGameManager.ArtificialIntelligences;
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
@@ -30,7 +35,14 @@ namespace Platform.WindowGameRelated
                 return;
             }
 
-            _MGameManager.StartGame();
+            if (AiDataGrid.SelectedItems.Count > 0)
+            {
+                _MGameManager.StartGame(_MArtificialIntelligences[AiDataGrid.SelectedIndex]);
+                Close();
+                return;
+            }
+
+            MessageBox.Show("Please select AI from list first!", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
     }
 }

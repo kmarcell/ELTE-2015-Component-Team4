@@ -11,7 +11,7 @@ namespace PlatformInterface
 
         event EventHandler<GameEndedEventArgs> GameEndedEvent;
 
-        void StartGame();
+        void StartGame(IArtificialIntelligence artificialIntelligence);
 
         void EndGame();
 

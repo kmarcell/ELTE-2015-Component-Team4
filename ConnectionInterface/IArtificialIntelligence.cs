@@ -11,8 +11,10 @@ namespace ConnectionInterface
 
     public interface IArtificialIntelligence
     {
-        Int32 GetHashCode();
+        String Name { get; }
 
-        Difficulty GetDifficulty();
+        String Description { get; }
+
+        Difficulty Difficulty { get; }
     }
 }

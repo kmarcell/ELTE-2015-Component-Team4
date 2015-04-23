@@ -15,7 +15,6 @@
                     <MenuItem Name="MenuServerDisconnectMenuItem" Header="Quit" Click="QuitMenuItem_Click" />
                 </MenuItem>
                 <MenuItem Name="LoadMenuItem"  Header="Load">
-                    <MenuItem Name="LoadAiComponentMenuItem" Header="Load AI Component" />
                     <MenuItem Name="LoadGameLogicComponentMenuItem" Header="Load Game Logic Component"  Click="RegisterGameMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" />

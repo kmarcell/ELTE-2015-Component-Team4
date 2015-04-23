@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using ConnectionInterface;
 using ConnectionInterface.GameEvents;
@@ -11,12 +12,14 @@ namespace Platform.Model
     {
         public GameManager()
         {
+            ArtificialIntelligences = new List<IArtificialIntelligence>();
             _MIsOnlineGame = true;
         }
 
         private Boolean _MIsOnlineGame;
         public static IGame CurrentGame { get; private set; }
-
+        public List<IArtificialIntelligence> ArtificialIntelligences { get; private set; }
+        
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
 
@@ -29,6 +32,12 @@ namespace Platform.Model
             CurrentGame = game;
             game.RegisterGameManager(this);
             game.SendGameStateChangedEventArg += RecieveGameState;
+        }
+
+
+        public void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence)
+        {
+            ArtificialIntelligences.Add(artificialIntelligence);
         }
 
         public void RecieveNetworkGameState(object sender, GameStateChangedEventArgs eventArgs)
@@ -96,9 +105,10 @@ namespace Platform.Model
             }
         }
         
-        public void StartGame()
+        public void StartGame(IArtificialIntelligence artificialIntelligence)
         {
             _MIsOnlineGame = false;
+            CurrentGame.RegisterArtificialIntelligence(artificialIntelligence);
             SendGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, IsOnline = _MIsOnlineGame });
         }
 

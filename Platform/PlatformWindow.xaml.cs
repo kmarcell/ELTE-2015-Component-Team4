@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -50,7 +51,6 @@ namespace Platform
             LoadGameMenuItem.IsEnabled = true;
             EndGameMenuItem.IsEnabled = false;
             StartGameMenuItem.IsEnabled = true;
-            LoadAiComponentMenuItem.IsEnabled = true;
             LoadGameLogicComponentMenuItem.IsEnabled = true;
 
 
@@ -68,9 +68,38 @@ namespace Platform
             _MNetworkManager.DisconnectedEvent += NetworkManager_OnDisconnectedEvent;
             _MNetworkManager.GameCreatedEvent += MNetworkManager_OnGameCreatedEvent;
             _MNetworkManager.GameEndedEvent += MNetworkManager_OnGameEndedEvent;
-            _MNetworkManager.GameCancelledEvent += MNetworkManager_OnGameCancelledEvent;         
+            _MNetworkManager.GameCancelledEvent += MNetworkManager_OnGameCancelledEvent;
+
+            LoadArtificalIntelligence();
         }
 
+        private void LoadArtificalIntelligence()
+        {
+            const string aiDirectory = "ArtificialIntelligence";
+
+            foreach (var aiDll in Directory.GetFiles(aiDirectory, "*.dll", SearchOption.TopDirectoryOnly))
+            {
+                var aiAssembly = Assembly.LoadFrom(aiDll);
+                Type aiType;
+
+                try
+                {
+                    aiType = aiAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IArtificialIntelligence") != null);
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    aiType = null;
+                }
+
+                if (aiType == null)
+                {
+                    break;
+                }
+
+                var aiObject = Activator.CreateInstance(aiType);
+                _MGameManager.RegisterArtificialIntelligence((IArtificialIntelligence)aiObject);
+            }
+        }
 
         private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
         {
@@ -190,14 +219,11 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                _MGameConfigurationWindow.Close();
-                
                 SaveGameMenuItem.IsEnabled = true;
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = true;
                 StartGameMenuItem.IsEnabled = false;
                 MenuServerConnectMenuItem.IsEnabled = false;
-                LoadAiComponentMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
         }
@@ -223,7 +249,6 @@ namespace Platform
             EndGameMenuItem.IsEnabled = false;
             StartGameMenuItem.IsEnabled = true;
             MenuServerConnectMenuItem.IsEnabled = true;
-            LoadAiComponentMenuItem.IsEnabled = true;
             LoadGameLogicComponentMenuItem.IsEnabled = true;
         }
         #endregion
@@ -247,7 +272,6 @@ namespace Platform
                     EndGameMenuItem.IsEnabled = false;
                     StartGameMenuItem.IsEnabled = false;
 
-                    LoadAiComponentMenuItem.IsEnabled = false;
                     LoadGameLogicComponentMenuItem.IsEnabled = false;
                 }
                 else
@@ -263,7 +287,6 @@ namespace Platform
                     EndGameMenuItem.IsEnabled = false;
                     StartGameMenuItem.IsEnabled = true;
 
-                    LoadAiComponentMenuItem.IsEnabled = true;
                     LoadGameLogicComponentMenuItem.IsEnabled = true;
 
                     if (_MIsConnectedToServer)

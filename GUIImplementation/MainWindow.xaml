@@ -1,7 +1,7 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:WpfCustomControlLibrary1="clr-namespace:WpfCustomControlLibrary1;assembly=WpfCustomControlLibrary1" xmlns:local="clr-namespace:GUIImplementation" x:Class="GUIImplementation.MainWindow"
+        xmlns:local="clr-namespace:GUIImplementation" x:Class="GUIImplementation.MainWindow"
         Title="MainWindow" Height="600" Width="1200" SizeToContent="WidthAndHeight">
     <Grid>
         <ContentControl x:Name="damaContent" Width="600" Height="600" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="582,10,10,-41">

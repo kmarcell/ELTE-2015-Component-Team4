@@ -7,12 +7,14 @@ namespace CheckersGame
     public class CheckersGame : IGame
     {
         private IPlatformGameManager PlatformGameManager;
+        private GTInterfacesLibrary.GTGameLogicInterface<Logic.Element, Logic.Position> Logic;
 
         public CheckersGame()
         {
             Name = "CheckersGame";
             Id = 2;
             Description = "CheckersGame";
+            Logic = new Logic.Logic();
         }
 
         public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEventArg;

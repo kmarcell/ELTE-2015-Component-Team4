@@ -32,27 +32,21 @@ namespace CheckersGame.Logic
 
         private List<Step> stepsFromPositionWithState(GameSpace state, Position position)
         {
-            Position[] positions = new Position[6];
-            for (int i = 0; i < 6; i++)
-            {
-                int[] coordinates = position.coordinates();
-                coordinates[i / 2] += (i % 2 == 0 ? -1 : 1);
-                //positions[i] = new Position(coordinates[0], coordinates[1], coordinates[2]);
-            }
+            List<Step> steps = new List<Step>();
 
-            List<Position> availablePositions = new List<Position>();
-            foreach (Position p in positions)
+            for (int i = StepSupervisor.BoardMinIndex; i <= StepSupervisor.BoardMaxIndex; i++)
             {
-                //if (!state.hasElementAt(p) && validPosition(p) && (position.z == p.z || !isCornerPosition(position)))
+                for (int j = StepSupervisor.BoardMinIndex; j <= StepSupervisor.BoardMaxIndex; j++)
                 {
-                    availablePositions.Add(p);
-                }
-            }
+                    if (!state.hasElementAt(position))
+                        continue;
 
-            List<Step> steps = new List<Step>(availablePositions.Count);
-            foreach (Position to in availablePositions)
-            {
-                //steps.Add(new Step(state.elementAt(position), position, to));
+                    Step step = new Step(state.elementAt(position), position, new Position(i, j));
+                    if (!StepSupervisor.IsValidStep(step))
+                        continue;
+                    else
+                        steps.Add(step);
+                }
             }
 
             return steps;
@@ -114,5 +108,9 @@ namespace CheckersGame.Logic
         {
             return e1.owner != e2.owner;
         }
+
+
+
+
     }
 }

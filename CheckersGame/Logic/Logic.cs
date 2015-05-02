@@ -11,17 +11,22 @@ namespace CheckersGame.Logic
     {
         // properties
         private GameSpace state = new GameSpace();
+        private string MyColor;
 
-		public Logic ()
+		public Logic(string color)
 		{
             init();
+            MyColor = color;
+            if (MyColor == "White")
+                state.IsMyTurn = true;
+            else
+                state.IsMyTurn = false;
 		}
 
 		// Input
 		public void init()
 		{
-            PutUpBlacks();
-            PutUpWhites();
+            StartingStateBuilder.BuildStartingState(state); 
 		}
 
         public void updateGameSpace(GTGameStepInterface<Element, Position> step)
@@ -48,62 +53,6 @@ namespace CheckersGame.Logic
 		public GTGameStateHashInterface<Element, Position> getStateHash()
 		{
 			return new GameStateHash();
-		}
-
-        private void PutUpBlacks()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (i % 2 == 0)
-                    {
-                        if (j % 2 != 0)
-                        {
-                            Position p = new Position(i, j);
-                            Element e = new Element(0, 0, 0);
-                            state.setElementAt(p, e);
-                        }
-                    }
-                    else
-                    {
-                        if (j % 2 == 0)
-                        {
-                            Position p = new Position(i, j);
-                            Element e = new Element(0, 0, 0);
-                            state.setElementAt(p, e);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void PutUpWhites()
-        {
-            for (int i = 5; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (i % 2 == 0)
-                    {
-                        if (j % 2 != 0)
-                        {
-                            Position p = new Position(i, j);
-                            Element e = new Element(0, 0, 1);
-                            state.setElementAt(p, e);
-                        }
-                    }
-                    else
-                    {
-                        if (j % 2 == 0)
-                        {
-                            Position p = new Position(i, j);
-                            Element e = new Element(0, 0, 1);
-                            state.setElementAt(p, e);
-                        }
-                    }
-                }
-            }
-        }
+		}    
     }
 }

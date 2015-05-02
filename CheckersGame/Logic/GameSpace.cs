@@ -9,6 +9,8 @@ namespace CheckersGame.Logic
     {
         private Dictionary<Position, Element> elements = new Dictionary<Position, Element>();
 
+        public bool IsMyTurn;
+
         public bool hasElementAt(Position p)
         {
             if (elements.Keys.Contains(p))

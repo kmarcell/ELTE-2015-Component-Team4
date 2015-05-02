@@ -45,8 +45,10 @@
     <Compile Include="Logic\GameStateGenerator.cs" />
     <Compile Include="Logic\GameStateHash.cs" />
     <Compile Include="Logic\Logic.cs" />
+    <Compile Include="Logic\StartingStateBuilder.cs" />
     <Compile Include="Logic\Position.cs" />
     <Compile Include="Logic\Step.cs" />
+    <Compile Include="Logic\StepSupervisor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

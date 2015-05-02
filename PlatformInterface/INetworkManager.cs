@@ -10,9 +10,7 @@ namespace PlatformInterface
         Boolean Connected { get; }
 
         String PlayerName { get; }
-
-        event EventHandler<ConnectionChangeEventArgs> ConnectionChangedEvent;
-
+        
         event EventHandler<EventArgs> ConnectAcceptedEvent;
 
         event EventHandler<EventArgs> ConnectRejectedServerNotRespondingEvent;
@@ -35,7 +33,7 @@ namespace PlatformInterface
 
         void JoinGame(Int32 gameId);
 
-        void SendGameState(Byte[] state);
+        void SendGameState(Game game);
 
         void EndGame(String player = null);
     }

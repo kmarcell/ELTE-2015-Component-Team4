@@ -22,10 +22,6 @@ namespace Server
         private readonly List<Game> _OnlineGames;
         private readonly List<String> _OnlinePlayers;
 
-        public Game[] OnlineGames
-        {
-            get { return _OnlineGames.ToArray(); }
-        }
 
         public String[] OnlinePlayers
         {
@@ -87,7 +83,7 @@ namespace Server
                     {
                         game.Phase = GamePhase.Playing;
                         game.SecondPlayer = player;
-                        ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.JoinGame, game);
+                        ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.JoinAccepted, game);
                         return true;
                     }
                     
@@ -107,14 +103,14 @@ namespace Server
             return _OnlineGames.Where(x => x.Phase == GamePhase.Opened && x.Id == id && !player.Equals(x.FirstPlayer) && !player.Equals(x.SecondPlayer)).ToArray();
         }
 
-        public void ChangeGameState(String player, Game game, Byte[] state)
+        public void ChangeGameState(String player, Game game)
         {
             lock (game)
             {
                 if (game.Phase == GamePhase.Playing)
                 {
                     ServerManager.ServerManagerInstance.MessagePlayer(
-                        game.FirstPlayer.Equals(player) ? game.SecondPlayer : game.FirstPlayer, MessageCode.ChangeGameState, state);
+                        game.FirstPlayer.Equals(player) ? game.SecondPlayer : game.FirstPlayer, MessageCode.ChangeGameState, game);
                 }
             }
         }

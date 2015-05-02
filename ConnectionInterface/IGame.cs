@@ -22,7 +22,7 @@ namespace ConnectionInterface
         /// <summary>
         /// The function where the platform can register its game manager after loading the dll <see cref="IPlatformGameManager"/>.
         /// <remarks>
-        /// In this function game has to connect to SendGameStateChangedEventArg event of platform game manager <see cref="GameStateChangedEventArgs"/>.
+        /// In this function game has to connect to SendGameStateChangedEvent event of platform game manager <see cref="GameStateChangedEventArgs"/>.
         /// </remarks>
         /// </summary>
         /// <param name="platformGameManager"></param>

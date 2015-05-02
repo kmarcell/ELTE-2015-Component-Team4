@@ -67,7 +67,7 @@ namespace Server
                             }
                             break;
                         case MessageCode.ChangeGameState:
-                            SendGameState(message.Content as Byte[]);
+                            SendGameState(message.Content as Game);
                             break;
                         case MessageCode.EndGame:
                             SendEndGame(message.Content as String);
@@ -88,7 +88,7 @@ namespace Server
 
         public void SendConnectionRejected()
         {
-            SendMessage(MessageCode.ConnectAccepted);
+            SendMessage(MessageCode.ConnectRejected);
         }
 
         public void Disconnect()
@@ -129,11 +129,11 @@ namespace Server
             SendMessage(MessageCode.JoinRejected);
         }
 
-        public void SendGameState(Byte[] gameState)
+        public void SendGameState(Game game)
         {
             if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
             {
-                DataManager.DataManagerInstance.ChangeGameState(Player, CurrentGame, gameState);
+                DataManager.DataManagerInstance.ChangeGameState(Player, game);
             }
         }
 

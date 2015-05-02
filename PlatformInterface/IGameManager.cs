@@ -2,6 +2,7 @@
 using ConnectionInterface;
 using ConnectionInterface.GameEvents;
 using PlatformInterface.EventsGameRelated;
+using PlatformInterface.EventsServerRelated;
 
 namespace PlatformInterface
 {
@@ -11,27 +12,23 @@ namespace PlatformInterface
 
         event EventHandler<GameEndedEventArgs> GameEndedEvent;
 
-        void StartGame(IArtificialIntelligence artificialIntelligence);
+        void StartLocalGame(IArtificialIntelligence artificialIntelligence);
 
-        void EndGame();
+        void EndLocalGame();
 
-        void SaveGame(String fileName);
+        void SaveLocalGame(String fileName);
 
-        void LoadGame(String fileName);
+        void LoadLocalGame(String fileName);
         
         /// <summary>
         /// The function which register the loaded game in the GameManager.
         /// <remarks>
-        /// We have to connect to SendGameStateChangedEventArg event of IGame <see cref="GameStateChangedEventArgs"/>.
+        /// We have to connect to SendGameStateChangedEvent event of IGame <see cref="GameStateChangedEventArgs"/>.
         /// </remarks>
         /// </summary>
         /// <param name="game"></param>
         void RegisterGame(IGame game);
 
-        event EventHandler<GameStateChangedEventArgs> SendNetworkGameStateChangedEventArg;
-
-        void SendNetworkGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs);
-
-        void RecieveNetworkGameState(object sender, GameStateChangedEventArgs eventArgs);
+        void RecieveGameStateFromNetwork(object sender, GameEventArgs eventArgs);
     }
 }

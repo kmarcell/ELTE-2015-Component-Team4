@@ -5,8 +5,6 @@ namespace ServerInterface
 {
     public interface IDataManager
     {
-        Game[] OnlineGames { get; }
-
         String[] OnlinePlayers { get; }
 
         String LoginPlayer(String playerName);
@@ -21,7 +19,7 @@ namespace ServerInterface
 
         Game[] GetOpenGames(String player, int id);
 
-        void ChangeGameState(String player, Game game, Byte[] state);
+        void ChangeGameState(String player, Game game);
 
         void EndGame(Game game, String player, String winner = null);
     }

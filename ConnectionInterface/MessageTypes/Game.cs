@@ -26,5 +26,11 @@ namespace ConnectionInterface.MessageTypes
 
         [XmlAttribute]
         public GamePhase Phase { get; set; }
+
+        [XmlAttribute]
+        public String PlayerTurn { get; set; }
+
+        [XmlAttribute]
+        public Byte[] GameState { get; set; }
     }
 }

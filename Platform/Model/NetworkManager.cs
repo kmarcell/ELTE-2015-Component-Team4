@@ -19,15 +19,17 @@ namespace Platform.Model
 
         public String PlayerName { get; private set; }
 
-        public event EventHandler<ConnectionChangeEventArgs> ConnectionChangedEvent;
         public event EventHandler<EventArgs> ConnectAcceptedEvent;
         public event EventHandler<EventArgs> ConnectRejectedServerNotRespondingEvent;
         public event EventHandler<EventArgs> ConnectRejectedUsernameOccupied;
         public event EventHandler<EventArgs> DisconnectedEvent;
         public event EventHandler<GamesEventArgs> OnlineGamesReceived;
         public event EventHandler<EventArgs> GameCreatedEvent;
+        public event EventHandler<EventArgs> GameJoinRejectedEvent;
+        public event EventHandler<EventArgs> GameJoinAcceptedEvent;
         public event EventHandler<GameEventArgs> GameEndedEvent;
         public event EventHandler<GameEventArgs> GameCancelledEvent;
+        public event EventHandler<GameEventArgs> GameStatusReceived;
 
 
         public void Connect(String address, Int32 port, String playerName)
@@ -73,14 +75,10 @@ namespace Platform.Model
                 Id = game.Id, 
                 Name = game.Name, 
                 Description = game.Description,
-                FirstPlayer = PlayerName
+                FirstPlayer = PlayerName,
+                Phase = GamePhase.Opened
             };
             SendMessage(MessageCode.CreateGame, gameToServer);
-        }
-
-        private void SendGameOnSendGameStateChangedEventArg(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
-        {
-            SendGameState(gameStateChangedEventArgs.GameState);
         }
 
         public void JoinGame(Int32 gameId)
@@ -88,9 +86,9 @@ namespace Platform.Model
             SendMessage(MessageCode.JoinGame, gameId);
         }
 
-        public void SendGameState(Byte[] state) 
+        public void SendGameState(Game game) 
         {
-            SendMessage(MessageCode.ChangeGameState, state);
+            SendMessage(MessageCode.ChangeGameState, game);
         }
 
         public void EndGame(String playerName = null)
@@ -138,7 +136,6 @@ namespace Platform.Model
             else
             {
                 ConnectRejectedServerNotRespondingEvent(this, EventArgs.Empty);
-                ConnectionChangedEvent(this, new ConnectionChangeEventArgs { IsConnected = false });
             }
         }
 
@@ -152,7 +149,6 @@ namespace Platform.Model
                 {
                     case MessageCode.ConnectAccepted:
                         ConnectAcceptedEvent(this, EventArgs.Empty);
-                        ConnectionChangedEvent(this, new ConnectionChangeEventArgs { IsConnected = true });
                         break;
                     case MessageCode.ConnectRejected:
                         ConnectRejectedUsernameOccupied(this, EventArgs.Empty);
@@ -161,27 +157,23 @@ namespace Platform.Model
                         _Socket.Shutdown(SocketShutdown.Both);
                         _Socket.Close(1000);
                         DisconnectedEvent(this, EventArgs.Empty);
-                        ConnectionChangedEvent(this, new ConnectionChangeEventArgs { IsConnected = false });
                         break;
                     case MessageCode.ChangeGameState:
-                        //GameStatusReceived(this, new GameStateEventArgs { GameState = message.Content as Byte[] });
+                        GameStatusReceived(this, new GameEventArgs { Game = message.Content as Game });
                         break;
                     case MessageCode.GetOpenGames:
                         OnlineGamesReceived(this, new GamesEventArgs { Games = message.Content as Game[] });
                         break;
                     case MessageCode.CreateGame:
-                        GameManager.CurrentGame.SendGameStateChangedEventArg += SendGameOnSendGameStateChangedEventArg;
                         GameCreatedEvent(this, EventArgs.Empty);
                         break;
-                    case MessageCode.JoinGame:
-                        //GameStarted(this, new GameEventArgs { Game = message.Content as Game });
-                        break;
                     case MessageCode.JoinAccepted:
-                        GameManager.CurrentGame.SendGameStateChangedEventArg += SendGameOnSendGameStateChangedEventArg;
-                        //GameStarted(this, new GameEventArgs { Game = message.Content as Game });
+                        GameJoinAcceptedEvent(this, new GameEventArgs { Game = message.Content as Game });
+                        //TODO
+                        //game started event
                         break;
                     case MessageCode.JoinRejected:
-                        //GameJoinFailed(this, EventArgs.Empty);
+                        GameJoinRejectedEvent(this, EventArgs.Empty);
                         break;
                     case MessageCode.EndGame:
                         var game = message.Content as Game;
@@ -203,7 +195,7 @@ namespace Platform.Model
             }
             else
             {
-                ConnectionChangedEvent(this, new ConnectionChangeEventArgs { IsConnected = false });
+                DisconnectedEvent(this, EventArgs.Empty);
             }
         }
 
@@ -211,7 +203,7 @@ namespace Platform.Model
         {
             if (e.SocketError != SocketError.Success && e.BytesTransferred > 0)
             {
-                ConnectionChangedEvent(this, new ConnectionChangeEventArgs { IsConnected = false });
+                DisconnectedEvent(this, EventArgs.Empty);
             }
             e.Dispose();
         }

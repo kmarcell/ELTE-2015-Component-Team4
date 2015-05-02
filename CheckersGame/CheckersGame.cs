@@ -26,7 +26,7 @@ namespace CheckersGame
         public void RegisterGameManager(IPlatformGameManager platformGameManager)
         {
             PlatformGameManager = platformGameManager;
-            PlatformGameManager.SendGameStateChangedEventArg += RecieveGameState;
+            PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;
         }
 
         public void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence)

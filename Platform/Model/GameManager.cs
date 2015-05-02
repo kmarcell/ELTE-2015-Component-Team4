@@ -3,35 +3,42 @@ using System.Collections.Generic;
 using System.IO;
 using ConnectionInterface;
 using ConnectionInterface.GameEvents;
+using ConnectionInterface.MessageTypes;
 using PlatformInterface;
 using PlatformInterface.EventsGameRelated;
+using PlatformInterface.EventsServerRelated;
 
 namespace Platform.Model
 {
     public class GameManager : IGameManager, IPlatformGameManager
     {
-        public GameManager()
+        private readonly NetworkManager _MNetworkManager;
+        public GameManager(NetworkManager networkManager)
         {
             ArtificialIntelligences = new List<IArtificialIntelligence>();
             _MIsOnlineGame = true;
+            _MNetworkManager = networkManager;
+            _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
         }
 
         private Boolean _MIsOnlineGame;
         public static IGame CurrentGame { get; private set; }
+
+        public static Game CurrentNetworkGame { get; protected set; }
+
         public List<IArtificialIntelligence> ArtificialIntelligences { get; private set; }
         
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
 
-        public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEventArg;
-        public event EventHandler<GameStateChangedEventArgs> SendNetworkGameStateChangedEventArg;
+        public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEvent;
 
 
         public void RegisterGame(IGame game)
         {
             CurrentGame = game;
             game.RegisterGameManager(this);
-            game.SendGameStateChangedEventArg += RecieveGameState;
+            game.SendGameStateChangedEventArg += RecieveGameStateFromLogic;
         }
 
 
@@ -40,36 +47,15 @@ namespace Platform.Model
             ArtificialIntelligences.Add(artificialIntelligence);
         }
 
-        public void RecieveNetworkGameState(object sender, GameStateChangedEventArgs eventArgs)
+        public void RecieveGameStateFromNetwork(object sender, GameEventArgs eventArgs)
         {
-            switch (eventArgs.GamePhase)
-            {
-                case GamePhase.Started:
-                    SendGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = eventArgs.GameState, IsMyTurn = eventArgs.IsMyTurn, IsWon = eventArgs.IsWon, IsOnline = _MIsOnlineGame });
-                    break;
+            var isMyTurn = eventArgs.Game.PlayerTurn == _MNetworkManager.PlayerName;
+            var isWon = eventArgs.Game.Winner != null && (eventArgs.Game.Winner == _MNetworkManager.PlayerName);
 
-                case GamePhase.Playing:
-                    SendGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Playing, GameState = eventArgs.GameState, IsMyTurn = eventArgs.IsMyTurn, IsWon = eventArgs.IsWon, IsOnline = _MIsOnlineGame });
-                    break;
-
-                case GamePhase.Ended:
-                    SendGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = eventArgs.GameState, IsMyTurn = eventArgs.IsMyTurn, IsWon = eventArgs.IsWon, IsOnline = _MIsOnlineGame });
-                    break;
-            }
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, IsOnline = _MIsOnlineGame });
         }
 
-        public void SendNetworkGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs)
-        {
-            SendNetworkGameStateChangedEventArg(this, currentGameStateChangedEventArgs);
-        }
-
-        
-        public void SendGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs)
-        {
-            SendGameStateChangedEventArg(this, currentGameStateChangedEventArgs);
-        }
-
-        public void RecieveGameState(object sender, GameStateChangedEventArgs eventArgs)
+        public void RecieveGameStateFromLogic(object sender, GameStateChangedEventArgs eventArgs)
         {
             if (!_MIsOnlineGame)
             {
@@ -84,41 +70,43 @@ namespace Platform.Model
                         _MIsOnlineGame = true;
                         return;
                 }
+
+                return;
             }
 
-            // TODO check
+            
             // if online game, send it to the server
-            // if local game and game is not ended, or started leave as it is
-            switch (eventArgs.GamePhase)
-            {
-                case GamePhase.Started:
-                    SendNetworkGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = eventArgs.GameState, IsMyTurn = eventArgs.IsMyTurn, IsWon = eventArgs.IsWon });
-                    break;
+            CurrentNetworkGame.GameState = eventArgs.GameState;
+            CurrentNetworkGame.Phase = eventArgs.GamePhase;
 
-                case GamePhase.Playing:
-                    SendNetworkGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Playing, GameState = eventArgs.GameState, IsMyTurn = eventArgs.IsMyTurn, IsWon = eventArgs.IsWon });
-                    break;
+            CurrentNetworkGame.PlayerTurn = (CurrentNetworkGame.FirstPlayer == _MNetworkManager.PlayerName && eventArgs.IsMyTurn) 
+                                                ? CurrentNetworkGame.FirstPlayer 
+                                                : CurrentNetworkGame.SecondPlayer;
+                
 
-                case GamePhase.Ended:
-                    SendNetworkGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = eventArgs.GameState, IsMyTurn = eventArgs.IsMyTurn, IsWon = eventArgs.IsWon });
-                    break;
-            }
+            if (eventArgs.GamePhase == GamePhase.Ended)
+                CurrentNetworkGame.Winner = _MNetworkManager.PlayerName;
+
+
+            _MNetworkManager.SendGameState(CurrentNetworkGame);
         }
+
+
         
-        public void StartGame(IArtificialIntelligence artificialIntelligence)
+        public void StartLocalGame(IArtificialIntelligence artificialIntelligence)
         {
             _MIsOnlineGame = false;
             CurrentGame.RegisterArtificialIntelligence(artificialIntelligence);
-            SendGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, IsOnline = _MIsOnlineGame });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, IsOnline = _MIsOnlineGame });
         }
 
-        public void EndGame()
+        public void EndLocalGame()
         {
             _MIsOnlineGame = true;
-            SendGameState(new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, IsOnline = _MIsOnlineGame });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, IsOnline = _MIsOnlineGame });
         }
 
-        public void SaveGame(String fileName)
+        public void SaveLocalGame(String fileName)
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new Exception("Filename is empty.");
@@ -127,7 +115,7 @@ namespace Platform.Model
             File.WriteAllBytes(fileName, data);
         }
 
-        public void LoadGame(String fileName)
+        public void LoadLocalGame(String fileName)
         {
             var data = File.ReadAllBytes(fileName);
             CurrentGame.LoadGame(data);

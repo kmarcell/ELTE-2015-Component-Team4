@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Windows;
 using ConnectionInterface;
 using Platform.Model;
@@ -28,8 +26,6 @@ namespace Platform
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
 
-        private Boolean _MIsConnectedToServer;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -37,8 +33,6 @@ namespace Platform
 
             // platform events
             Closing += OnClosing;
-
-            _MIsConnectedToServer = false;
             //TODO
             //CreateOnlineGameMenuItem.IsEnabled = false;
             //ConnectOnlineGameMenuItem.IsEnabled = false;
@@ -54,14 +48,7 @@ namespace Platform
             LoadGameLogicComponentMenuItem.IsEnabled = true;
 
 
-
-            _MGameManager = new GameManager();
-            _MGameManager.GameStartedEvent += MGameManager_OnGameStartedEvent;
-            _MGameManager.GameEndedEvent += MGameManager_OnGameEndedEvent;
-
-
             _MNetworkManager = new NetworkManager();
-            _MNetworkManager.ConnectionChangedEvent += NetworkManager_OnConnectionChangedEvent;
             _MNetworkManager.ConnectAcceptedEvent += NetworkManager_OnConnectAcceptedEvent;
             _MNetworkManager.ConnectRejectedServerNotRespondingEvent += NetworkManager_OnConnectRejectedServerNotRespondingEvent;
             _MNetworkManager.ConnectRejectedUsernameOccupied += NetworkManager_OnConnectRejectedUsernameOccupiedEvent;
@@ -69,8 +56,33 @@ namespace Platform
             _MNetworkManager.GameCreatedEvent += MNetworkManager_OnGameCreatedEvent;
             _MNetworkManager.GameEndedEvent += MNetworkManager_OnGameEndedEvent;
             _MNetworkManager.GameCancelledEvent += MNetworkManager_OnGameCancelledEvent;
+            _MNetworkManager.GameJoinAcceptedEvent += MNetworkManagerOnGameJoinAcceptedEvent;
+            _MNetworkManager.GameJoinRejectedEvent += MNetworkManagerOnGameJoinRejectedEvent;
 
-            LoadArtificalIntelligence();
+
+
+            _MGameManager = new GameManager(_MNetworkManager);
+            _MGameManager.GameStartedEvent += MGameManager_OnGameStartedEvent;
+            _MGameManager.GameEndedEvent += MGameManager_OnGameEndedEvent;
+
+            //TODO
+            //LoadArtificalIntelligence();
+        }
+
+        private void MNetworkManagerOnGameJoinRejectedEvent(object sender, EventArgs eventArgs)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MainStatusBarTextBlock.Text = "Join game rejected!";
+            });
+        }
+
+        private void MNetworkManagerOnGameJoinAcceptedEvent(object sender, EventArgs eventArgs)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MainStatusBarTextBlock.Text = "Join game accepted, game could started!";
+            });
         }
 
         private void LoadArtificalIntelligence()
@@ -139,7 +151,7 @@ namespace Platform
 
         private void EndGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _MGameManager.EndGame();
+            _MGameManager.EndLocalGame();
         }
 
         private void CreateOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
@@ -182,8 +194,9 @@ namespace Platform
                 };
 
                 openFileDialog.ShowDialog();
-                _MGameManager.LoadGame(openFileDialog.FileName);
+                _MGameManager.LoadLocalGame(openFileDialog.FileName);
 
+                MainStatusBarTextBlock.Text = "Game loaded!";
                 MessageBox.Show("Game loaded!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception)
@@ -203,8 +216,9 @@ namespace Platform
                 };
 
                 saveFileDialog.ShowDialog();
-                _MGameManager.SaveGame(saveFileDialog.FileName);
+                _MGameManager.SaveLocalGame(saveFileDialog.FileName);
 
+                MainStatusBarTextBlock.Text = "Game saved!";
                 MessageBox.Show("Game saved!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception)
@@ -255,55 +269,27 @@ namespace Platform
 
 
         #region Networkmanager events
-        private void NetworkManager_OnConnectionChangedEvent(object sender, ConnectionChangeEventArgs e)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (e.IsConnected)
-                {
-                    CreateOnlineGameMenuItem.IsEnabled = true;
-                    ConnectOnlineGameMenuItem.IsEnabled = true;
-                    LeaveOnlineGameMenuItem.IsEnabled = true;
-                    MenuServerDisconnectMenuItem.IsEnabled = true;
-                    MenuServerConnectMenuItem.IsEnabled = false;
-
-                    SaveGameMenuItem.IsEnabled = false;
-                    LoadGameMenuItem.IsEnabled = false;
-                    EndGameMenuItem.IsEnabled = false;
-                    StartGameMenuItem.IsEnabled = false;
-
-                    LoadGameLogicComponentMenuItem.IsEnabled = false;
-                }
-                else
-                {
-                    CreateOnlineGameMenuItem.IsEnabled = false;
-                    ConnectOnlineGameMenuItem.IsEnabled = false;
-                    LeaveOnlineGameMenuItem.IsEnabled = false;
-                    MenuServerDisconnectMenuItem.IsEnabled = false;
-                    MenuServerConnectMenuItem.IsEnabled = true;
-
-                    SaveGameMenuItem.IsEnabled = false;
-                    LoadGameMenuItem.IsEnabled = true;
-                    EndGameMenuItem.IsEnabled = false;
-                    StartGameMenuItem.IsEnabled = true;
-
-                    LoadGameLogicComponentMenuItem.IsEnabled = true;
-
-                    if (_MIsConnectedToServer)
-                    {
-                        _MIsConnectedToServer = false;
-                        MessageBox.Show("Unkown error!\nYou are disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                    }
-                }
-            });
-        }
 
         private void NetworkManager_OnConnectAcceptedEvent(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
                 _MServerConnectWindow.Close();
-                _MIsConnectedToServer = true;
+
+                CreateOnlineGameMenuItem.IsEnabled = true;
+                ConnectOnlineGameMenuItem.IsEnabled = true;
+                LeaveOnlineGameMenuItem.IsEnabled = true;
+                MenuServerDisconnectMenuItem.IsEnabled = true;
+                MenuServerConnectMenuItem.IsEnabled = false;
+
+                SaveGameMenuItem.IsEnabled = false;
+                LoadGameMenuItem.IsEnabled = false;
+                EndGameMenuItem.IsEnabled = false;
+                StartGameMenuItem.IsEnabled = false;
+
+                LoadGameLogicComponentMenuItem.IsEnabled = false;
+
+                MainStatusBarTextBlock.Text = "Connect to the server successful!";
                 MessageBox.Show("Connect to the server successful.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
@@ -328,14 +314,30 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                MessageBox.Show("You are successfuly disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+                CreateOnlineGameMenuItem.IsEnabled = false;
+                ConnectOnlineGameMenuItem.IsEnabled = false;
+                LeaveOnlineGameMenuItem.IsEnabled = false;
+                MenuServerDisconnectMenuItem.IsEnabled = false;
+                MenuServerConnectMenuItem.IsEnabled = true;
+
+                SaveGameMenuItem.IsEnabled = false;
+                LoadGameMenuItem.IsEnabled = true;
+                EndGameMenuItem.IsEnabled = false;
+                StartGameMenuItem.IsEnabled = true;
+
+                LoadGameLogicComponentMenuItem.IsEnabled = true;
+
+                MainStatusBarTextBlock.Text = "You are disconnected from the server!";
+                MessageBox.Show("You are disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             });
         }
         private void MNetworkManager_OnGameCreatedEvent(object sender, EventArgs eventArgs)
         {
-            Dispatcher.Invoke(() => _MCreateGameWindow.Close());
-
-            // todo inform player and wait for connect another
+            Dispatcher.Invoke(() =>
+                {
+                    _MCreateGameWindow.Close();
+                    MainStatusBarTextBlock.Text = "Game created! Waiting for another player.";
+                });
         }
 
         private void MNetworkManager_OnGameEndedEvent(object sender, GameEventArgs eventArgs)
@@ -359,16 +361,18 @@ namespace Platform
 
         private void MNetworkManager_OnGameCancelledEvent(object sender, GameEventArgs eventArgs)
         {
-            MessageBox.Show("Sorry, the game is cancelled.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
             Dispatcher.Invoke(() =>
             {
+                MainStatusBarTextBlock.Text = "Game cancelled!";
+
                 CreateOnlineGameMenuItem.IsEnabled = true;
                 ConnectOnlineGameMenuItem.IsEnabled = true;
                 LeaveOnlineGameMenuItem.IsEnabled = false;
                 MenuServerDisconnectMenuItem.IsEnabled = true;
                 MenuServerConnectMenuItem.IsEnabled = false;
             });
+
+            MessageBox.Show("Sorry, the game is cancelled.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
         #endregion
 
@@ -408,6 +412,8 @@ namespace Platform
                 //    var hash = SHA1.Create().ComputeHash(dllStream);
                 //}
 
+
+                MainStatusBarTextBlock.Text = "Game registered!";
                 MessageBox.Show("Game registered!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception)

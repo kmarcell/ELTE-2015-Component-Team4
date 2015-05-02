@@ -23,7 +23,7 @@ namespace ServerInterface
 
         void SendJoinGameRejected();
 
-        void SendGameState(Byte[] gameState);
+        void SendGameState(Game game);
 
         void SendEndGame(String player);
 

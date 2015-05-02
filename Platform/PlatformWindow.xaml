@@ -6,7 +6,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Menu Margin="0" Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Name="FileMenuItem" Header="File" >
@@ -33,5 +33,11 @@
                 <MenuItem Name="LeaveOnlineGameMenuItem" Header="Leave Game" Click="LeaveGameMenuItem_Click" />
             </MenuItem>
         </Menu>
+
+        <StatusBar Name="MainStatusBar" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <StatusBarItem>
+                <TextBlock Name="MainStatusBarTextBlock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>    
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

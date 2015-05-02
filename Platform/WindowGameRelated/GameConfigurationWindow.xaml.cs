@@ -37,7 +37,7 @@ namespace Platform.WindowGameRelated
 
             if (AiDataGrid.SelectedItems.Count > 0)
             {
-                _MGameManager.StartGame(_MArtificialIntelligences[AiDataGrid.SelectedIndex]);
+                _MGameManager.StartLocalGame(_MArtificialIntelligences[AiDataGrid.SelectedIndex]);
                 Close();
                 return;
             }

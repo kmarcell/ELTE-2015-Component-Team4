@@ -57,6 +57,14 @@ namespace GTMillGameLogic
 		{
 			return this.gameField.GetEnumerator ();
 		}
+
+        public int nextPlayer
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 	}
 
 }

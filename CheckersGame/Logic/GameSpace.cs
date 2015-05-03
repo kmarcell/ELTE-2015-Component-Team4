@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System;
 using GTInterfacesLibrary;
 
 namespace CheckersGame.Logic
@@ -51,6 +52,14 @@ namespace CheckersGame.Logic
         public IEnumerator<KeyValuePair<Position, Element>> GetEnumerator()
         {
             return elements.GetEnumerator();
+        }
+
+        public int nextPlayer
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace CheckersGame.Logic
     {
         private Dictionary<Position, Element> elements = new Dictionary<Position, Element>();
 
-        public bool IsMyTurn;
+        public string MyColor;
 
         public bool hasElementAt(Position p)
         {
@@ -52,6 +52,12 @@ namespace CheckersGame.Logic
         public IEnumerator<KeyValuePair<Position, Element>> GetEnumerator()
         {
             return elements.GetEnumerator();
+        }
+
+        public Dictionary<Position, Element> GetElements()
+        {
+            return elements;
+
         }
 
         public int nextPlayer

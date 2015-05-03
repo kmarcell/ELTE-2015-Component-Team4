@@ -42,7 +42,7 @@ namespace CheckersGame.Logic
                         continue;
 
                     Step step = new Step(state.elementAt(position), position, new Position(i, j));
-                    if (!StepSupervisor.IsValidStep(step))
+                    if (!StepSupervisor.IsValidStep(state, step))
                         continue;
                     else
                         steps.Add(step);

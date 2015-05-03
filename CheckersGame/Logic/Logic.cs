@@ -10,17 +10,19 @@ namespace CheckersGame.Logic
     public class Logic: GTGameLogicInterface<Element, Position>
     {
         // properties
-        private GameSpace state = new GameSpace();
+        public GameSpace state = new GameSpace();
         private string MyColor;
+        private bool IsMyTurn;
 
 		public Logic(string color)
 		{
             init();
+            state.MyColor = color;
             MyColor = color;
-            if (MyColor == "White")
-                state.IsMyTurn = true;
+            if (MyColor == "white")
+                IsMyTurn = true;
             else
-                state.IsMyTurn = false;
+                IsMyTurn = false;
 		}
 
 		// Input

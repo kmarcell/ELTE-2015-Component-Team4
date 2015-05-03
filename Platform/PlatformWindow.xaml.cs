@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Navigation;
 using ConnectionInterface;
 using Platform.Model;
 using Platform.WindowGameRelated;
@@ -66,7 +69,7 @@ namespace Platform
             _MGameManager.GameEndedEvent += MGameManager_OnGameEndedEvent;
 
             //TODO
-            //LoadArtificalIntelligence();
+            LoadArtificalIntelligence();
         }
 
         private void MNetworkManagerOnGameJoinRejectedEvent(object sender, EventArgs eventArgs)
@@ -88,15 +91,20 @@ namespace Platform
         private void LoadArtificalIntelligence()
         {
             const string aiDirectory = "ArtificialIntelligence";
+            if (!Directory.Exists(aiDirectory))
+            {
+                MainStatusBarTextBlock.Text = "No AI loaded, directory does not exists, local game not possible";
+                return;
+            }
 
             foreach (var aiDll in Directory.GetFiles(aiDirectory, "*.dll", SearchOption.TopDirectoryOnly))
             {
                 var aiAssembly = Assembly.LoadFrom(aiDll);
-                Type aiType;
+                List<Type> aiType;
 
                 try
                 {
-                    aiType = aiAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IArtificialIntelligence") != null);
+                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterface("IArtificialIntelligence") != null).ToList();
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -108,8 +116,11 @@ namespace Platform
                     break;
                 }
 
-                var aiObject = Activator.CreateInstance(aiType);
-                _MGameManager.RegisterArtificialIntelligence((IArtificialIntelligence)aiObject);
+                foreach (var currentAiType in aiType)
+                {
+                    var aiObject = Activator.CreateInstance(currentAiType);
+                    _MGameManager.RegisterArtificialIntelligence((IArtificialIntelligence)aiObject);
+                }
             }
         }
 

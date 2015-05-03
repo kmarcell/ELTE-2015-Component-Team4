@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Navigation;
 using ConnectionInterface;
 using Platform.Model;
 using Platform.WindowGameRelated;
@@ -36,18 +34,16 @@ namespace Platform
 
             // platform events
             Closing += OnClosing;
-            //TODO
-            //CreateOnlineGameMenuItem.IsEnabled = false;
-            //ConnectOnlineGameMenuItem.IsEnabled = false;
+            
+            CreateOnlineGameMenuItem.IsEnabled = false;
+            ConnectOnlineGameMenuItem.IsEnabled = false;
             LeaveOnlineGameMenuItem.IsEnabled = false;
-
-
-            MenuServerConnectMenuItem.IsEnabled = true;
+            MenuServerConnectMenuItem.IsEnabled = false;
             MenuServerDisconnectMenuItem.IsEnabled = false;
             SaveGameMenuItem.IsEnabled = false;
-            LoadGameMenuItem.IsEnabled = true;
+            LoadGameMenuItem.IsEnabled = false;
             EndGameMenuItem.IsEnabled = false;
-            StartGameMenuItem.IsEnabled = true;
+            StartGameMenuItem.IsEnabled = false;
             LoadGameLogicComponentMenuItem.IsEnabled = true;
 
 
@@ -68,24 +64,7 @@ namespace Platform
             _MGameManager.GameStartedEvent += MGameManager_OnGameStartedEvent;
             _MGameManager.GameEndedEvent += MGameManager_OnGameEndedEvent;
 
-            //TODO
             LoadArtificalIntelligence();
-        }
-
-        private void MNetworkManagerOnGameJoinRejectedEvent(object sender, EventArgs eventArgs)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                MainStatusBarTextBlock.Text = "Join game rejected!";
-            });
-        }
-
-        private void MNetworkManagerOnGameJoinAcceptedEvent(object sender, EventArgs eventArgs)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                MainStatusBarTextBlock.Text = "Join game accepted, game could started!";
-            });
         }
 
         private void LoadArtificalIntelligence()
@@ -244,11 +223,17 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
+                MainStatusBarTextBlock.Text = "Game started.";
+
+                CreateOnlineGameMenuItem.IsEnabled = false;
+                ConnectOnlineGameMenuItem.IsEnabled = false;
+                LeaveOnlineGameMenuItem.IsEnabled = false;
+                MenuServerConnectMenuItem.IsEnabled = false;
+                MenuServerDisconnectMenuItem.IsEnabled = false;
                 SaveGameMenuItem.IsEnabled = true;
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = true;
                 StartGameMenuItem.IsEnabled = false;
-                MenuServerConnectMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
         }
@@ -268,13 +253,21 @@ namespace Platform
                 MessageBox.Show("Game canceled!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
+            Dispatcher.Invoke(() =>
+            {
+                MainStatusBarTextBlock.Text = "Game finished.";
 
-            SaveGameMenuItem.IsEnabled = false;
-            LoadGameMenuItem.IsEnabled = true;
-            EndGameMenuItem.IsEnabled = false;
-            StartGameMenuItem.IsEnabled = true;
-            MenuServerConnectMenuItem.IsEnabled = true;
-            LoadGameLogicComponentMenuItem.IsEnabled = true;
+                CreateOnlineGameMenuItem.IsEnabled = false;
+                ConnectOnlineGameMenuItem.IsEnabled = false;
+                LeaveOnlineGameMenuItem.IsEnabled = false;
+                MenuServerConnectMenuItem.IsEnabled = true;
+                MenuServerDisconnectMenuItem.IsEnabled = false;
+                SaveGameMenuItem.IsEnabled = false;
+                LoadGameMenuItem.IsEnabled = true;
+                EndGameMenuItem.IsEnabled = false;
+                StartGameMenuItem.IsEnabled = true;
+                LoadGameLogicComponentMenuItem.IsEnabled = true;
+            });
         }
         #endregion
 
@@ -285,21 +278,18 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                _MServerConnectWindow.Close();
-
                 CreateOnlineGameMenuItem.IsEnabled = true;
                 ConnectOnlineGameMenuItem.IsEnabled = true;
-                LeaveOnlineGameMenuItem.IsEnabled = true;
-                MenuServerDisconnectMenuItem.IsEnabled = true;
+                LeaveOnlineGameMenuItem.IsEnabled = false;
                 MenuServerConnectMenuItem.IsEnabled = false;
-
+                MenuServerDisconnectMenuItem.IsEnabled = true;
                 SaveGameMenuItem.IsEnabled = false;
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
-
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
 
+                _MServerConnectWindow.Close();
                 MainStatusBarTextBlock.Text = "Connect to the server successful!";
                 MessageBox.Show("Connect to the server successful.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             });
@@ -328,14 +318,12 @@ namespace Platform
                 CreateOnlineGameMenuItem.IsEnabled = false;
                 ConnectOnlineGameMenuItem.IsEnabled = false;
                 LeaveOnlineGameMenuItem.IsEnabled = false;
-                MenuServerDisconnectMenuItem.IsEnabled = false;
                 MenuServerConnectMenuItem.IsEnabled = true;
-
+                MenuServerDisconnectMenuItem.IsEnabled = false;
                 SaveGameMenuItem.IsEnabled = false;
                 LoadGameMenuItem.IsEnabled = true;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = true;
-
                 LoadGameLogicComponentMenuItem.IsEnabled = true;
 
                 MainStatusBarTextBlock.Text = "You are disconnected from the server!";
@@ -346,6 +334,18 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
                 {
+
+                    CreateOnlineGameMenuItem.IsEnabled = false;
+                    ConnectOnlineGameMenuItem.IsEnabled = false;
+                    LeaveOnlineGameMenuItem.IsEnabled = true;
+                    MenuServerConnectMenuItem.IsEnabled = false;
+                    MenuServerDisconnectMenuItem.IsEnabled = true;
+                    SaveGameMenuItem.IsEnabled = false;
+                    LoadGameMenuItem.IsEnabled = false;
+                    EndGameMenuItem.IsEnabled = false;
+                    StartGameMenuItem.IsEnabled = false;
+                    LoadGameLogicComponentMenuItem.IsEnabled = false;
+
                     _MCreateGameWindow.Close();
                     MainStatusBarTextBlock.Text = "Game created! Waiting for another player.";
                 });
@@ -361,11 +361,17 @@ namespace Platform
 
             Dispatcher.Invoke(() =>
             {
+                MainStatusBarTextBlock.Text = message;
                 CreateOnlineGameMenuItem.IsEnabled = true;
                 ConnectOnlineGameMenuItem.IsEnabled = true;
                 LeaveOnlineGameMenuItem.IsEnabled = false;
-                MenuServerDisconnectMenuItem.IsEnabled = true;
                 MenuServerConnectMenuItem.IsEnabled = false;
+                MenuServerDisconnectMenuItem.IsEnabled = true;
+                SaveGameMenuItem.IsEnabled = false;
+                LoadGameMenuItem.IsEnabled = false;
+                EndGameMenuItem.IsEnabled = false;
+                StartGameMenuItem.IsEnabled = false;
+                LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
         }
 
@@ -379,11 +385,43 @@ namespace Platform
                 CreateOnlineGameMenuItem.IsEnabled = true;
                 ConnectOnlineGameMenuItem.IsEnabled = true;
                 LeaveOnlineGameMenuItem.IsEnabled = false;
-                MenuServerDisconnectMenuItem.IsEnabled = true;
                 MenuServerConnectMenuItem.IsEnabled = false;
+                MenuServerDisconnectMenuItem.IsEnabled = true;
+                SaveGameMenuItem.IsEnabled = false;
+                LoadGameMenuItem.IsEnabled = false;
+                EndGameMenuItem.IsEnabled = false;
+                StartGameMenuItem.IsEnabled = false;
+                LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
 
             MessageBox.Show("Sorry, the game is cancelled.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        }
+
+        private void MNetworkManagerOnGameJoinRejectedEvent(object sender, EventArgs eventArgs)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MainStatusBarTextBlock.Text = "Join game rejected!";
+            });
+        }
+
+        private void MNetworkManagerOnGameJoinAcceptedEvent(object sender, EventArgs eventArgs)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                CreateOnlineGameMenuItem.IsEnabled = false;
+                ConnectOnlineGameMenuItem.IsEnabled = false;
+                LeaveOnlineGameMenuItem.IsEnabled = true;
+                MenuServerConnectMenuItem.IsEnabled = false;
+                MenuServerDisconnectMenuItem.IsEnabled = true;
+                SaveGameMenuItem.IsEnabled = false;
+                LoadGameMenuItem.IsEnabled = false;
+                EndGameMenuItem.IsEnabled = false;
+                StartGameMenuItem.IsEnabled = false;
+                LoadGameLogicComponentMenuItem.IsEnabled = false;
+
+                MainStatusBarTextBlock.Text = "Join game accepted, game could started!";
+            });
         }
         #endregion
 
@@ -418,11 +456,17 @@ namespace Platform
 
                 var obj = Activator.CreateInstance(gameType);
                 _MGameManager.RegisterGame((IGame)obj);
-                //using (Stream dllStream = new FileStream(openFileDialog.FileName, FileMode.Open))
-                //{
-                //    var hash = SHA1.Create().ComputeHash(dllStream);
-                //}
 
+                CreateOnlineGameMenuItem.IsEnabled = false;
+                ConnectOnlineGameMenuItem.IsEnabled = false;
+                LeaveOnlineGameMenuItem.IsEnabled = false;
+                MenuServerConnectMenuItem.IsEnabled = true;
+                MenuServerDisconnectMenuItem.IsEnabled = false;
+                SaveGameMenuItem.IsEnabled = false;
+                LoadGameMenuItem.IsEnabled = true;
+                EndGameMenuItem.IsEnabled = false;
+                StartGameMenuItem.IsEnabled = true;
+                LoadGameLogicComponentMenuItem.IsEnabled = true;
 
                 MainStatusBarTextBlock.Text = "Game registered!";
                 MessageBox.Show("Game registered!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);

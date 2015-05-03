@@ -156,7 +156,6 @@ namespace Platform.Model
                     case MessageCode.Disconnect:
                         _Socket.Shutdown(SocketShutdown.Both);
                         _Socket.Close(1000);
-                        DisconnectedEvent(this, EventArgs.Empty);
                         break;
                     case MessageCode.ChangeGameState:
                         GameStatusReceived(this, new GameEventArgs { Game = message.Content as Game });

@@ -7,7 +7,7 @@ namespace GTMillGameLogic
 {
 	public class GTMillGameStateHash : GTGameStateHashInterface<GTMillGameElement, GTMillPosition>
 	{
-        private GTMillGameSpace state;
+        private GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state;
 
         private List<KeyValuePair<GTMillPosition, GTMillGameElement>> opponentElements;
 
@@ -99,7 +99,7 @@ namespace GTMillGameLogic
             return 0;
         }
 
-        public int evaluateState(/*GTGameSpaceInterface<GTMillGameElement, GTMillPosition>*/GTMillGameSpace state)
+        public int evaluateState(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state)
         {
             this.state = state;
 

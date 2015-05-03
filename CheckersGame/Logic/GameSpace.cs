@@ -67,5 +67,13 @@ namespace CheckersGame.Logic
                 throw new NotImplementedException();
             }
         }
+
+        public int gamePhase
+        {
+            get
+            {
+                return 0;
+            }
+        }
     }
 }

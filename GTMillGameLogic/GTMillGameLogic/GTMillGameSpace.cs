@@ -65,6 +65,14 @@ namespace GTMillGameLogic
                 throw new NotImplementedException();
             }
         }
+
+        public int gamePhase
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 	}
 
 }

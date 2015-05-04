@@ -11,9 +11,20 @@ namespace CheckersGame.Logic
         public static int BoardMaxIndex = 7;
         private static GameSpace CurrentState;
 
+        public static void RefreshState(GameSpace state)
+        {
+            CurrentState = state;
+        }
+
         public static bool IsValidStep(GameSpace state, Step step)
         {
             CurrentState = state;
+
+            if (step.element == null)
+                return false;
+
+            if (state.nextPlayer != step.element.owner)
+                return false;
 
             if (!state.hasElementAt(step.from))
                 return false;
@@ -34,7 +45,7 @@ namespace CheckersGame.Logic
             }
         }
 
-        private static bool CanCapture()
+        public static bool CanCapture()
         {
             var myElements = CurrentState.GetElements().Where(x => IsMine(x.Value));
             var opponentElements = CurrentState.GetElements().Where(x => !IsMine(x.Value));
@@ -76,7 +87,7 @@ namespace CheckersGame.Logic
                 return false;
         }
 
-        private static bool IsValidCapture(Step step)
+        public static bool IsValidCapture(Step step)
         {
             if (!IsDiagonal(step) || !IsForward(step) || !IsAdjacentAdjacent(step) || IsOccupied(step))
                 return false;
@@ -86,6 +97,18 @@ namespace CheckersGame.Logic
                 return true;
             else
                 return false;
+        }
+
+        public static Position CapturedElementPos(Step step)
+        {
+            if (!IsDiagonal(step) || !IsForward(step) || !IsAdjacentAdjacent(step) || IsOccupied(step))
+                return null;
+
+            Position posBetween = PositionBetween(step.from, step.to);
+            if (IsThereAnOpponent(posBetween))
+                return posBetween;
+            else
+                return null;
         }
 
         private static bool IsDiagonal(Step step)
@@ -156,6 +179,9 @@ namespace CheckersGame.Logic
 
         private static bool IsThereAnOpponent(Position pos)
         {
+            if (pos == null)
+                return false;
+
             if (!CurrentState.hasElementAt(pos))
                 return false;
 
@@ -167,20 +193,10 @@ namespace CheckersGame.Logic
 
         private static bool IsMine(Element e)
         {
-            if (CurrentState.MyColor == "white")
-            {
-                if (e.owner == 1)
-                    return true;
-                else
-                    return false;
-            }
+            if (CurrentState.nextPlayer == e.owner)
+                return true;
             else
-            {
-                if (e.owner == 0)
-                    return true;
-                else
-                    return false;
-            } 
+                return false;
         }
 
         private static Position PositionBehind(Position from, Position to)
@@ -196,9 +212,6 @@ namespace CheckersGame.Logic
 
         private static Position PositionBetween(Position from, Position to)
         {
-            if (to.x == 0 || to.x == 7 || to.y == 0 || to.y == 7)
-                return null;
-
             int xMove = to.x - from.x;
             int yMove = to.y - from.y;
 

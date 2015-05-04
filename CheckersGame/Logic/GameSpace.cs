@@ -10,8 +10,6 @@ namespace CheckersGame.Logic
     {
         private Dictionary<Position, Element> elements = new Dictionary<Position, Element>();
 
-        public string MyColor;
-
         public bool hasElementAt(Position p)
         {
             if (elements.Keys.Contains(p))
@@ -34,6 +32,19 @@ namespace CheckersGame.Logic
         {
             elements.Remove(step.from);
             elements.Add(step.to, step.element);
+
+            Step s = new Step(step.element, step.from, step.to);
+            
+            if (s.IsCapture())
+            {
+                Position pos = StepSupervisor.CapturedElementPos(s);
+                elements.Remove(pos);
+            }
+
+            if (!StepSupervisor.CanCapture())
+                nextP = 1 - step.element.owner;
+
+            StepSupervisor.RefreshState(this);
         }
 
         public GTGameSpaceInterface<Element, Position> stateWithStep(GTGameStepInterface<Element, Position> step)
@@ -60,12 +71,15 @@ namespace CheckersGame.Logic
 
         }
 
+        public bool CanCaptureFromState(GameSpace state)
+        {
+            throw new NotImplementedException();
+        }
+
+        private int nextP = 1;
         public int nextPlayer
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return nextP; }
         }
 
         public int gamePhase

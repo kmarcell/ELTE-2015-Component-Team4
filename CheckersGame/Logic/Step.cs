@@ -1,4 +1,5 @@
 ﻿using GTInterfacesLibrary;
+using System;
 
 namespace CheckersGame.Logic
 {
@@ -18,6 +19,14 @@ namespace CheckersGame.Logic
             this.from = from;
             this.to = to;
             this.element = element;
+        }
+
+        public bool IsCapture()
+        {
+            if (Math.Abs(from.x - to.x) == 2)
+                return true;
+            else
+                return false;
         }
     }
 }

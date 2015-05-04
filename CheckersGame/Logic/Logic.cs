@@ -11,18 +11,10 @@ namespace CheckersGame.Logic
     {
         // properties
         public GameSpace state = new GameSpace();
-        private string MyColor;
-        private bool IsMyTurn;
 
-		public Logic(string color)
+		public Logic()
 		{
             init();
-            state.MyColor = color;
-            MyColor = color;
-            if (MyColor == "white")
-                IsMyTurn = true;
-            else
-                IsMyTurn = false;
 		}
 
 		// Input

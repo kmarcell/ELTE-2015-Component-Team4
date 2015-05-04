@@ -52,6 +52,12 @@ namespace Platform.Model
             var isMyTurn = eventArgs.Game.PlayerTurn == _MNetworkManager.PlayerName;
             var isWon = eventArgs.Game.Winner != null && (eventArgs.Game.Winner == _MNetworkManager.PlayerName);
 
+
+            if (eventArgs.Game.Phase == GamePhase.Ended)
+            {
+                GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = CurrentNetworkGame.Winner == _MNetworkManager.PlayerName });
+            }
+
             SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, IsOnline = _MIsOnlineGame });
         }
 
@@ -82,10 +88,13 @@ namespace Platform.Model
             CurrentNetworkGame.PlayerTurn = (CurrentNetworkGame.FirstPlayer == _MNetworkManager.PlayerName && eventArgs.IsMyTurn) 
                                                 ? CurrentNetworkGame.FirstPlayer 
                                                 : CurrentNetworkGame.SecondPlayer;
-                
+
 
             if (eventArgs.GamePhase == GamePhase.Ended)
+            {
                 CurrentNetworkGame.Winner = _MNetworkManager.PlayerName;
+                GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = true });
+            }
 
 
             _MNetworkManager.SendGameState(CurrentNetworkGame);

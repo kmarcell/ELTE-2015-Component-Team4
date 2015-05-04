@@ -25,6 +25,8 @@
                 <Separator />
                 <MenuItem Name="StartGameMenuItem" Header="Start Game" Click="StartGameMenuItem_Click" />
                 <MenuItem Name="EndGameMenuItem" Header="End Game" Click="EndGameMenuItem_Click" />
+                <Separator />
+                <MenuItem Name="StartAiAiGameMenuItem" Header="Start AI-AI Game" Click="StartAiAiGameMenuItem_OnClick"/>
             </MenuItem>
             <MenuItem Name="OnlineGameMenuItem"  Header="Online game" ToolTip="For online game please join to the server (File)">
                 <MenuItem Name="CreateOnlineGameMenuItem" Header="Create Game" Click="CreateOnlineGameMenuItem_Click" />
@@ -32,8 +34,14 @@
                 <MenuItem Name="ConnectOnlineGameMenuItem" Header="Connect Game" Click="ConnectOnlineGameMenuItem_Click" />
                 <MenuItem Name="LeaveOnlineGameMenuItem" Header="Leave Game" Click="LeaveGameMenuItem_Click" />
             </MenuItem>
+            <MenuItem Name="GuiMenuItem" Header="Gui">
+                <MenuItem Name="DarkGuiMenuItem" Header="Dark" Click="DarkGuiMenuItem_Click" />
+                <MenuItem Name="LightGuiMenuItem" Header="Light" Click="LightGuiMenuItem_Click" />
+            </MenuItem>
         </Menu>
-
+        <ContentControl Grid.Row="1" Name="GameContentControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            
+        </ContentControl>
         <StatusBar Name="MainStatusBar" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <StatusBarItem>
                 <TextBlock Name="MainStatusBarTextBlock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>    

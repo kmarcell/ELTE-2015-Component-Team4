@@ -16,12 +16,12 @@ namespace Platform.Model
         public GameManager(NetworkManager networkManager)
         {
             ArtificialIntelligences = new List<IArtificialIntelligence>();
-            _MIsOnlineGame = true;
+            _MGameType = GameType.Online;
             _MNetworkManager = networkManager;
             _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
         }
 
-        private Boolean _MIsOnlineGame;
+        private GameType _MGameType;
         public static IGame CurrentGame { get; private set; }
 
         public static Game CurrentNetworkGame { get; protected set; }
@@ -36,6 +36,8 @@ namespace Platform.Model
 
         public void RegisterGame(IGame game)
         {
+
+            _MGameType = GameType.Online;
             CurrentGame = game;
             game.RegisterGameManager(this);
             game.SendGameStateChangedEventArg += RecieveGameStateFromLogic;
@@ -58,12 +60,12 @@ namespace Platform.Model
                 GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = CurrentNetworkGame.Winner == _MNetworkManager.PlayerName });
             }
 
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, IsOnline = _MIsOnlineGame });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, GameType = _MGameType });
         }
 
         public void RecieveGameStateFromLogic(object sender, GameStateChangedEventArgs eventArgs)
         {
-            if (!_MIsOnlineGame)
+            if (_MGameType != GameType.Online)
             {
                 switch (eventArgs.GamePhase)
                 {
@@ -73,7 +75,7 @@ namespace Platform.Model
 
                     case GamePhase.Ended:
                         GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = eventArgs.IsWon });
-                        _MIsOnlineGame = true;
+                        _MGameType = GameType.Online;
                         return;
                 }
 
@@ -104,15 +106,29 @@ namespace Platform.Model
         
         public void StartLocalGame(IArtificialIntelligence artificialIntelligence)
         {
-            _MIsOnlineGame = false;
+            _MGameType = GameType.Local;
             CurrentGame.RegisterArtificialIntelligence(artificialIntelligence);
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, IsOnline = _MIsOnlineGame });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = _MGameType });
+        }
+
+        public void StartAiAiGame()
+        {
+            _MGameType = GameType.Ai;
+            var randomToSelectAi = new Random().Next(0, ArtificialIntelligences.Count);
+            CurrentGame.RegisterArtificialIntelligence(ArtificialIntelligences[randomToSelectAi]);
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = _MGameType });
         }
 
         public void EndLocalGame()
         {
-            _MIsOnlineGame = true;
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, IsOnline = _MIsOnlineGame });
+            _MGameType = GameType.Online;
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, GameType = _MGameType });
+        }
+
+        public void EndAiAiGame()
+        {
+            _MGameType = GameType.Online;
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, GameType = _MGameType });
         }
 
         public void SaveLocalGame(String fileName)
@@ -128,7 +144,7 @@ namespace Platform.Model
         {
             var data = File.ReadAllBytes(fileName);
             CurrentGame.LoadGame(data);
-            _MIsOnlineGame = false;
+            _MGameType = GameType.Local;
         }
     }
 }

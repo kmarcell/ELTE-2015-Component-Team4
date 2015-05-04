@@ -27,6 +27,7 @@
                 <MenuItem Name="EndGameMenuItem" Header="End Game" Click="EndGameMenuItem_Click" />
                 <Separator />
                 <MenuItem Name="StartAiAiGameMenuItem" Header="Start AI-AI Game" Click="StartAiAiGameMenuItem_OnClick"/>
+                <MenuItem Name="EndAiAiGameMenuItem" Header="End AI-AI Game" Click="EndAiAiGameMenuItem_OnClick"/>
             </MenuItem>
             <MenuItem Name="OnlineGameMenuItem"  Header="Online game" ToolTip="For online game please join to the server (File)">
                 <MenuItem Name="CreateOnlineGameMenuItem" Header="Create Game" Click="CreateOnlineGameMenuItem_Click" />

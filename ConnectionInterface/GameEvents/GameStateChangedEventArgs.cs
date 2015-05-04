@@ -10,6 +10,13 @@ namespace ConnectionInterface.GameEvents
         Ended
     }
 
+    public enum GameType
+    {
+        Online,
+        Local,
+        Ai
+    }
+
     /// <summary>
     /// The event
     /// </summary>
@@ -36,6 +43,6 @@ namespace ConnectionInterface.GameEvents
 
         public bool IsWon { get; set; }
 
-        public bool IsOnline { get; set; }
+        public GameType GameType { get; set; }
     }
 }

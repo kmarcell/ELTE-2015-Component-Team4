@@ -26,10 +26,13 @@ namespace Platform
 
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
+        private Boolean IsAiAiGameStarted; 
 
         public MainWindow()
         {
             InitializeComponent();
+
+            IsAiAiGameStarted = false; 
 
             GameContentControl = new GUIImplementation.LightGUI();
             LightGuiMenuItem.IsChecked = true;
@@ -47,6 +50,8 @@ namespace Platform
             LoadGameMenuItem.IsEnabled = false;
             EndGameMenuItem.IsEnabled = false;
             StartGameMenuItem.IsEnabled = false;
+            StartAiAiGameMenuItem.IsEnabled = false;
+            EndAiAiGameMenuItem.IsEnabled = false;
             LoadGameLogicComponentMenuItem.IsEnabled = true;
 
 
@@ -245,8 +250,10 @@ namespace Platform
                 MenuServerDisconnectMenuItem.IsEnabled = false;
                 SaveGameMenuItem.IsEnabled = true;
                 LoadGameMenuItem.IsEnabled = false;
-                EndGameMenuItem.IsEnabled = true;
+                EndGameMenuItem.IsEnabled = !IsAiAiGameStarted;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = IsAiAiGameStarted;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
         }
@@ -279,6 +286,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = true;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = true;
+                StartAiAiGameMenuItem.IsEnabled = true;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = true;
             });
         }
@@ -300,6 +309,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
 
                 _MServerConnectWindow.Close();
@@ -337,6 +348,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = true;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = true;
+                StartAiAiGameMenuItem.IsEnabled = true;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = true;
 
                 MainStatusBarTextBlock.Text = "You are disconnected from the server!";
@@ -357,6 +370,8 @@ namespace Platform
                     LoadGameMenuItem.IsEnabled = false;
                     EndGameMenuItem.IsEnabled = false;
                     StartGameMenuItem.IsEnabled = false;
+                    StartAiAiGameMenuItem.IsEnabled = false;
+                    EndAiAiGameMenuItem.IsEnabled = false;
                     LoadGameLogicComponentMenuItem.IsEnabled = false;
 
                     _MCreateGameWindow.Close();
@@ -384,6 +399,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
         }
@@ -404,6 +421,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
 
@@ -431,6 +450,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
 
                 MainStatusBarTextBlock.Text = "Join game accepted, game could started!";
@@ -479,6 +500,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = true;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = true;
+                StartAiAiGameMenuItem.IsEnabled = true;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = true;
 
                 MainStatusBarTextBlock.Text = "Game registered!";
@@ -506,7 +529,14 @@ namespace Platform
 
         private void StartAiAiGameMenuItem_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            IsAiAiGameStarted = true;
+            _MGameManager.StartAiAiGame();
+        }
+
+        private void EndAiAiGameMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            IsAiAiGameStarted = false;
+            _MGameManager.EndAiAiGame();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConnectionInterface.GameEvents
+namespace GTInterfacesLibrary.GameEvents
 {
     public enum GamePhase
     {

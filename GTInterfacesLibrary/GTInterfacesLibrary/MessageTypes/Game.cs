@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Xml.Serialization;
-using ConnectionInterface.GameEvents;
+using GTInterfacesLibrary.GameEvents;
 
-namespace ConnectionInterface.MessageTypes
+namespace GTInterfacesLibrary.MessageTypes
 {
     public class Game
     {

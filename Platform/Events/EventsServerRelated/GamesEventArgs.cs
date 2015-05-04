@@ -1,7 +1,7 @@
 ﻿using System;
-using ConnectionInterface.MessageTypes;
+using GTInterfacesLibrary.MessageTypes;
 
-namespace PlatformInterface.EventsServerRelated
+namespace Platform.Events.EventsServerRelated
 {
     public class GamesEventArgs : EventArgs
     {

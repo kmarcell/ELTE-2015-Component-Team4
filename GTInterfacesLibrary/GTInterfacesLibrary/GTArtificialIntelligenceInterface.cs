@@ -10,7 +10,9 @@ namespace GTInterfacesLibrary
         Hard
     }
 
-	public interface GTArtificialIntelligenceInterface<E, P> where E : GTGameSpaceElementInterface where P : IPosition
+	public interface GTArtificialIntelligenceInterface<E, P> 
+        where E : GTGameSpaceElementInterface 
+        where P : IPosition
 	{
 		/**
 		 *  Implement this function with async directive.
@@ -19,7 +21,7 @@ namespace GTInterfacesLibrary
         String Name { get; }
 
         String Description { get; }
-        
+
         Difficulty Difficulty { get; }
 	}
 }

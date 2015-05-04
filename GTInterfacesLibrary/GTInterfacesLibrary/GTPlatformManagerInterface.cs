@@ -1,9 +1,9 @@
 ﻿using System;
-using ConnectionInterface.GameEvents;
+using GTInterfacesLibrary.GameEvents;
 
-namespace ConnectionInterface
+namespace GTInterfacesLibrary
 {
-    public interface IPlatformGameManager
+    public interface GTPlatformManagerInterface
     {
         /// <summary>
         /// The message which will send to the gamelogic if there is any change in game

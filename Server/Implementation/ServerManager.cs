@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using ConnectionInterface.MessageTypes;
-using ServerInterface;
+using GTInterfacesLibrary.MessageTypes;
+using Server.Interfaces;
 
-namespace Server
+namespace Server.Implementation
 {
     public class ServerManager : IDisposable, IServerManager
     {

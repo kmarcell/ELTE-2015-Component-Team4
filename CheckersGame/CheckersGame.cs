@@ -1,13 +1,12 @@
 ﻿using System;
-using ConnectionInterface;
-using ConnectionInterface.GameEvents;
 using GTInterfacesLibrary;
+using GTInterfacesLibrary.GameEvents;
 
 namespace CheckersGame
 {
-    public class CheckersGame : IGame
+    public class CheckersGame //: IGame
     {
-        private IPlatformGameManager PlatformGameManager;
+        private GTPlatformManagerInterface PlatformGameManager;
         private GTInterfacesLibrary.GTGameLogicInterface<Logic.Element, Logic.Position> logic;
         private GTInterfacesLibrary.GTArtificialIntelligenceInterface<Logic.Element, Logic.Position> AI;
         private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> IAI;
@@ -30,7 +29,7 @@ namespace CheckersGame
             SendGameStateChangedEventArg(this, eventArgs);
         }
 
-        public void RegisterGameManager(IPlatformGameManager platformGameManager)
+        public void RegisterGameManager(GTPlatformManagerInterface platformGameManager)
         {
             PlatformGameManager = platformGameManager;
             PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;

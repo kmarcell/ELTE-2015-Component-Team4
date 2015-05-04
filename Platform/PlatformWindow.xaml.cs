@@ -5,13 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using ConnectionInterface;
 using GTInterfacesLibrary;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
-using PlatformInterface.EventsGameRelated;
-using PlatformInterface.EventsServerRelated;
+using GameEndedEventArgs = Platform.Events.EventsGameRelated.GameEndedEventArgs;
+using GameEventArgs = Platform.Events.EventsServerRelated.GameEventArgs;
 
 namespace Platform
 {
@@ -99,7 +98,7 @@ namespace Platform
 
                 try
                 {
-                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterface("IArtificialIntelligence") != null).ToList();
+                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.Name.Contains("GTArtificialIntelligenceInterface"))).ToList();
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -476,7 +475,7 @@ namespace Platform
 
                 try
                 {
-                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterface("IGame") != null);
+                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterfaces().Any(y => y.Name.Contains("GTGameLogicInterface")));
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -488,9 +487,8 @@ namespace Platform
                     MessageBox.Show("Registering game error!\nPlease select sufficient game to play!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-
                 var obj = Activator.CreateInstance(gameType);
-                _MGameManager.RegisterGame((IGame)obj);
+                _MGameManager.RegisterGame((GTGameLogicInterface<GTGameSpaceElementInterface, IPosition>)obj);
 
                 CreateOnlineGameMenuItem.IsEnabled = false;
                 ConnectOnlineGameMenuItem.IsEnabled = false;

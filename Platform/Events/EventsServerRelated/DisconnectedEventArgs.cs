@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PlatformInterface.EventsServerRelated
+namespace Platform.Events.EventsServerRelated
 {
     public class DisconnectedEventArgs : EventArgs
     {

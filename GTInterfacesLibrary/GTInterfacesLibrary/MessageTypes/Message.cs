@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
-using ConnectionInterface.GameEvents;
+using GTInterfacesLibrary.GameEvents;
 
-namespace ConnectionInterface.MessageTypes
+namespace GTInterfacesLibrary.MessageTypes
 {
     public enum MessageCode {
         Login, Disconnect, ConnectAccepted, ConnectRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOpenGames

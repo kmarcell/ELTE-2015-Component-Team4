@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ConnectionInterface;
-using ConnectionInterface.GameEvents;
-using ConnectionInterface.MessageTypes;
 using GTInterfacesLibrary;
-using PlatformInterface;
-using PlatformInterface.EventsGameRelated;
-using PlatformInterface.EventsServerRelated;
+using GTInterfacesLibrary.GameEvents;
+using GTInterfacesLibrary.MessageTypes;
+using GameEndedEventArgs = Platform.Events.EventsGameRelated.GameEndedEventArgs;
+using GameEventArgs = Platform.Events.EventsServerRelated.GameEventArgs;
+using IGameManager = Platform.Model.Interface.IGameManager;
 
 namespace Platform.Model
 {
-    public class GameManager : IGameManager, IPlatformGameManager
+    public class GameManager : IGameManager, GTPlatformManagerInterface
     {
         private readonly NetworkManager _MNetworkManager;
         public GameManager(NetworkManager networkManager)
@@ -23,7 +22,7 @@ namespace Platform.Model
         }
 
         private GameType _MGameType;
-        public static IGame CurrentGame { get; private set; }
+        public static GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> CurrentGame { get; private set; }
 
         public static Game CurrentNetworkGame { get; protected set; }
 
@@ -35,7 +34,7 @@ namespace Platform.Model
         public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEvent;
 
 
-        public void RegisterGame(IGame game)
+        public void RegisterGame(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game)
         {
 
             _MGameType = GameType.Online;

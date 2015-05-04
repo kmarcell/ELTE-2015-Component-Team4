@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PlatformInterface.EventsGameRelated
+namespace Platform.Events.EventsGameRelated
 {
     public class GameEndedEventArgs : EventArgs
     {

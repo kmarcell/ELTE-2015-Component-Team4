@@ -1,5 +1,6 @@
 ﻿using System;
 using GTInterfacesLibrary;
+using GTInterfacesLibrary.GameEvents;
 
 namespace GTMillGameLogic
 {
@@ -9,7 +10,10 @@ namespace GTMillGameLogic
 		private GTMillGameSpace _state = new GTMillGameSpace();
 
 		public GTMillGameLogic ()
-		{
+        {
+            Name = "MillGame";
+            Id = 1;
+            Description = "MillGame";
 		}
 
 		// Input
@@ -42,6 +46,40 @@ namespace GTMillGameLogic
 		{
 			return new GTMillGameStateHash();
 		}
+
+	    public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEventArg;
+	    public void SendGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public void RegisterGameManager(GTPlatformManagerInterface platformGameManager)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+        public void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public string Name { get; private set; }
+	    public int Id { get; private set; }
+	    public string Description { get; private set; }
+	    public void LoadGame(byte[] gameState)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public byte[] SaveGame()
+	    {
+	        throw new NotImplementedException();
+	    }
 	}
 }
 

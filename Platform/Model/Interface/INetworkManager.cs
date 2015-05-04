@@ -1,9 +1,9 @@
 ﻿using System;
-using ConnectionInterface;
-using ConnectionInterface.MessageTypes;
-using PlatformInterface.EventsServerRelated;
+using GTInterfacesLibrary;
+using GTInterfacesLibrary.MessageTypes;
+using GamesEventArgs = Platform.Events.EventsServerRelated.GamesEventArgs;
 
-namespace PlatformInterface
+namespace Platform.Model.Interface
 {
     public interface INetworkManager
     {
@@ -27,9 +27,9 @@ namespace PlatformInterface
 
         void Disconnect();
 
-        void GetOnlineGames(IGame game);
+        void GetOnlineGames(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game);
 
-        void CreateGame(IGame game, int hashCode);
+        void CreateGame(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game, int hashCode);
 
         void JoinGame(Int32 gameId);
 

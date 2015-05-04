@@ -1,4 +1,5 @@
 ﻿using System;
+using Server.Implementation;
 
 namespace Server
 {
@@ -17,7 +18,7 @@ namespace Server
                 Console.ReadKey();
             }
 
-            Console.WriteLine("Attempting to stop, please wait, it will closed immediately.");
+            Console.WriteLine("\nAttempting to stop, please wait, it will be closed immediately.");
             manager.Stop();
         }
     }

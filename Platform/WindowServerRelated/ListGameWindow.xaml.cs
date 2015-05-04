@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using ConnectionInterface.MessageTypes;
+using GTInterfacesLibrary.MessageTypes;
 using Platform.Model;
-using PlatformInterface.EventsServerRelated;
+using GamesEventArgs = Platform.Events.EventsServerRelated.GamesEventArgs;
 
 namespace Platform.WindowServerRelated
 {

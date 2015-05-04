@@ -1,7 +1,7 @@
 ﻿using System;
-using ConnectionInterface.MessageTypes;
+using GTInterfacesLibrary.MessageTypes;
 
-namespace ServerInterface
+namespace Server.Interfaces
 {
     public interface IDataManager
     {

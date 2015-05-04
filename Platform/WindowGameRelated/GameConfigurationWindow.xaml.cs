@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using ConnectionInterface;
 using GTInterfacesLibrary;
 using Platform.Model;
 

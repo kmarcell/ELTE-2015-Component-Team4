@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConnectionInterface.GameEvents;
-using ConnectionInterface.MessageTypes;
-using ServerInterface;
+using GTInterfacesLibrary.GameEvents;
+using GTInterfacesLibrary.MessageTypes;
+using Server.Interfaces;
 
-namespace Server
+namespace Server.Implementation
 {
     public class DataManager : IDataManager
     {

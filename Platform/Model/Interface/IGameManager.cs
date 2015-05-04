@@ -1,11 +1,10 @@
 ﻿using System;
-using ConnectionInterface;
-using ConnectionInterface.GameEvents;
 using GTInterfacesLibrary;
-using PlatformInterface.EventsGameRelated;
-using PlatformInterface.EventsServerRelated;
+using GTInterfacesLibrary.GameEvents;
+using GameEndedEventArgs = Platform.Events.EventsGameRelated.GameEndedEventArgs;
+using GameEventArgs = Platform.Events.EventsServerRelated.GameEventArgs;
 
-namespace PlatformInterface
+namespace Platform.Model.Interface
 {
     public interface IGameManager
     {
@@ -28,7 +27,7 @@ namespace PlatformInterface
         /// </remarks>
         /// </summary>
         /// <param name="game"></param>
-        void RegisterGame(IGame game);
+        void RegisterGame(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game);
 
         void RecieveGameStateFromNetwork(object sender, GameEventArgs eventArgs);
     }

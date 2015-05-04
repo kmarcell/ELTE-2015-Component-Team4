@@ -1,5 +1,6 @@
 ﻿using System;
 using ConnectionInterface.GameEvents;
+using GTInterfacesLibrary;
 
 namespace ConnectionInterface
 {
@@ -32,7 +33,7 @@ namespace ConnectionInterface
         ///  The function where the platform can register the currently selected AI for the game.
         /// </summary>
         /// <param name="artificialIntelligence">The currently loaded/selected AI</param>
-        void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence);
+        void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence);
 
         /// <summary>
         /// The subscribe for event of platform game manager

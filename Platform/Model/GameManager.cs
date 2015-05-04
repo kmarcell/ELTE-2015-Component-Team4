@@ -4,6 +4,7 @@ using System.IO;
 using ConnectionInterface;
 using ConnectionInterface.GameEvents;
 using ConnectionInterface.MessageTypes;
+using GTInterfacesLibrary;
 using PlatformInterface;
 using PlatformInterface.EventsGameRelated;
 using PlatformInterface.EventsServerRelated;
@@ -15,7 +16,7 @@ namespace Platform.Model
         private readonly NetworkManager _MNetworkManager;
         public GameManager(NetworkManager networkManager)
         {
-            ArtificialIntelligences = new List<IArtificialIntelligence>();
+            ArtificialIntelligences = new List<GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>>();
             _MGameType = GameType.Online;
             _MNetworkManager = networkManager;
             _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
@@ -26,7 +27,7 @@ namespace Platform.Model
 
         public static Game CurrentNetworkGame { get; protected set; }
 
-        public List<IArtificialIntelligence> ArtificialIntelligences { get; private set; }
+        public List<GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>> ArtificialIntelligences { get; private set; }
         
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
@@ -44,7 +45,7 @@ namespace Platform.Model
         }
 
 
-        public void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence)
+        public void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
         {
             ArtificialIntelligences.Add(artificialIntelligence);
         }
@@ -103,8 +104,8 @@ namespace Platform.Model
         }
 
 
-        
-        public void StartLocalGame(IArtificialIntelligence artificialIntelligence)
+
+        public void StartLocalGame(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
         {
             _MGameType = GameType.Local;
             CurrentGame.RegisterArtificialIntelligence(artificialIntelligence);

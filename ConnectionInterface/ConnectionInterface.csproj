@@ -40,12 +40,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameEvents\GameStateChangedEventArgs.cs" />
-    <Compile Include="IArtificialIntelligence.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="IPlatformGameManager.cs" />
     <Compile Include="MessageTypes\Game.cs" />
     <Compile Include="MessageTypes\Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj">
+      <Project>{cd85d76b-e9dc-4fca-80a9-87a89f8b6c65}</Project>
+      <Name>GTInterfacesLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

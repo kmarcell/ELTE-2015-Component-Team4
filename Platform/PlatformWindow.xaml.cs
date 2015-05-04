@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using ConnectionInterface;
+using GTInterfacesLibrary;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -113,7 +114,7 @@ namespace Platform
                 foreach (var currentAiType in aiType)
                 {
                     var aiObject = Activator.CreateInstance(currentAiType);
-                    _MGameManager.RegisterArtificialIntelligence((IArtificialIntelligence)aiObject);
+                    _MGameManager.RegisterArtificialIntelligence((GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)aiObject);
                 }
             }
         }

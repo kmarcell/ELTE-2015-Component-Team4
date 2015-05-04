@@ -1,6 +1,7 @@
 ﻿using System;
 using ConnectionInterface;
 using ConnectionInterface.GameEvents;
+using GTInterfacesLibrary;
 using PlatformInterface.EventsGameRelated;
 using PlatformInterface.EventsServerRelated;
 
@@ -12,7 +13,7 @@ namespace PlatformInterface
 
         event EventHandler<GameEndedEventArgs> GameEndedEvent;
 
-        void StartLocalGame(IArtificialIntelligence artificialIntelligence);
+        void StartLocalGame(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence);
 
         void EndLocalGame();
 

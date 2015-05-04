@@ -1,6 +1,7 @@
 ﻿using System;
 using ConnectionInterface;
 using ConnectionInterface.GameEvents;
+using GTInterfacesLibrary;
 
 namespace CheckersGame
 {
@@ -9,7 +10,7 @@ namespace CheckersGame
         private IPlatformGameManager PlatformGameManager;
         private GTInterfacesLibrary.GTGameLogicInterface<Logic.Element, Logic.Position> logic;
         private GTInterfacesLibrary.GTArtificialIntelligenceInterface<Logic.Element, Logic.Position> AI;
-        private IArtificialIntelligence IAI;
+        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> IAI;
 
         public CheckersGame()
         {
@@ -35,7 +36,7 @@ namespace CheckersGame
             PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;
         }
 
-        public void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence)
+        public void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
         {
             IAI = artificialIntelligence;
         }

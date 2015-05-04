@@ -56,6 +56,10 @@
       <Project>{084addf8-2daa-43ab-b293-a43eabb955ce}</Project>
       <Name>ConnectionInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj">
+      <Project>{cd85d76b-e9dc-4fca-80a9-87a89f8b6c65}</Project>
+      <Name>GTInterfacesLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

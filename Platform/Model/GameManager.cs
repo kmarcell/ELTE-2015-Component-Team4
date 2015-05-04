@@ -15,18 +15,18 @@ namespace Platform.Model
         private readonly NetworkManager _MNetworkManager;
         public GameManager(NetworkManager networkManager)
         {
-            ArtificialIntelligences = new List<GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>>();
+            ArtificialIntelligences = new List<IGTArtificialIntelligenceInterface>();
             _MGameType = GameType.Online;
             _MNetworkManager = networkManager;
             _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
         }
 
         private GameType _MGameType;
-        public static GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> CurrentGame { get; private set; }
+        public static IGTGameLogicInterface CurrentGame { get; private set; }
 
         public static Game CurrentNetworkGame { get; protected set; }
 
-        public List<GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>> ArtificialIntelligences { get; private set; }
+        public List<IGTArtificialIntelligenceInterface> ArtificialIntelligences { get; private set; }
         
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
@@ -34,7 +34,7 @@ namespace Platform.Model
         public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEvent;
 
 
-        public void RegisterGame(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game)
+        public void RegisterGame(IGTGameLogicInterface game)
         {
 
             _MGameType = GameType.Online;
@@ -44,7 +44,7 @@ namespace Platform.Model
         }
 
 
-        public void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
+        public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
             ArtificialIntelligences.Add(artificialIntelligence);
         }
@@ -104,7 +104,7 @@ namespace Platform.Model
 
 
 
-        public void StartLocalGame(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
+        public void StartLocalGame(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
             _MGameType = GameType.Local;
             CurrentGame.RegisterArtificialIntelligence(artificialIntelligence);

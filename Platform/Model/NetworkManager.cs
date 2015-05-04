@@ -63,13 +63,13 @@ namespace Platform.Model
             }
         }
 
-        public void GetOnlineGames(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game) 
+        public void GetOnlineGames(IGTGameLogicInterface game) 
         {
             SendMessage(MessageCode.GetOpenGames, game.Id);
         }
 
 
-        public void CreateGame(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game, int hashCode)
+        public void CreateGame(IGTGameLogicInterface game, int hashCode)
         {
             var gameToServer = new Game
             {

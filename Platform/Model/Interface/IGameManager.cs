@@ -12,7 +12,7 @@ namespace Platform.Model.Interface
 
         event EventHandler<GameEndedEventArgs> GameEndedEvent;
 
-        void StartLocalGame(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence);
+        void StartLocalGame(IGTArtificialIntelligenceInterface artificialIntelligence);
 
         void EndLocalGame();
 
@@ -27,7 +27,7 @@ namespace Platform.Model.Interface
         /// </remarks>
         /// </summary>
         /// <param name="game"></param>
-        void RegisterGame(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game);
+        void RegisterGame(IGTGameLogicInterface game);
 
         void RecieveGameStateFromNetwork(object sender, GameEventArgs eventArgs);
     }

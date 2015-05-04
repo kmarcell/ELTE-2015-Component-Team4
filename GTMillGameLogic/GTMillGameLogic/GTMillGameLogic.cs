@@ -58,7 +58,7 @@ namespace GTMillGameLogic
 	        throw new NotImplementedException();
 	    }
 
-        public void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
+        public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
 	    {
 	        throw new NotImplementedException();
 	    }

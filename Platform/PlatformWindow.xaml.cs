@@ -98,7 +98,7 @@ namespace Platform
 
                 try
                 {
-                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.Name.Contains("GTArtificialIntelligenceInterface"))).ToList();
+                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.Name.Contains("IGTArtificialIntelligenceInterface"))).ToList();
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -113,7 +113,7 @@ namespace Platform
                 foreach (var currentAiType in aiType)
                 {
                     var aiObject = Activator.CreateInstance(currentAiType);
-                    _MGameManager.RegisterArtificialIntelligence((GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)aiObject);
+                    _MGameManager.RegisterArtificialIntelligence((IGTArtificialIntelligenceInterface)aiObject);
                 }
             }
         }
@@ -475,7 +475,7 @@ namespace Platform
 
                 try
                 {
-                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterfaces().Any(y => y.Name.Contains("GTGameLogicInterface")));
+                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterfaces().Any(y => y.Name.Contains("IGTGameLogicInterface")));
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -488,7 +488,7 @@ namespace Platform
                     return;
                 }
                 var obj = Activator.CreateInstance(gameType);
-                _MGameManager.RegisterGame((GTGameLogicInterface<GTGameSpaceElementInterface, IPosition>)obj);
+                _MGameManager.RegisterGame((IGTGameLogicInterface)obj);
 
                 CreateOnlineGameMenuItem.IsEnabled = false;
                 ConnectOnlineGameMenuItem.IsEnabled = false;

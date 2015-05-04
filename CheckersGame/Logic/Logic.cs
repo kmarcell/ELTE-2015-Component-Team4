@@ -74,9 +74,9 @@ namespace CheckersGame.Logic
             PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;
         }
 
-        public void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence)
+        public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            IAI = artificialIntelligence;
+            IAI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)artificialIntelligence;
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)

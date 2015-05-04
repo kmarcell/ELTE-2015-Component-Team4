@@ -27,9 +27,9 @@ namespace Platform.Model.Interface
 
         void Disconnect();
 
-        void GetOnlineGames(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game);
+        void GetOnlineGames(IGTGameLogicInterface game);
 
-        void CreateGame(GTGameLogicInterface<GTGameSpaceElementInterface, IPosition> game, int hashCode);
+        void CreateGame(IGTGameLogicInterface game, int hashCode);
 
         void JoinGame(Int32 gameId);
 

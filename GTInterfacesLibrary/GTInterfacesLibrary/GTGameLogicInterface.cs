@@ -3,7 +3,7 @@ using GTInterfacesLibrary.GameEvents;
 
 namespace GTInterfacesLibrary
 {
-    public interface GTGameLogicInterface<E, P>
+    public interface GTGameLogicInterface<E, P> : IGTGameLogicInterface
         where E : GTGameSpaceElementInterface
         where P : IPosition
 	{
@@ -16,7 +16,10 @@ namespace GTInterfacesLibrary
 		GTGameSpaceInterface<E, P> getCurrentState();
 		GTGameStateGeneratorInterface<E, P> getStateGenerator();
 		GTGameStateHashInterface<E, P> getStateHash();
+	}
 
+    public interface IGTGameLogicInterface
+    {
         /// <summary>
         /// The message which will send to the platform if there is any change in game
         /// </summary>
@@ -40,7 +43,7 @@ namespace GTInterfacesLibrary
         ///  The function where the platform can register the currently selected AI for the game.
         /// </summary>
         /// <param name="artificialIntelligence">The currently loaded/selected AI</param>
-        void RegisterArtificialIntelligence(GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> artificialIntelligence);
+        void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence);
 
         /// <summary>
         /// The subscribe for event of platform game manager
@@ -77,6 +80,7 @@ namespace GTInterfacesLibrary
         /// </summary>
         /// <returns>the byte array representation of the game</returns>
         Byte[] SaveGame();
-	}
+        
+    }
 }
 

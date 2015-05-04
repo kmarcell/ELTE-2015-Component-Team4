@@ -26,11 +26,17 @@ namespace Platform
 
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
+        private Boolean IsAiAiGameStarted; 
 
         public MainWindow()
         {
             InitializeComponent();
 
+            IsAiAiGameStarted = false; 
+
+            GameContentControl = new GUIImplementation.LightGUI();
+            LightGuiMenuItem.IsChecked = true;
+            DarkGuiMenuItem.IsChecked = false;
 
             // platform events
             Closing += OnClosing;
@@ -44,6 +50,8 @@ namespace Platform
             LoadGameMenuItem.IsEnabled = false;
             EndGameMenuItem.IsEnabled = false;
             StartGameMenuItem.IsEnabled = false;
+            StartAiAiGameMenuItem.IsEnabled = false;
+            EndAiAiGameMenuItem.IsEnabled = false;
             LoadGameLogicComponentMenuItem.IsEnabled = true;
 
 
@@ -72,11 +80,18 @@ namespace Platform
             const string aiDirectory = "ArtificialIntelligence";
             if (!Directory.Exists(aiDirectory))
             {
-                MainStatusBarTextBlock.Text = "No AI loaded, directory does not exists, local game not possible";
+                MainStatusBarTextBlock.Text = "AI could not be loaded, directory does not exists, local game not possible";
                 return;
             }
 
-            foreach (var aiDll in Directory.GetFiles(aiDirectory, "*.dll", SearchOption.TopDirectoryOnly))
+            var aiFromDirectory = Directory.GetFiles(aiDirectory, "*.dll", SearchOption.TopDirectoryOnly);
+            if (!aiFromDirectory.Any())
+            {
+                MainStatusBarTextBlock.Text = "AI could not be loaded, AI in the directory could not be found, local game not possible";
+                return;
+            }
+
+            foreach (var aiDll in aiFromDirectory)
             {
                 var aiAssembly = Assembly.LoadFrom(aiDll);
                 List<Type> aiType;
@@ -183,11 +198,12 @@ namespace Platform
                     Filter = "Gamesaves|*.compgame"
                 };
 
-                openFileDialog.ShowDialog();
-                _MGameManager.LoadLocalGame(openFileDialog.FileName);
+                if(Convert.ToBoolean(openFileDialog.ShowDialog()))
+                { 
+                    _MGameManager.LoadLocalGame(openFileDialog.FileName);
 
-                MainStatusBarTextBlock.Text = "Game loaded!";
-                MessageBox.Show("Game loaded!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MainStatusBarTextBlock.Text = "Game loaded successfuly!";
+                }
             }
             catch (Exception)
             {
@@ -205,11 +221,13 @@ namespace Platform
                     Filter = "Gamesaves|*.compgame"
                 };
 
-                saveFileDialog.ShowDialog();
-                _MGameManager.SaveLocalGame(saveFileDialog.FileName);
 
-                MainStatusBarTextBlock.Text = "Game saved!";
-                MessageBox.Show("Game saved!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (Convert.ToBoolean(saveFileDialog.ShowDialog()))
+                {
+                    _MGameManager.SaveLocalGame(saveFileDialog.FileName);
+
+                    MainStatusBarTextBlock.Text = "Game saved successfuly!";
+                }
             }
             catch (Exception)
             {
@@ -232,8 +250,10 @@ namespace Platform
                 MenuServerDisconnectMenuItem.IsEnabled = false;
                 SaveGameMenuItem.IsEnabled = true;
                 LoadGameMenuItem.IsEnabled = false;
-                EndGameMenuItem.IsEnabled = true;
+                EndGameMenuItem.IsEnabled = !IsAiAiGameStarted;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = IsAiAiGameStarted;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
         }
@@ -266,6 +286,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = true;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = true;
+                StartAiAiGameMenuItem.IsEnabled = true;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = true;
             });
         }
@@ -287,6 +309,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
 
                 _MServerConnectWindow.Close();
@@ -324,6 +348,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = true;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = true;
+                StartAiAiGameMenuItem.IsEnabled = true;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = true;
 
                 MainStatusBarTextBlock.Text = "You are disconnected from the server!";
@@ -344,6 +370,8 @@ namespace Platform
                     LoadGameMenuItem.IsEnabled = false;
                     EndGameMenuItem.IsEnabled = false;
                     StartGameMenuItem.IsEnabled = false;
+                    StartAiAiGameMenuItem.IsEnabled = false;
+                    EndAiAiGameMenuItem.IsEnabled = false;
                     LoadGameLogicComponentMenuItem.IsEnabled = false;
 
                     _MCreateGameWindow.Close();
@@ -371,6 +399,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
         }
@@ -391,6 +421,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
             });
 
@@ -418,6 +450,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = false;
+                StartAiAiGameMenuItem.IsEnabled = false;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = false;
 
                 MainStatusBarTextBlock.Text = "Join game accepted, game could started!";
@@ -466,6 +500,8 @@ namespace Platform
                 LoadGameMenuItem.IsEnabled = true;
                 EndGameMenuItem.IsEnabled = false;
                 StartGameMenuItem.IsEnabled = true;
+                StartAiAiGameMenuItem.IsEnabled = true;
+                EndAiAiGameMenuItem.IsEnabled = false;
                 LoadGameLogicComponentMenuItem.IsEnabled = true;
 
                 MainStatusBarTextBlock.Text = "Game registered!";
@@ -475,6 +511,32 @@ namespace Platform
             {
                 MessageBox.Show("Registering game error!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void DarkGuiMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            GameContentControl = new GUIImplementation.DarkGUI();
+            LightGuiMenuItem.IsChecked = false;
+            DarkGuiMenuItem.IsChecked = true;
+        }
+
+        private void LightGuiMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            GameContentControl = new GUIImplementation.LightGUI();
+            LightGuiMenuItem.IsChecked = true;
+            DarkGuiMenuItem.IsChecked = false;
+        }
+
+        private void StartAiAiGameMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            IsAiAiGameStarted = true;
+            _MGameManager.StartAiAiGame();
+        }
+
+        private void EndAiAiGameMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            IsAiAiGameStarted = false;
+            _MGameManager.EndAiAiGame();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GUIImplementation
 {
-    class DarkGUI : AbstractGUIControl
+    public class DarkGUI : AbstractGUIControl
     {
         protected override Uri GetImageURI(bool isBackground, byte value) {
             if (isBackground)

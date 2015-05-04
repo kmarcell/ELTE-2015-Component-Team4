@@ -8,13 +8,15 @@ namespace CheckersGame
     {
         private IPlatformGameManager PlatformGameManager;
         private GTInterfacesLibrary.GTGameLogicInterface<Logic.Element, Logic.Position> logic;
+        private GTInterfacesLibrary.GTArtificialIntelligenceInterface<Logic.Element, Logic.Position> AI;
+        private IArtificialIntelligence IAI;
 
         public CheckersGame()
         {
             Name = "CheckersGame";
             Id = 2;
             Description = "CheckersGame";
-            logic = new Logic.Logic("White");
+            logic = new Logic.Logic();
         }
 
         public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEventArg;
@@ -35,15 +37,19 @@ namespace CheckersGame
 
         public void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence)
         {
-            throw new NotImplementedException();
+            IAI = artificialIntelligence;
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
         {
             // TODO:
             // Update game logic with the received game state.
-            Logic.Step step = StepFromBytes(gameStateChangedEventArgs.GameState);
-            logic.updateGameSpace(step);
+            GameStateChangedEventArgs state = gameStateChangedEventArgs;
+            if (state.GamePhase == GamePhase.Playing)
+            {
+                Logic.Step step = StepFromBytes(gameStateChangedEventArgs.GameState);
+                logic.updateGameSpace(step);
+            }            
         }
 
         public string Name { get; private set; }

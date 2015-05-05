@@ -3,6 +3,8 @@ using GTInterfacesLibrary;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Math;
+
 
 namespace GTMillGameLogic
 {
@@ -25,18 +27,120 @@ namespace GTMillGameLogic
         int twoPieces;
         int blockedOpponent;
 
-        private void checkMorris(int direction, Tuple<List<GTMillGameElement>, List<GTMillGameElement>> neighbours)
+        /**
+         * True if we can jump in the given direction from the given position
+         **/
+        private bool isValidDirection(int direction, GTMillPosition position)
         {
+            return !(direction == 0 && position.y == 1) //you cant jump horizontal
+                    && !(direction == 1 && position.x == 1) //you cant jump vertical
+                    && !(direction == 2 && position.x == 1 && position.y == 1); //we can only jump diagonal from there
+        }
+
+        /**
+         * Returns the neighbour elements of the given position. 
+         * The opponent and own elements will be seperated.
+         **/
+        private Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> getNeighbours(int direction, GTMillPosition position)
+        {
+            List<Tuple<GTMillGameElement, bool>> opponentNeighbours = new List<Tuple<GTMillGameElement, bool>>(),
+                                                 ownNeighbours = new List<Tuple<GTMillGameElement, bool>>();
+
+            if (this.isValidDirection(direction, position))
+            {
+                switch (direction)
+                {
+                    case 0:
+                        for (int i = 0; i < 3; ++i)
+                        {
+                            GTMillPosition pos = new GTMillPosition(i, position.y, position.z);
+
+                            if (state.hasElementAt(pos))
+                            {
+                                GTMillGameElement element = state.elementAt(pos);
+                                bool direct = Math.Abs(i - position.x) == 1;
+
+                                if (element.owner == state.nextPlayer)
+                                {
+                                    ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
+                                }
+                                else
+                                {
+                                    opponentNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
+                                }
+                            }
+                        }
+
+                        break;
+                    case 1:
+                        for (int i = 0; i < 3; ++i)
+                        {
+                            GTMillPosition pos = new GTMillPosition(position.x, i, position.z);
+
+                            if (state.hasElementAt(pos))
+                            {
+                                GTMillGameElement element = state.elementAt(pos);
+                                bool direct = Math.Abs(i - position.y) == 1;
+
+                                if (element.owner == state.nextPlayer)
+                                {
+                                    ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
+                                }
+                                else
+                                {
+                                    opponentNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
+                                }
+                            }
+                        }
+
+                        break;
+                    case 2:
+                        for (int i = 0; i < 3; ++i)
+                        {
+                            GTMillPosition pos = new GTMillPosition(position.x, position.y, i);
+
+                            if (state.hasElementAt(pos))
+                            {
+                                GTMillGameElement element = state.elementAt(pos);
+                                bool direct = Math.Abs(i - position.z) == 1;
+
+                                if (element.owner == state.nextPlayer)
+                                {
+                                    ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
+                                }
+                                else
+                                {
+                                    opponentNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
+                                }
+                            }
+                        }
+
+                        break;
+                }
+            }
+
+            Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours
+                = new Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>>(ownNeighbours, opponentNeighbours);
+
+            return neighbours;
+        }
+
+        /**
+         * Checks morrises in one direction
+         **/
+        private void checkMorris(int direction, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours)
+        {
+            //there is a morris
             if (neighbours.Item1.Count == 3 )
             {
                 switch (direction)
                 {
                     case 0:
-                        if (!this.horizontalMorrises.Contains(neighbours.Item1.First()))
+                        if (!this.horizontalMorrises.Contains(neighbours.Item1.First().Item1))
                         {
-                            foreach (GTMillGameElement element in neighbours.Item1)
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
                             {
-                                this.horizontalMorrises.Add(element);
+                                this.horizontalMorrises.Add(element.Item1);
                             }
                              
                             this.morrises++;
@@ -44,11 +148,11 @@ namespace GTMillGameLogic
 
                         break;
                     case 1:
-                        if (!this.verticalMorrises.Contains(neighbours.Item1.First()))
+                        if (!this.verticalMorrises.Contains(neighbours.Item1.First().Item1))
                         {
-                            foreach (GTMillGameElement element in neighbours.Item1)
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
                             {
-                                this.verticalMorrises.Add(element);
+                                this.verticalMorrises.Add(element.Item1);
                             }
 
                             this.morrises++;
@@ -56,11 +160,11 @@ namespace GTMillGameLogic
 
                         break;
                     case 2:
-                        if (!this.diagonalMorrises.Contains(neighbours.Item1.First()))
+                        if (!this.diagonalMorrises.Contains(neighbours.Item1.First().Item1))
                         {
-                            foreach (GTMillGameElement element in neighbours.Item1)
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
                             {
-                                this.diagonalMorrises.Add(element);
+                                this.diagonalMorrises.Add(element.Item1);
                             }
 
                             this.morrises++;
@@ -71,18 +175,22 @@ namespace GTMillGameLogic
             }
         }
 
-        private void check2Pieces(int direction, Tuple<List<GTMillGameElement>, List<GTMillGameElement>> neighbours)
+        /**
+         * Checks 2 and 3 pieces configurations
+         **/
+        private void check23Pieces(int direction, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours)
         {
+            //if there is 3 items then it will be a morris
             if (neighbours.Item1.Count == 2 && neighbours.Item2.Count == 0)
             {
                 switch (direction)
                 {
                     case 0:
-                        if (!this.horizontal2Pieces.Contains(neighbours.Item1.First()))
+                        if (!this.horizontal2Pieces.Contains(neighbours.Item1.First().Item1))
                         {
-                            foreach (GTMillGameElement element in neighbours.Item1)
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
                             {
-                                this.horizontal2Pieces.Add(element);
+                                this.horizontal2Pieces.Add(element.Item1);
                             }
 
                             this.twoPieces++;
@@ -90,11 +198,11 @@ namespace GTMillGameLogic
 
                         break;
                     case 1:
-                        if (!this.vertical2Pieces.Contains(neighbours.Item1.First()))
+                        if (!this.vertical2Pieces.Contains(neighbours.Item1.First().Item1))
                         {
-                            foreach (GTMillGameElement element in neighbours.Item1)
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
                             {
-                                this.vertical2Pieces.Add(element);
+                                this.vertical2Pieces.Add(element.Item1);
                             }
 
                             this.twoPieces++;
@@ -102,11 +210,11 @@ namespace GTMillGameLogic
 
                         break;
                     case 2:
-                        if (!this.diagonal2Pieces.Contains(neighbours.Item1.First()))
+                        if (!this.diagonal2Pieces.Contains(neighbours.Item1.First().Item1))
                         {
-                            foreach (GTMillGameElement element in neighbours.Item1)
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
                             {
-                                this.diagonal2Pieces.Add(element);
+                                this.diagonal2Pieces.Add(element.Item1);
                             }
 
                             this.twoPieces++;
@@ -117,130 +225,25 @@ namespace GTMillGameLogic
             }
         }
 
-        private Tuple<List<GTMillGameElement>, List<GTMillGameElement>> getNeighbours(int direction, GTMillPosition position)
+        /**
+         * Returns true if blocked in one direction
+         **/
+        private bool isBlocked(int direction, GTMillPosition position, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours)
         {
-            List<GTMillGameElement> opponentNeighbours = new List<GTMillGameElement>(),
-                                    ownNeighbours = new List<GTMillGameElement>();
-
-            switch (direction)
-            {
-                case 0:
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        GTMillPosition pos = new GTMillPosition(i, position.y, position.z);
-
-                        if (state.hasElementAt(pos)) {
-                            GTMillGameElement element = state.elementAt(pos);
-
-                            if (element.owner == state.nextPlayer) {
-                                ownNeighbours.Add(element);
-                            } else {
-                                opponentNeighbours.Add(element);
-                            }
-                        } 
-                    }
-
-                    break;
-                case 1:
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        GTMillPosition pos = new GTMillPosition(position.x, i, position.z);
-
-                        if (state.hasElementAt(pos)) {
-                            GTMillGameElement element = state.elementAt(pos);
-
-                            if (element.owner == state.nextPlayer) {
-                                ownNeighbours.Add(element);
-                            } else {
-                                opponentNeighbours.Add(element);
-                            }
-                        } 
-                    }
-                        
-                    break;
-                case 2:
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        GTMillPosition pos = new GTMillPosition(position.x, position.y, i);
-
-                        if (state.hasElementAt(pos)) {
-                            GTMillGameElement element = state.elementAt(pos);
-
-                            if (element.owner == state.nextPlayer) {
-                                ownNeighbours.Add(element);
-                            } else {
-                                opponentNeighbours.Add(element);
-                            }
-                        } 
-                    }
-
-                    break;
-            }
-
-            Tuple<List<GTMillGameElement>, List<GTMillGameElement>> neighbours
-                = new Tuple<List<GTMillGameElement>, List<GTMillGameElement>>(ownNeighbours, opponentNeighbours);
-
-            return neighbours;
-        }
-
-        private bool isBlocked(int direction, GTMillPosition position, GTMillGameElement element)
-        {
+            List<Tuple<GTMillGameElement, bool>> opponentNeighbours 
+                = (List<Tuple<GTMillGameElement, bool>>)neighbours.Item2.Where(item => item.Item2);
+            
             bool blocked = true;
 
-            switch (direction)
+            if (((position.x == 0 || position.x == 2) && direction == 0)
+                || ((position.y == 0 || position.y == 2) && direction == 1)
+                || ((position.z == 0 || position.z == 2) && direction == 2))
             {
-                case 0:
-                    //horizontal
-                    if (position.x == 0 || position.x == 2)
-                    {
-                        GTMillPosition pos = new GTMillPosition(1, position.y, position.z);
-
-                        blocked = blocked && state.hasElementAt(pos) && (state.elementAt(pos).owner != element.owner);
-                    } else {
-                        GTMillPosition pos1 = new GTMillPosition(0, position.y, position.z),
-                                       pos2 = new GTMillPosition(2, position.y, position.z);
-
-                        blocked = blocked && state.hasElementAt(pos1) && (state.elementAt(pos1).owner != element.owner);
-                        blocked = blocked && state.hasElementAt(pos2) && (state.elementAt(pos2).owner != element.owner);
-                    }
-
-                    break;
-                case 1:
-                    //vertical
-                    if (position.y == 0 || position.y == 2)
-                    {
-                        GTMillPosition pos = new GTMillPosition(position.x, 1, position.z);
-
-                        blocked = blocked && state.hasElementAt(pos) && (state.elementAt(pos).owner != element.owner);
-                    }
-                    else
-                    {
-                        GTMillPosition pos1 = new GTMillPosition(position.x, 0, position.z),
-                                       pos2 = new GTMillPosition(position.x, 2, position.z);
-
-                        blocked = blocked && state.hasElementAt(pos1) && (state.elementAt(pos1).owner != element.owner);
-                        blocked = blocked && state.hasElementAt(pos2) && (state.elementAt(pos2).owner != element.owner);
-                    }
-
-                    break;
-                case 2:
-                    //diagonal
-                    if (position.z == 0 || position.z == 2)
-                    {
-                        GTMillPosition pos = new GTMillPosition(position.x, position.y, 1);
-
-                        blocked = blocked && state.hasElementAt(pos) && (state.elementAt(pos).owner != element.owner);
-                    }
-                    else
-                    {
-                        GTMillPosition pos1 = new GTMillPosition(position.x, position.y, 0),
-                                       pos2 = new GTMillPosition(position.x, position.y, 2);
-
-                        blocked = blocked && state.hasElementAt(pos1) && (state.elementAt(pos1).owner != element.owner);
-                        blocked = blocked && state.hasElementAt(pos2) && (state.elementAt(pos2).owner != element.owner);
-                    }
-
-                    break;
+                blocked = (opponentNeighbours.Count > 0);
+            }
+            else
+            {
+                blocked = (opponentNeighbours.Count > 1);
             }
 
             return blocked;
@@ -267,23 +270,24 @@ namespace GTMillGameLogic
                 //Directions: 0 horizontal, 1 vertical, 2 diagonal
                 for (int direction = 0; direction < 3; ++direction)
                 {
-                    //impossible to jump this direction
-                    if (!(direction == 0 && element.Key.y == 1) && !(direction == 1 && element.Key.x == 1))
+                    //if possible to jump this direction
+                    if (this.isValidDirection(direction, element.Key)) 
                     {
+                        Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours
+                               = this.getNeighbours(direction, element.Key);
+
                         //if the next player has element at the position
                         if (element.Value.owner == state.nextPlayer)
                         {
-                            Tuple<List<GTMillGameElement>, List<GTMillGameElement>> neighbours = this.getNeighbours(direction, element.Key);
-
-                            //checking the morrises
+                            //checking morrises
                             this.checkMorris(direction, neighbours);
-                            //checking 2 pieces configuration 
-                            this.check2Pieces(direction, neighbours);
+                            //checking 2&3 pieces configuration 
+                            this.check23Pieces(direction, neighbours);
                         }
                         else
                         {
                             //checking blocking
-                            blocked = blocked && this.isBlocked(direction, element.Key, element.Value);
+                            blocked = blocked && this.isBlocked(direction, element.Key, neighbours);
                         }
                     }
                 }

@@ -53,6 +53,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Events\EventsGameRelated\GameEndedEventArgs.cs" />
+    <Compile Include="Events\EventsGameRelated\GameLoadedEventArgs.cs" />
+    <Compile Include="Events\EventsGameRelated\GameSavedEventArgs.cs" />
+    <Compile Include="Events\EventsServerRelated\ConnectionChangeEventArgs.cs" />
+    <Compile Include="Events\EventsServerRelated\DisconnectedEventArgs.cs" />
+    <Compile Include="Events\EventsServerRelated\GameEventArgs.cs" />
+    <Compile Include="Events\EventsServerRelated\GamesEventArgs.cs" />
+    <Compile Include="Model\Interface\IGameManager.cs" />
+    <Compile Include="Model\Interface\INetworkManager.cs" />
     <Compile Include="WindowGameRelated\GameConfigurationWindow.xaml.cs">
       <DependentUpon>GameConfigurationWindow.xaml</DependentUpon>
     </Compile>
@@ -127,9 +136,9 @@
     <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConnectionInterface\ConnectionInterface.csproj">
-      <Project>{084addf8-2daa-43ab-b293-a43eabb955ce}</Project>
-      <Name>ConnectionInterface</Name>
+    <ProjectReference Include="..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj">
+      <Project>{cd85d76b-e9dc-4fca-80a9-87a89f8b6c65}</Project>
+      <Name>GTInterfacesLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\GUIImplementation\GUIImplementation.csproj">
       <Project>{37d59d2a-42f0-4819-8fca-11f2f8de2a08}</Project>
@@ -138,10 +147,6 @@
     <ProjectReference Include="..\GUILibrary\GUILibrary.csproj">
       <Project>{a632c624-748c-4094-a17a-8b2c108bb1b6}</Project>
       <Name>GUILibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PlatformInterface\PlatformInterface.csproj">
-      <Project>{fa6e1f10-a86e-4bea-a830-590c442b7b3b}</Project>
-      <Name>PlatformInterface</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

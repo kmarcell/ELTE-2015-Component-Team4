@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ConnectionInterface;
-using ConnectionInterface.GameEvents;
-using ConnectionInterface.MessageTypes;
-using PlatformInterface;
-using PlatformInterface.EventsGameRelated;
-using PlatformInterface.EventsServerRelated;
+using GTInterfacesLibrary;
+using GTInterfacesLibrary.GameEvents;
+using GTInterfacesLibrary.MessageTypes;
+using GameEndedEventArgs = Platform.Events.EventsGameRelated.GameEndedEventArgs;
+using GameEventArgs = Platform.Events.EventsServerRelated.GameEventArgs;
+using IGameManager = Platform.Model.Interface.IGameManager;
 
 namespace Platform.Model
 {
-    public class GameManager : IGameManager, IPlatformGameManager
+    public class GameManager : IGameManager, GTPlatformManagerInterface
     {
         private readonly NetworkManager _MNetworkManager;
         public GameManager(NetworkManager networkManager)
         {
-            ArtificialIntelligences = new List<IArtificialIntelligence>();
+            ArtificialIntelligences = new List<IGTArtificialIntelligenceInterface>();
             _MGameType = GameType.Online;
             _MNetworkManager = networkManager;
             _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
         }
 
         private GameType _MGameType;
-        public static IGame CurrentGame { get; private set; }
+        public static IGTGameLogicInterface CurrentGame { get; private set; }
 
         public static Game CurrentNetworkGame { get; protected set; }
 
-        public List<IArtificialIntelligence> ArtificialIntelligences { get; private set; }
+        public List<IGTArtificialIntelligenceInterface> ArtificialIntelligences { get; private set; }
         
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
@@ -34,7 +34,7 @@ namespace Platform.Model
         public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEvent;
 
 
-        public void RegisterGame(IGame game)
+        public void RegisterGame(IGTGameLogicInterface game)
         {
 
             _MGameType = GameType.Online;
@@ -44,7 +44,7 @@ namespace Platform.Model
         }
 
 
-        public void RegisterArtificialIntelligence(IArtificialIntelligence artificialIntelligence)
+        public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
             ArtificialIntelligences.Add(artificialIntelligence);
         }
@@ -103,8 +103,8 @@ namespace Platform.Model
         }
 
 
-        
-        public void StartLocalGame(IArtificialIntelligence artificialIntelligence)
+
+        public void StartLocalGame(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
             _MGameType = GameType.Local;
             CurrentGame.RegisterArtificialIntelligence(artificialIntelligence);

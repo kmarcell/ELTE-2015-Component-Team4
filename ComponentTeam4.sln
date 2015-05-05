@@ -1,17 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform", "Platform\Platform.csproj", "{B8F21F68-414C-4525-9765-34479994C7FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37D59D2A-42F0-4819-8FCA-11F2F8DE2A08} = {37D59D2A-42F0-4819-8FCA-11F2F8DE2A08}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{C26BF413-4BC3-4323-B94E-AC06DD2412BC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionInterface", "ConnectionInterface\ConnectionInterface.csproj", "{084ADDF8-2DAA-43AB-B293-A43EABB955CE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerInterface", "ServerInterface\ServerInterface.csproj", "{158DE2D9-EA11-487E-B348-EB6764B877B1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformInterface", "PlatformInterface\PlatformInterface.csproj", "{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTInterfacesLibrary", "GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj", "{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}"
 EndProject
@@ -37,18 +34,6 @@ Global
 		{C26BF413-4BC3-4323-B94E-AC06DD2412BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C26BF413-4BC3-4323-B94E-AC06DD2412BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C26BF413-4BC3-4323-B94E-AC06DD2412BC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{084ADDF8-2DAA-43AB-B293-A43EABB955CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{158DE2D9-EA11-487E-B348-EB6764B877B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{158DE2D9-EA11-487E-B348-EB6764B877B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{158DE2D9-EA11-487E-B348-EB6764B877B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{158DE2D9-EA11-487E-B348-EB6764B877B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA6E1F10-A86E-4BEA-A830-590C442B7B3B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.ActiveCfg = Release|Any CPU

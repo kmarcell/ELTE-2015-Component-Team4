@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using ConnectionInterface;
+using GTInterfacesLibrary;
 using Platform.Model;
 
 namespace Platform.WindowGameRelated
@@ -11,7 +11,7 @@ namespace Platform.WindowGameRelated
     public partial class GameConfigurationWindow : Window
     {
         private readonly GameManager _MGameManager;
-        private readonly List<IArtificialIntelligence> _MArtificialIntelligences; 
+        private readonly List<IGTArtificialIntelligenceInterface> _MArtificialIntelligences; 
         public GameConfigurationWindow()
         {
             InitializeComponent();

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using ConnectionInterface;
-using ConnectionInterface.GameEvents;
-using ConnectionInterface.MessageTypes;
-using PlatformInterface;
-using PlatformInterface.EventsServerRelated;
+using GTInterfacesLibrary;
+using GTInterfacesLibrary.GameEvents;
+using GTInterfacesLibrary.MessageTypes;
+using GameEventArgs = Platform.Events.EventsServerRelated.GameEventArgs;
+using GamesEventArgs = Platform.Events.EventsServerRelated.GamesEventArgs;
+using INetworkManager = Platform.Model.Interface.INetworkManager;
 
 namespace Platform.Model
 {
@@ -62,13 +63,13 @@ namespace Platform.Model
             }
         }
 
-        public void GetOnlineGames(IGame game) 
+        public void GetOnlineGames(IGTGameLogicInterface game) 
         {
             SendMessage(MessageCode.GetOpenGames, game.Id);
         }
 
 
-        public void CreateGame(IGame game, int hashCode)
+        public void CreateGame(IGTGameLogicInterface game, int hashCode)
         {
             var gameToServer = new Game
             {

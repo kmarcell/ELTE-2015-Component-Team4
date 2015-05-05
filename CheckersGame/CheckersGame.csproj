@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckersGame.cs" />
     <Compile Include="Logic\Element.cs" />
     <Compile Include="Logic\GameSpace.cs" />
     <Compile Include="Logic\GameStateGenerator.cs" />
@@ -52,10 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConnectionInterface\ConnectionInterface.csproj">
-      <Project>{084ADDF8-2DAA-43AB-B293-A43EABB955CE}</Project>
-      <Name>ConnectionInterface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj">
       <Project>{cd85d76b-e9dc-4fca-80a9-87a89f8b6c65}</Project>
       <Name>GTInterfacesLibrary</Name>

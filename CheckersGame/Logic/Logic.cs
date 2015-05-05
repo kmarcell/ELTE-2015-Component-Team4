@@ -5,11 +5,10 @@ using GTInterfacesLibrary.GameEvents;
 
 namespace CheckersGame.Logic
 {
-    public class Logic: GTGameLogicInterface<Element, Position>
+    public class Logic: GTGameLogicInterface<Element, Position>, IGTGameLogicInterface
     {
         private GTPlatformManagerInterface PlatformGameManager;
-        private GTArtificialIntelligenceInterface<Element, Position> AI;
-        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> IAI;
+        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition> AI;
 
 		public Logic()
         {
@@ -76,7 +75,7 @@ namespace CheckersGame.Logic
 
         public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            IAI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)artificialIntelligence;
+            AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition>)artificialIntelligence;
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)

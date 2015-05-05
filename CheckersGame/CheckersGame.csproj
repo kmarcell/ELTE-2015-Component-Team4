@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckersGame.cs" />
     <Compile Include="Logic\Element.cs" />
     <Compile Include="Logic\GameSpace.cs" />
     <Compile Include="Logic\GameStateGenerator.cs" />

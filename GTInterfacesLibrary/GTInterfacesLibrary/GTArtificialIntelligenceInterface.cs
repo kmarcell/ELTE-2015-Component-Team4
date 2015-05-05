@@ -12,7 +12,7 @@ namespace GTInterfacesLibrary
 
 	public interface GTArtificialIntelligenceInterface<E, P> 
         where E : GTGameSpaceElementInterface 
-        where P : IPosition
+        where P : GTPosition
 	{
 		/**
 		 *  Implement this function with async directive.

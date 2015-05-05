@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
 
@@ -60,10 +62,9 @@ namespace CheckersGame.Logic
         public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEventArg;
         public void SendGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs)
         {
-            // TODO: 
-            // Raise the SendGameStateChangedEventArg event with the current game state.
             GameStateChangedEventArgs eventArgs = new GameStateChangedEventArgs();
-            eventArgs.GameState = BytesFromGameState(getCurrentState());
+            eventArgs.GamePhase = isGameOver() ? GamePhase.Ended : GamePhase.Playing;
+            eventArgs.GameState = BytesFromGameState((GameSpace)getCurrentState());
             SendGameStateChangedEventArg(this, eventArgs);
         }
 
@@ -80,13 +81,10 @@ namespace CheckersGame.Logic
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
         {
-            // TODO:
-            // Update game logic with the received game state.
-            GameStateChangedEventArgs state = gameStateChangedEventArgs;
-            if (state.GamePhase == GamePhase.Playing)
+            if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)
             {
-                Step step = StepFromBytes(gameStateChangedEventArgs.GameState);
-                updateGameSpace(step);
+                GameSpace receivedState = StateFromBytes(gameStateChangedEventArgs.GameState);
+                state = receivedState;
             }
         }
         public void LoadGame(byte[] gameState)
@@ -99,14 +97,24 @@ namespace CheckersGame.Logic
             throw new NotImplementedException();
         }
 
-        private Step StepFromBytes(byte[] state)
+        private GameSpace StateFromBytes(byte[] bytes)
         {
-            throw new NotImplementedException();
+            MemoryStream memStream = new MemoryStream();
+            BinaryFormatter binForm = new BinaryFormatter();
+            memStream.Write(bytes, 0, bytes.Length);
+            memStream.Seek(0, SeekOrigin.Begin);
+            GameSpace state = (GameSpace)binForm.Deserialize(memStream);
+            return state;
         }
 
-        private byte[] BytesFromGameState(GTGameSpaceInterface<Element, Position> state)
+        private byte[] BytesFromGameState(GameSpace state)
         {
-            throw new NotImplementedException();
+            if (state == null)
+                return null;
+            BinaryFormatter bf = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+            bf.Serialize(ms, state);
+            return ms.ToArray();
         }
     }
 }

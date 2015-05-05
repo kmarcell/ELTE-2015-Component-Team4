@@ -34,6 +34,9 @@ namespace CheckersGame.Logic
             elements.Add(step.to, step.element);
 
             Step s = new Step(step.element, step.from, step.to);
+
+            if (StepSupervisor.IsStepToKingsRow(s))
+                step.element.type = 1;
             
             if (s.IsCapture())
             {

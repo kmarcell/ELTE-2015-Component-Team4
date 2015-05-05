@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GTInterfacesLibrary;
 
 namespace CheckersGame.Logic
 {
@@ -129,6 +130,9 @@ namespace CheckersGame.Logic
 
         private static bool IsForward(Step step)
         {
+            if (IsKing(step.element))
+                return true;
+
             if (step.element.owner == 1)
             {
                 if (step.from.x < step.to.x)
@@ -216,6 +220,25 @@ namespace CheckersGame.Logic
             int yMove = to.y - from.y;
 
             return new Position(to.x - xMove/2, to.y - yMove/2);
+        }
+
+        private static bool IsKing(Element e)
+        {
+            if (e.type == 1)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool IsStepToKingsRow(Step step)
+        {
+            if (step.element.owner == 1 && step.to.x == 7)
+                return true;
+
+            if (step.element.owner == 0 && step.to.x == 0)
+                return true;
+
+            return false;
         }
     }
 }

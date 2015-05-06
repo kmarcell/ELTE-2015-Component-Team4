@@ -1,6 +1,8 @@
 ﻿using System;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
+using System.Collections.Generic;
+using System.IO;
 
 namespace GTMillGameLogic
 {
@@ -78,12 +80,43 @@ namespace GTMillGameLogic
 	    public string Description { get; private set; }
 	    public void LoadGame(byte[] gameState)
 	    {
-	        throw new NotImplementedException();
+            GTMillGameSpace newState = new GTMillGameSpace();
+            MemoryStream memoryStream = new MemoryStream(gameState);
+            BinaryReader reader = new BinaryReader(memoryStream);
+            long pos = 0;
+            while (pos < reader.BaseStream.Length)
+            {
+                int x = reader.ReadInt32();
+                int y = reader.ReadInt32();
+                int z = reader.ReadInt32();
+
+                int id = reader.ReadInt32();
+                int type = reader.ReadInt32();
+                int owner = reader.ReadInt32();
+
+                newState.setElementAt(new GTMillPosition(x, y, z), new GTMillGameElement(id, type, owner));
+
+                pos += sizeof(int) * 6;
+            }
+
+            _state = newState;
 	    }
 
 	    public byte[] SaveGame()
 	    {
-	        throw new NotImplementedException();
+            MemoryStream memoryStream = new MemoryStream();
+            BinaryWriter writer = new BinaryWriter(memoryStream);
+            foreach (KeyValuePair<GTMillPosition, GTMillGameElement> kv in _state)
+            {
+                writer.Write(kv.Key.x);
+                writer.Write(kv.Key.y);
+                writer.Write(kv.Key.z);
+                writer.Write(kv.Value.id);
+                writer.Write(kv.Value.type);
+                writer.Write(kv.Value.owner);
+            }
+
+            return memoryStream.ToArray();;
 	    }
 	}
 }

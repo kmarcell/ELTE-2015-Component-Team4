@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTMillGameLogic", "GTMillGameLogic\GTMillGameLogic.csproj", "{317B8772-6AF4-4F18-8AED-DB22A5E6303F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTInterfacesLibrary", "..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj", "{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTMillGameLogicTests", "GTMillGameLogicTests\GTMillGameLogicTests.csproj", "{36E45433-B357-47DE-86BE-49E5CEEEF47A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{77ADD362-F166-4223-B650-517631523D07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,13 +21,20 @@ Global
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36E45433-B357-47DE-86BE-49E5CEEEF47A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77ADD362-F166-4223-B650-517631523D07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77ADD362-F166-4223-B650-517631523D07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77ADD362-F166-4223-B650-517631523D07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77ADD362-F166-4223-B650-517631523D07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

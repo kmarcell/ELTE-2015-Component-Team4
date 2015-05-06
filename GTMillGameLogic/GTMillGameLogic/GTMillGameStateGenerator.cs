@@ -68,7 +68,7 @@ namespace GTMillGameLogic
 		}
 
 		private bool isCornerPosition(GTMillPosition p) {
-			return p.x + p.y % 2 == 0;
+			return (p.x + p.y) % 2 == 0;
 		}
 	}
 }

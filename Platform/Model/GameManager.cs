@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
 using GTInterfacesLibrary.MessageTypes;
@@ -15,7 +17,10 @@ namespace Platform.Model
         private readonly NetworkManager _MNetworkManager;
         public GameManager(NetworkManager networkManager)
         {
-            ArtificialIntelligences = new List<IGTArtificialIntelligenceInterface>();
+            ArtificialIntelligenceList = new List<IGTArtificialIntelligenceInterface>();
+            GameGuiList = new List<GTGuiInterface>();
+            GameLogicList = new List<IGTGameLogicInterface>();
+
             _MGameType = GameType.Online;
             _MNetworkManager = networkManager;
             _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
@@ -24,9 +29,15 @@ namespace Platform.Model
         private GameType _MGameType;
         public static IGTGameLogicInterface CurrentGame { get; private set; }
 
+        public static GTGuiInterface CurrentGui { get; private set; }
+
         public static Game CurrentNetworkGame { get; protected set; }
 
-        public List<IGTArtificialIntelligenceInterface> ArtificialIntelligences { get; private set; }
+        public List<IGTArtificialIntelligenceInterface> ArtificialIntelligenceList { get; private set; }
+
+        public List<GTGuiInterface> GameGuiList { get; private set; }
+
+        public List<IGTGameLogicInterface> GameLogicList { get; private set; }
         
         public event EventHandler<EventArgs>  GameStartedEvent;
         public event EventHandler<GameEndedEventArgs> GameEndedEvent;
@@ -34,19 +45,120 @@ namespace Platform.Model
         public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEvent;
 
 
-        public void RegisterGame(IGTGameLogicInterface game)
+        #region initialize components
+
+        public void InitializeGameLogic(string gameLogicDirectory)
         {
+            var logicFromDirectory = Directory.GetFiles(gameLogicDirectory, "*.dll", SearchOption.TopDirectoryOnly);
+            foreach (var logicDll in logicFromDirectory)
+            {
+                var gameAssembly = Assembly.LoadFrom(logicDll);
+                Type gameType;
+
+                try
+                {
+                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterfaces().Any(y => y.Name.Contains("IGTGameLogicInterface") && !x.IsInterface));
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    gameType = null;
+                }
+
+                if (gameType == null)
+                {
+                    continue;
+                }
+            
+            
+                var gameLogicObject = (IGTGameLogicInterface)Activator.CreateInstance(gameType);
+                GameLogicList.Add(gameLogicObject);
+            }
 
             _MGameType = GameType.Online;
-            CurrentGame = game;
-            game.RegisterGameManager(this);
-            game.SendGameStateChangedEventArg += RecieveGameStateFromLogic;
+            CurrentGame = GameLogicList.First();
+            CurrentGame.RegisterGameManager(this);
+            CurrentGame.RegisterGui(CurrentGui);
+            CurrentGame.SendGameStateChangedEventArg += RecieveGameStateFromLogic;
         }
 
-
-        public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
+        public void InitializeArtificialIntelligence(string artificialIntelligenceDirectory)
         {
-            ArtificialIntelligences.Add(artificialIntelligence);
+            var aiFromDirectory = Directory.GetFiles(artificialIntelligenceDirectory, "*.dll", SearchOption.TopDirectoryOnly);
+            foreach (var aiDll in aiFromDirectory)
+            {
+                var aiAssembly = Assembly.LoadFrom(aiDll);
+                List<Type> aiType;
+
+                try
+                {
+                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.Name.Contains("IGTArtificialIntelligenceInterface"))).ToList();
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    aiType = null;
+                }
+
+                if (aiType == null)
+                {
+                    continue;
+                }
+
+                foreach (var currentAiType in aiType)
+                {
+                    var aiObject = Activator.CreateInstance(currentAiType);
+                    ArtificialIntelligenceList.Add((IGTArtificialIntelligenceInterface)aiObject);
+                }
+            }
+        }
+
+        public void InitializeGui(List<GTGuiInterface> gameGuiList)
+        {
+            GameGuiList = gameGuiList;
+            CurrentGui = GameGuiList.First();
+        }
+
+        public void InitializeGui(string guiDirectory)
+        {
+            var guiFromDirectory = Directory.GetFiles(guiDirectory, "*.dll", SearchOption.TopDirectoryOnly);
+            foreach (var guiDll in guiFromDirectory)
+            {
+                var aiAssembly = Assembly.LoadFrom(guiDll);
+                List<Type> aiType;
+
+                try
+                {
+                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.Name.Contains("GTGuiInterface"))).ToList();
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    aiType = null;
+                }
+
+                if (aiType == null)
+                {
+                    continue;
+                }
+
+                foreach (var currentAiType in aiType)
+                {
+                    var aiObject = Activator.CreateInstance(currentAiType);
+                    GameGuiList.Add((GTGuiInterface)aiObject);
+                }
+            }
+
+            CurrentGui = GameGuiList.First();
+        }
+        #endregion
+
+        public void SetCurrentGame(IGTGameLogicInterface game)
+        {
+            CurrentGame = game;
+        }
+
+        public void SetCurrentGui(GTGuiInterface gui)
+        {
+            CurrentGui = gui;
+            CurrentGame.RegisterGui(gui);
         }
 
         public void RecieveGameStateFromNetwork(object sender, GameEventArgs eventArgs)
@@ -114,8 +226,8 @@ namespace Platform.Model
         public void StartAiAiGame()
         {
             _MGameType = GameType.Ai;
-            var randomToSelectAi = new Random().Next(0, ArtificialIntelligences.Count);
-            CurrentGame.RegisterArtificialIntelligence(ArtificialIntelligences[randomToSelectAi]);
+            var randomToSelectAi = new Random().Next(0, ArtificialIntelligenceList.Count);
+            CurrentGame.RegisterArtificialIntelligence(ArtificialIntelligenceList[randomToSelectAi]);
             SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = _MGameType });
         }
 

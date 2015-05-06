@@ -26,8 +26,10 @@ namespace Platform.Model.Interface
         /// We have to connect to SendGameStateChangedEvent event of IGame <see cref="GameStateChangedEventArgs"/>.
         /// </remarks>
         /// </summary>
-        /// <param name="game"></param>
-        void RegisterGame(IGTGameLogicInterface game);
+        /// <param name="gameLogicDirectory"></param>
+        void InitializeGameLogic(string gameLogicDirectory);
+
+        void InitializeArtificialIntelligence(string artificialIntelligenceDirectory);
 
         void RecieveGameStateFromNetwork(object sender, GameEventArgs eventArgs);
     }

@@ -22,8 +22,8 @@ namespace Platform.WindowGameRelated
         {
             _MGameManager = gameManager;
             CurrentlyLoadedGameLabel.Content = GameManager.CurrentGame.Name;
-            _MArtificialIntelligences = _MGameManager.ArtificialIntelligences;
-            AiDataGrid.ItemsSource = _MGameManager.ArtificialIntelligences;
+            _MArtificialIntelligences = _MGameManager.ArtificialIntelligenceList;
+            AiDataGrid.ItemsSource = _MGameManager.ArtificialIntelligenceList;
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)

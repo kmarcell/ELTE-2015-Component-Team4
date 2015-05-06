@@ -8,6 +8,8 @@ namespace GUIImplementation
 {
     public class LightGUI : AbstractGUIControl
     {
+        public override string GuiName { get { return "LightGui"; } }
+
         protected override Uri GetImageURI(bool isBackground, byte value) {
             if (isBackground)
             {

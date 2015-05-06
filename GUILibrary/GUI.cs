@@ -12,5 +12,6 @@ namespace GUILibrary
         event FieldClickedEventHandler FieldClicked;
         void SetField(byte[,] field);
         void SetFieldBackground(byte[,] field);
+        string GuiName { get; }
     }
 }

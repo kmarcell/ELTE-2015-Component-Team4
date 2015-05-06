@@ -8,6 +8,8 @@ namespace GUIImplementation
 {
     public class DarkGUI : AbstractGUIControl
     {
+        public override string GuiName { get { return "DarkGui"; } }
+
         protected override Uri GetImageURI(bool isBackground, byte value) {
             if (isBackground)
             {

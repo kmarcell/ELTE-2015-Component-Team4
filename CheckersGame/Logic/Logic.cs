@@ -79,6 +79,11 @@ namespace CheckersGame.Logic
             AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition>)artificialIntelligence;
         }
 
+        public void RegisterGui(GTGuiInterface gui)
+        {
+            // register
+        }
+
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
         {
             if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)

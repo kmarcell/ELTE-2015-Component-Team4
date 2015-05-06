@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -106,6 +106,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj">
+      <Project>{cd85d76b-e9dc-4fca-80a9-87a89f8b6c65}</Project>
+      <Name>GTInterfacesLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GUILibrary\GUILibrary.csproj">
       <Project>{a632c624-748c-4094-a17a-8b2c108bb1b6}</Project>
       <Name>GUILibrary</Name>

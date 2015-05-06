@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GTInterfacesLibrary;
 
 namespace GUIImplementation
 {
@@ -77,13 +78,13 @@ namespace GUIImplementation
 
         }
 
-        void damagui_FieldClicked(GUILibrary.GUI gui, int row, int column)
+        void damagui_FieldClicked(GTGuiInterface gui, int row, int column)
         {
             damaField[row, column] = (byte)((damaField[row, column] + 1) % 3);
             gui.SetField(damaField);
         }
 
-        void malomgui_FieldClicked(GUILibrary.GUI gui, int row, int column)
+        void malomgui_FieldClicked(GTGuiInterface gui, int row, int column)
         {
             malomField[row, column] = (byte)((malomField[row, column] + 1) % 3);
             gui.SetField(malomField);

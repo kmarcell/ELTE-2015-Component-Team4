@@ -1,4 +1,4 @@
-﻿using GUILibrary;
+﻿using GTInterfacesLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +13,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FieldClickedEventHandler = GTInterfacesLibrary.FieldClickedEventHandler;
 
 namespace GUIImplementation
 {
     /// <summary>
     /// Interaction logic for AbstractGUIControl.xaml
     /// </summary>
-    public partial class AbstractGUIControl : UserControl, GUI
+    public partial class AbstractGUIControl : UserControl, GTGuiInterface
     {
-
         public event FieldClickedEventHandler FieldClicked;
         private List<List<System.Windows.Controls.Image>> field;
         private List<List<System.Windows.Controls.Image>> background;
@@ -140,6 +140,8 @@ namespace GUIImplementation
             }
             RefreshBackGround(field);
         }
+
+        public virtual string GuiName { get { throw new NotImplementedException(); } }
 
         private void DeleteBackground()
         {

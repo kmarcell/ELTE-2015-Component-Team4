@@ -63,6 +63,11 @@ namespace GTMillGameLogic
 	        throw new NotImplementedException();
 	    }
 
+	    public void RegisterGui(GTGuiInterface gui)
+        {
+            // register
+	    }
+
 	    public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
 	    {
 	        throw new NotImplementedException();

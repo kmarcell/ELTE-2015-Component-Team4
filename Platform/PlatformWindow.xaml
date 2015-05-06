@@ -10,18 +10,15 @@
         </Grid.RowDefinitions>
         <Menu Margin="0" Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Name="FileMenuItem" Header="File" >
-                <MenuItem Name="ServerMenuItem" Header="Server">
-                    <MenuItem Name="MenuServerConnectMenuItem" Header="Join" Click="JoinMenuItem_Click" />
-                    <MenuItem Name="MenuServerDisconnectMenuItem" Header="Quit" Click="QuitMenuItem_Click" />
-                </MenuItem>
-                <MenuItem Name="LoadMenuItem"  Header="Load">
-                    <MenuItem Name="LoadGameLogicComponentMenuItem" Header="Load Game Logic Component"  Click="RegisterGameMenuItem_Click"/>
-                </MenuItem>
                 <MenuItem Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" />
             </MenuItem>
-            <MenuItem Name="GameMenuItem"  Header="Game" ToolTip="For local game please quit from the server (File)">
-                <MenuItem Name="LoadGameMenuItem" Header="Load Game" Click="LoadGameMenuItem_Click" />
-                <MenuItem Name="SaveGameMenuItem" Header="Save Game" Click="SaveGameMenuItem_Click" />
+            <MenuItem Name="GameMenuItem" Header="Game">
+            </MenuItem>
+            <MenuItem Name="GuiMenuItem" Header="Gui">
+            </MenuItem>
+            <MenuItem Name="LocalGameMenuItem"  Header="Local Game" ToolTip="For local game please quit from the server (File)">
+                <MenuItem Name="LoadGameMenuItem" Header="Load Game State" Click="LoadGameMenuItem_Click" />
+                <MenuItem Name="SaveGameMenuItem" Header="Save Game State" Click="SaveGameMenuItem_Click" />
                 <Separator />
                 <MenuItem Name="StartGameMenuItem" Header="Start Game" Click="StartGameMenuItem_Click" />
                 <MenuItem Name="EndGameMenuItem" Header="End Game" Click="EndGameMenuItem_Click" />
@@ -30,14 +27,14 @@
                 <MenuItem Name="EndAiAiGameMenuItem" Header="End AI-AI Game" Click="EndAiAiGameMenuItem_OnClick"/>
             </MenuItem>
             <MenuItem Name="OnlineGameMenuItem"  Header="Online game" ToolTip="For online game please join to the server (File)">
+                <MenuItem Name="ServerMenuItem" Header="Server">
+                    <MenuItem Name="MenuServerConnectMenuItem" Header="Join" Click="JoinMenuItem_Click" />
+                    <MenuItem Name="MenuServerDisconnectMenuItem" Header="Quit" Click="QuitMenuItem_Click" />
+                </MenuItem>
                 <MenuItem Name="CreateOnlineGameMenuItem" Header="Create Game" Click="CreateOnlineGameMenuItem_Click" />
                 <Separator />
                 <MenuItem Name="ConnectOnlineGameMenuItem" Header="Connect Game" Click="ConnectOnlineGameMenuItem_Click" />
                 <MenuItem Name="LeaveOnlineGameMenuItem" Header="Leave Game" Click="LeaveGameMenuItem_Click" />
-            </MenuItem>
-            <MenuItem Name="GuiMenuItem" Header="Gui">
-                <MenuItem Name="DarkGuiMenuItem" Header="Dark" Click="DarkGuiMenuItem_Click" />
-                <MenuItem Name="LightGuiMenuItem" Header="Light" Click="LightGuiMenuItem_Click" />
             </MenuItem>
         </Menu>
         <ContentControl Grid.Row="1" Name="GameContentControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">

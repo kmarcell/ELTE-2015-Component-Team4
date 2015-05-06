@@ -45,6 +45,8 @@ namespace GTInterfacesLibrary
         /// <param name="artificialIntelligence">The currently loaded/selected AI</param>
         void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence);
 
+        void RegisterGui(GTGuiInterface gui);
+
         /// <summary>
         /// The subscribe for event of platform game manager
         /// </summary>

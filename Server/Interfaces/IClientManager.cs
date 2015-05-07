@@ -15,6 +15,8 @@ namespace Server.Interfaces
 
         void SendConnectionRejected();
 
+        void Disconnect();
+
         void SendOnlineGames(int id);
 
         void SendCreateGame(String player, Game game);

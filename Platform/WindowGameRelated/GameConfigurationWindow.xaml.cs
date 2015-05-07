@@ -21,14 +21,14 @@ namespace Platform.WindowGameRelated
         public GameConfigurationWindow(GameManager gameManager) : this()
         {
             _MGameManager = gameManager;
-            CurrentlyLoadedGameLabel.Content = GameManager.CurrentGame.Name;
+            CurrentlyLoadedGameLabel.Content = _MGameManager.CurrentGame.Name;
             _MArtificialIntelligences = _MGameManager.ArtificialIntelligenceList;
             AiDataGrid.ItemsSource = _MGameManager.ArtificialIntelligenceList;
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (GameManager.CurrentGame == null)
+            if (_MGameManager.CurrentGame == null)
             {
                 MessageBox.Show("Please load game before play (File)!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

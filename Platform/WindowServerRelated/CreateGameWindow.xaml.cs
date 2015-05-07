@@ -15,23 +15,25 @@ namespace Platform.WindowServerRelated
         }
 
         private readonly NetworkManager _MNetworkManager;
+        private readonly GameManager _MGameManager;
 
-        public CreateGameWindow(NetworkManager networkManager)
+        public CreateGameWindow(NetworkManager networkManager, GameManager gameManager)
             : this()
         {
             _MNetworkManager = networkManager;
-            LoadedGameLabel.Content = GameManager.CurrentGame.Name;
+            _MGameManager = gameManager;
+            LoadedGameLabel.Content = _MGameManager.CurrentGame.Name;
         }
 
         private void CreateGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (GameManager.CurrentGame == null)
+            if (_MGameManager.CurrentGame == null)
             {
                 MessageBox.Show("Please load game first (File)!", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
-            _MNetworkManager.CreateGame(GameManager.CurrentGame, GameManager.CurrentGame.GetHashCode());
+            _MNetworkManager.CreateGame(_MGameManager.CurrentGame, _MGameManager.CurrentGame.GetHashCode());
         }
     }
 }

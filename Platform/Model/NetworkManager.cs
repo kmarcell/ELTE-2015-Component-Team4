@@ -16,6 +16,8 @@ namespace Platform.Model
 
         private Socket _Socket;
 
+        public Game CurrentGame { get; private set; }
+
         public Boolean Connected { get { return _Socket != null && _Socket.Connected; } }
 
         public String PlayerName { get; private set; }
@@ -79,6 +81,7 @@ namespace Platform.Model
                 FirstPlayer = PlayerName,
                 Phase = GamePhase.Opened
             };
+
             SendMessage(MessageCode.CreateGame, gameToServer);
         }
 
@@ -168,9 +171,8 @@ namespace Platform.Model
                         GameCreatedEvent(this, EventArgs.Empty);
                         break;
                     case MessageCode.JoinAccepted:
-                        GameJoinAcceptedEvent(this, new GameEventArgs { Game = message.Content as Game });
-                        //TODO
-                        //game started event
+                        CurrentGame = message.Content as Game;
+                        GameJoinAcceptedEvent(this, new GameEventArgs { Game = CurrentGame });
                         break;
                     case MessageCode.JoinRejected:
                         GameJoinRejectedEvent(this, EventArgs.Empty);

@@ -1,12 +1,15 @@
 ﻿using System;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.MessageTypes;
+using Platform.Events.EventsServerRelated;
 using GamesEventArgs = Platform.Events.EventsServerRelated.GamesEventArgs;
 
 namespace Platform.Model.Interface
 {
     public interface INetworkManager
     {
+        Game CurrentGame { get; }
+
         Boolean Connected { get; }
 
         String PlayerName { get; }
@@ -22,6 +25,16 @@ namespace Platform.Model.Interface
         event EventHandler<GamesEventArgs> OnlineGamesReceived;
 
         event EventHandler<EventArgs> GameCreatedEvent;
+
+        event EventHandler<EventArgs> GameJoinRejectedEvent;
+
+        event EventHandler<EventArgs> GameJoinAcceptedEvent;
+
+        event EventHandler<GameEventArgs> GameEndedEvent;
+
+        event EventHandler<GameEventArgs> GameCancelledEvent;
+
+        event EventHandler<GameEventArgs> GameStatusReceived;
 
         void Connect(String address, Int32 port, String playerName);
 

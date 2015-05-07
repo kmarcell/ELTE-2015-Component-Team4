@@ -115,7 +115,7 @@ namespace Platform
 
         private void StartGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (GameManager.CurrentGame == null)
+            if (_MGameManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before start game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -132,25 +132,25 @@ namespace Platform
 
         private void CreateOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (GameManager.CurrentGame == null)
+            if (_MGameManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before create to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _MCreateGameWindow = new CreateGameWindow(_MNetworkManager);
+            _MCreateGameWindow = new CreateGameWindow(_MNetworkManager, _MGameManager);
             _MCreateGameWindow.ShowDialog();
         }
 
         private void ConnectOnlineGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (GameManager.CurrentGame == null)
+            if (_MGameManager.CurrentGame == null)
             {
                 MessageBox.Show("Load game before connect to online game!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _MListGameWindow = new ListGameWindow(_MNetworkManager);
+            _MListGameWindow = new ListGameWindow(_MNetworkManager, _MGameManager);
             _MListGameWindow.ShowDialog();
         }
 

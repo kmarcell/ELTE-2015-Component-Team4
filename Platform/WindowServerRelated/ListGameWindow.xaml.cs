@@ -17,14 +17,16 @@ namespace Platform.WindowServerRelated
 
         private Game[] _MGames;
         private readonly NetworkManager _MNetworkManager;
+        private readonly GameManager _MGameManager;
 
-        public ListGameWindow(NetworkManager networkManager)
+        public ListGameWindow(NetworkManager networkManager, GameManager gameManager)
             : this()
         {
             _MNetworkManager = networkManager;
+            _MGameManager = gameManager;
             _MNetworkManager.OnlineGamesReceived += MNetworkManager_OnOnlineGamesReceived;
-            LoadedGameLabel.Content = GameManager.CurrentGame.Name;
-            _MNetworkManager.GetOnlineGames(GameManager.CurrentGame);
+            LoadedGameLabel.Content = _MGameManager.CurrentGame.Name;
+            _MNetworkManager.GetOnlineGames(_MGameManager.CurrentGame);
             
         }
 

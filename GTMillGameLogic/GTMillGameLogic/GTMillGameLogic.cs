@@ -10,7 +10,8 @@ namespace GTMillGameLogic
 	{
 		// properties
 		private GTMillGameSpace _state = new GTMillGameSpace();
-		private List<GTPlayerInterface<GTMillGameElement, GTMillPosition>> _players;
+		private List<GTPlayerInterface<GTMillGameElement, GTMillPosition>> _players = new List<GTPlayerInterface<GTMillGameElement, GTMillPosition>> ();
+		int _nextPlayer = 0;
 
 		public GTMillGameLogic ()
         {
@@ -52,7 +53,8 @@ namespace GTMillGameLogic
 
 		public GTPlayerInterface<GTMillGameElement, GTMillPosition> nextPlayer {
 			get {
-				throw new NotImplementedException ();
+				_nextPlayer = _nextPlayer++ % _players.Count;
+				return _players [_nextPlayer];
 			}
 		}
 

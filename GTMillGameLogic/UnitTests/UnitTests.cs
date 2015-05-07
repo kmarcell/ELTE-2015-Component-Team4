@@ -120,5 +120,80 @@ namespace UnitTests
             newState = (GTMillGameSpace)availableStates[2];
             Assert.AreEqual(figure1, newState.elementAt(new GTMillPosition(2, 1, 1)));
         }
+
+        [TestMethod()]
+        public void TestCaseMillDetectorHorizontal()
+        {
+
+            // given
+            GTMillGameSpace state = new GTMillGameSpace();
+            GTMillGameElement figure1 = new GTMillGameElement(1, 1, 1);
+            GTMillGameElement figure2 = new GTMillGameElement(2, 1, 1);
+            GTMillGameElement figure3 = new GTMillGameElement(3, 1, 1);
+
+            GTMillPosition position1 = new GTMillPosition(0, 0, 0);
+            GTMillPosition position2 = new GTMillPosition(1, 0, 0);
+            GTMillPosition position3 = new GTMillPosition(2, 0, 0);
+
+            // when
+            state.setElementAt(position1, figure1);
+            state.setElementAt(position2, figure2);
+            state.setElementAt(position3, figure3);
+
+            // then
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position1, state, 1));
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position2, state, 1));
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position3, state, 1));
+        }
+
+        [TestMethod()]
+        public void TestCaseMillDetectorVertical()
+        {
+
+            // given
+            GTMillGameSpace state = new GTMillGameSpace();
+            GTMillGameElement figure1 = new GTMillGameElement(1, 1, 1);
+            GTMillGameElement figure2 = new GTMillGameElement(2, 1, 1);
+            GTMillGameElement figure3 = new GTMillGameElement(3, 1, 1);
+
+            GTMillPosition position1 = new GTMillPosition(2, 0, 0);
+            GTMillPosition position2 = new GTMillPosition(2, 1, 0);
+            GTMillPosition position3 = new GTMillPosition(2, 2, 0);
+
+            // when
+            state.setElementAt(position1, figure1);
+            state.setElementAt(position2, figure2);
+            state.setElementAt(position3, figure3);
+
+            // then
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position1, state, 1));
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position2, state, 1));
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position3, state, 1));
+        }
+
+        [TestMethod()]
+        public void TestCaseMillDetectorCross()
+        {
+
+            // given
+            GTMillGameSpace state = new GTMillGameSpace();
+            GTMillGameElement figure1 = new GTMillGameElement(1, 1, 1);
+            GTMillGameElement figure2 = new GTMillGameElement(2, 1, 1);
+            GTMillGameElement figure3 = new GTMillGameElement(3, 1, 1);
+
+            GTMillPosition position1 = new GTMillPosition(2, 2, 0);
+            GTMillPosition position2 = new GTMillPosition(2, 2, 1);
+            GTMillPosition position3 = new GTMillPosition(2, 2, 2);
+
+            // when
+            state.setElementAt(position1, figure1);
+            state.setElementAt(position2, figure2);
+            state.setElementAt(position3, figure3);
+
+            // then
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position1, state, 1));
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position2, state, 1));
+            Assert.IsTrue(GTMillGameMillDetector.detectMillOnPositionWithStateForUser(position3, state, 1));
+        }
     }
 }

@@ -31,15 +31,26 @@ namespace GTMillGameLogic
 			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
 				TaskReturnType states = new TaskReturnType ();
 
-				List<GTMillGameStep> steps = new List<GTMillGameStep> ();
 				for (int x = 0; x < 3; ++x) {
 					for (int y = 0; y < 3; ++y) {
 						for (int z = 0; z < 3; ++z) {
 							GTMillPosition p = new GTMillPosition(x, y ,z);
 							if (!state.hasElementAt(p)) {
+								
 								int id = player.id * player.figuresLost + 1;
 								GTMillGameElement element = new GTMillGameElement(id, 1, player.id);
-								steps.Add(new GTMillGameStep(element, GTMillPosition.Nowhere(), p));
+								GTMillGameStep step = new GTMillGameStep(element, GTMillPosition.Nowhere(), p);
+								GTMillGameSpace newState = state.stateWithStep (step) as GTMillGameSpace;
+								if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
+								{
+									foreach (GTMillGameStep removeStep in removeOppenentFigureSteps(newState, player.id)) {
+										states.Add(newState.stateWithStep(removeStep));
+									}
+								}
+								else
+								{
+									states.Add (newState);
+								}
 							}
 						}
 					}
@@ -87,6 +98,37 @@ namespace GTMillGameLogic
 		{
 			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
 				TaskReturnType states = new TaskReturnType ();
+
+				foreach (KeyValuePair<GTMillPosition, GTMillGameElement> kv in state) {
+					if (kv.Value.owner == player.id) {
+
+						for (int x = 0; x < 3; ++x) {
+							for (int y = 0; y < 3; ++y) {
+								for (int z = 0; z < 3; ++z) {
+									
+									GTMillPosition p = new GTMillPosition(x, y ,z);
+									if (!state.hasElementAt(p)) {
+
+										GTMillGameElement element = kv.Value;
+										GTMillGameStep step = new GTMillGameStep(element, kv.Key, p);
+										GTMillGameSpace newState = state.stateWithStep (step) as GTMillGameSpace;
+										if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
+										{
+											foreach (GTMillGameStep removeStep in removeOppenentFigureSteps(newState, player.id)) {
+												states.Add(newState.stateWithStep(removeStep));
+											}
+										}
+										else
+										{
+											states.Add (newState);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
 				return states;
 			});
 			return task;

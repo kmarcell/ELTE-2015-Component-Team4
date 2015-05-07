@@ -33,6 +33,7 @@
     <Compile Include="GameEvents\GameStateChangedEventArgs.cs" />
     <Compile Include="GTGuiInterface.cs" />
     <Compile Include="GTPlatformManagerInterface.cs" />
+    <Compile Include="GTPlayerInterface.cs" />
     <Compile Include="MessageTypes\Game.cs" />
     <Compile Include="MessageTypes\Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

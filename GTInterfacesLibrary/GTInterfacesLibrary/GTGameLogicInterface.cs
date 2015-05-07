@@ -10,6 +10,7 @@ namespace GTInterfacesLibrary
 		// Input
 		void init();
 		void updateGameSpace(GTGameStepInterface<E, P> step);
+        // void addPlayer(GTPlayerInterface<E, P> player);
 
 		// Output
 		Boolean isGameOver();

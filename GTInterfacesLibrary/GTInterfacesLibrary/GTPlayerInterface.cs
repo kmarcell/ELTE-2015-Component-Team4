@@ -14,11 +14,13 @@ namespace GTInterfacesLibrary
         GTPlayerInterface<E, P> playerWithAI(GTArtificialIntelligenceInterface<E, P> ai, int id);
 
         int id { get; set; }
+		int figuresInitial { get; set; }
         int figuresRemaining {get; set;}
         int figuresLost { get; set; }
+
     }
 
-    class GTPlayer<E, P> : GTPlayerInterface<E, P>
+	class GTPlayer<E, P> : GTPlayerInterface<E, P>
         where E : GTGameSpaceElementInterface
         where P : GTPosition
     {
@@ -26,6 +28,7 @@ namespace GTInterfacesLibrary
         int _id;
         int _figuresRemaining;
         int _figuresLost;
+		int _figuresInitial;
         GTArtificialIntelligenceInterface<E, P> ai;
 
         public int id
@@ -39,6 +42,15 @@ namespace GTInterfacesLibrary
                 _id = value;
             }
         }
+
+		public int figuresInitial {
+			get {
+				return _figuresInitial;
+			}
+			set {
+				_figuresInitial = value;
+			}
+		}
 
         public int figuresRemaining
         {

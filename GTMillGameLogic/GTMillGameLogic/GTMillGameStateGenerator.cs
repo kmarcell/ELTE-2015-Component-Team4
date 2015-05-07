@@ -9,7 +9,33 @@ namespace GTMillGameLogic
 
 	public class GTMillGameStateGenerator : GTGameStateGeneratorInterface<GTMillGameElement, GTMillPosition>
 	{
-        public Task<TaskReturnType> availableStatesFrom(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+
+		public Task<TaskReturnType> availableStatesFrom(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+		{
+			if (player.figuresRemaining > 0) {
+				// first phase
+				return availableStatesFirstPhase(state, player);
+
+			} else if (player.figuresInitial - player.figuresLost > 3) {
+				// second phase
+				return availableStatesSteppingPhase (state, player);
+
+			} else {
+				// third phase
+				return availableStatesThirdPhase (state, player);
+			}
+		}	
+
+		private Task<TaskReturnType> availableStatesFirstPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+		{
+			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
+				TaskReturnType states = new TaskReturnType ();
+				return states;
+			});
+			return task;
+		}
+
+        private Task<TaskReturnType> availableStatesSteppingPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
 		{
 			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
 				
@@ -39,6 +65,15 @@ namespace GTMillGameLogic
 				return states;
 			});
 
+			return task;
+		}
+
+		private Task<TaskReturnType> availableStatesThirdPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+		{
+			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
+				TaskReturnType states = new TaskReturnType ();
+				return states;
+			});
 			return task;
 		}
 

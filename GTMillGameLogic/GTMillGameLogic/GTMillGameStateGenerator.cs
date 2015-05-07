@@ -15,23 +15,43 @@ namespace GTMillGameLogic
 				
 				List<GTMillGameStep> steps = new List<GTMillGameStep> ();
 				foreach (KeyValuePair<GTMillPosition, GTMillGameElement> kv in state) {
-					steps.AddRange(stepsFromPositionWithState(state as GTMillGameSpace, kv.Key));
+					if (kv.Value.owner == player.id) {
+						steps.AddRange(stepsFromPositionWithState(state as GTMillGameSpace, kv.Key));
+					}
 				}
 
 				TaskReturnType states = new TaskReturnType ();
-
 				foreach (GTMillGameStep step in steps) {
 
-                    if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, state as GTMillGameSpace, player.id))
+					GTMillGameSpace newState = state.stateWithStep (step) as GTMillGameSpace;
+					if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
                     {
-                        throw new NotImplementedException();
+						foreach (GTMillGameStep removeStep in removeOppenentFigureSteps(newState, player.id)) {
+							states.Add(newState.stateWithStep(removeStep));
+						}
                     }
-					states.Add (state.stateWithStep (step));
+					else
+					{
+						states.Add (newState);
+					}
+
 				}
 				return states;
 			});
 
 			return task;
+		}
+
+		private List<GTMillGameStep> removeOppenentFigureSteps(GTMillGameSpace state, int owner) {
+
+			List<GTMillGameStep> steps = new List<GTMillGameStep> ();
+			foreach (KeyValuePair<GTMillPosition, GTMillGameElement> kv in state) {
+				if (kv.Value.owner != owner) {
+					steps.Add (new GTMillGameStep(kv.Value, kv.Key, GTMillPosition.Nowhere()));
+				}
+			}
+
+			return steps;
 		}
 
 		private List<GTMillGameStep> stepsFromPositionWithState(GTMillGameSpace state, GTMillPosition position)

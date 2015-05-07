@@ -5,6 +5,6 @@ namespace GTInterfacesLibrary
 {
 	public interface GTGameStateGeneratorInterface<E, P> where E : GTGameSpaceElementInterface where P : IPosition
 	{
-        Task<List<GTGameSpaceInterface<E, P>>> availableStatesFrom(GTGameSpaceInterface<E, P> state, GTPlayerInterface<E, P> player);
+		Task<List<GTGameSpaceInterface<E, P>>> availableStatesFrom(GTGameSpaceInterface<E, P> state, GTPlayerInterface<E, P> player);
 	}
 }

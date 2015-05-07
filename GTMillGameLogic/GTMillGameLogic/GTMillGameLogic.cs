@@ -10,6 +10,7 @@ namespace GTMillGameLogic
 	{
 		// properties
 		private GTMillGameSpace _state = new GTMillGameSpace();
+		private List<GTPlayerInterface<GTMillGameElement, GTMillPosition>> _players;
 
 		public GTMillGameLogic ()
         {
@@ -47,6 +48,31 @@ namespace GTMillGameLogic
 		public GTGameStateHashInterface<GTMillGameElement, GTMillPosition> getStateHash()
 		{
 			return new GTMillGameStateHash();
+		}
+
+		public GTPlayerInterface<GTMillGameElement, GTMillPosition> nextPlayer {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public int gamePhase {
+			get {
+
+				GTPlayerInterface<GTMillGameElement, GTMillPosition> player = _players[0];
+				if (player.figuresRemaining > 0) {
+					// first phase
+					return 0;
+
+				} else if (player.figuresInitial - player.figuresLost > 3) {
+					// second phase
+					return 1;
+
+				} else {
+					// third phase
+					return 2;
+				}
+			}
 		}
 
 	    public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEventArg;

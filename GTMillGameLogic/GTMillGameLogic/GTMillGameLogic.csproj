@@ -39,7 +39,6 @@
     <Compile Include="GTMillGameStateHash.cs" />
     <Compile Include="GTMillGameSpace.cs" />
     <Compile Include="GTMillPosition.cs" />
-    <Compile Include="GTMillGamePlayerInterface.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

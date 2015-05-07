@@ -17,6 +17,16 @@ namespace GTInterfacesLibrary
 		GTGameSpaceInterface<E, P> getCurrentState();
 		GTGameStateGeneratorInterface<E, P> getStateGenerator();
 		GTGameStateHashInterface<E, P> getStateHash();
+
+		GTPlayerInterface<E, P> nextPlayer
+		{
+			get;
+		}
+
+		int gamePhase
+		{
+			get;
+		}
 	}
 
     public interface IGTGameLogicInterface

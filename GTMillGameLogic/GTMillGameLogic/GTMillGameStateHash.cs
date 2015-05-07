@@ -10,6 +10,7 @@ namespace GTMillGameLogic
 	public class GTMillGameStateHash : GTGameStateHashInterface<GTMillGameElement, GTMillPosition>
 	{
         private GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state;
+		private GTPlayerInterface<GTMillGameElement, GTMillPosition> player;
 
         private List<KeyValuePair<GTMillPosition, GTMillGameElement>> opponentElements;
         private List<KeyValuePair<GTMillPosition, GTMillGameElement>> ownElements;
@@ -59,7 +60,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.x) == 1;
 
-                                if (element.owner == state.nextPlayer)
+							if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -81,7 +82,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.y) == 1;
 
-                                if (element.owner == state.nextPlayer)
+							if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -103,7 +104,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.z) == 1;
 
-                                if (element.owner == state.nextPlayer)
+							if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -255,7 +256,7 @@ namespace GTMillGameLogic
 
             foreach (KeyValuePair<GTMillPosition, GTMillGameElement> element in state)
             {
-                if (element.Value.owner == state.nextPlayer)
+				if (element.Value.owner == this.player.id)
                 {
                     this.ownElements.Add(element);
                 }
@@ -276,7 +277,7 @@ namespace GTMillGameLogic
                                = this.getNeighbours(direction, element.Key);
 
                         //if the next player has element at the position
-                        if (element.Value.owner == state.nextPlayer)
+						if (element.Value.owner == this.player.id)
                         {
                             //checking morrises
                             this.checkMorris(direction, neighbours);
@@ -291,16 +292,17 @@ namespace GTMillGameLogic
                     }
                 }
 
-                if (blocked && element.Value.owner != state.nextPlayer)
+				if (blocked && element.Value.owner != this.player.id)
                 {
                     this.blockedOpponent++;
                 }
             }
         }
 
-        public int evaluateState(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state)
+		public int evaluateState(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
         {
             this.state = state;
+			this.player = player;
 
             this.morrises = 0;
             this.twoPieces = 0;

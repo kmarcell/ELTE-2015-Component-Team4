@@ -8,7 +8,7 @@ namespace GTInterfacesLibrary
 {
     public interface GTPlayerInterface<E, P>
         where E : GTGameSpaceElementInterface
-        where P : GTPosition
+        where P : IPosition
     {
         GTPlayerInterface<E, P> playerWithRealUser(int id);
         GTPlayerInterface<E, P> playerWithAI(GTArtificialIntelligenceInterface<E, P> ai, int id);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GTInterfacesLibrary;
@@ -8,7 +9,7 @@ namespace GTMillGameLogic
 
 	public class GTMillGameStateGenerator : GTGameStateGeneratorInterface<GTMillGameElement, GTMillPosition>
 	{
-		public Task<TaskReturnType> availableStatesFrom (GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state)
+        public Task<TaskReturnType> availableStatesFrom(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
 		{
 			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
 				
@@ -20,6 +21,11 @@ namespace GTMillGameLogic
 				TaskReturnType states = new TaskReturnType ();
 
 				foreach (GTMillGameStep step in steps) {
+
+                    if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, state as GTMillGameSpace, player.id))
+                    {
+                        throw new NotImplementedException();
+                    }
 					states.Add (state.stateWithStep (step));
 				}
 				return states;

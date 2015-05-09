@@ -117,7 +117,7 @@ namespace Platform.Model.Interface
         /// Get online games request by the user.
         /// </summary>
         /// <remarks>
-        /// To send message for server: SendMessage(MessageCode.GetOpenGames, game.Id) and wait for response.
+        /// To send message for server: SendMessage(MessageCode.GetOpenGames, game.TypeId) and wait for response.
         /// </remarks>
         /// <param name="game">The currently selected game.</param>
         void GetOnlineGames(IGTGameLogicInterface game);

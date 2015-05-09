@@ -16,16 +16,22 @@ namespace GTInterfacesLibrary.MessageTypes
         public Int32 Id { get; set; }
 
         /// <summary>
-        /// The name of the game (should be unique).
+        /// The id of the game type (should be unique).
         /// </summary>
         [XmlAttribute]
-        public String Name { get; set; }
+        public Int32 TypeId { get; set; }
 
         /// <summary>
-        /// The description of the game.
+        /// The name of the game type (should be unique).
         /// </summary>
         [XmlAttribute]
-        public String Description { get; set; }
+        public String TypeName { get; set; }
+
+        /// <summary>
+        /// The description of the gam typee.
+        /// </summary>
+        [XmlAttribute]
+        public String TypeDescription { get; set; }
 
         /// <summary>
         /// The first player name of the game (creator).
@@ -62,5 +68,11 @@ namespace GTInterfacesLibrary.MessageTypes
         /// </summary>
         [XmlAttribute]
         public Byte[] GameState { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("TypeId: {0}, TypeName: {1}, TypeDescription: {2}, FirstPlayer: {3}, SecondPlayer: {4}, Phase: {5}", 
+                TypeId, TypeName, TypeDescription, FirstPlayer ?? "null", SecondPlayer ?? "null", Phase);
+        }
     }
 }

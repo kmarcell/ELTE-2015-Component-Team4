@@ -590,7 +590,8 @@ namespace Platform
         }
         #endregion
 
-        
+
+        #region log/message player
         private void PrintStatusBarMessage(string message, params object[] messageParams)
         {
             var messageToLog = string.Format("{0} {1}", LogMessagePrefix, string.Format(message, messageParams));
@@ -601,7 +602,7 @@ namespace Platform
         private void WriteLog(string message, params object[] messageParams)
         {
             // create log
-            if (File.Exists(LogfileName))
+            if (!File.Exists(LogfileName))
             {
                 File.Create(LogfileName);
             }
@@ -612,5 +613,6 @@ namespace Platform
                 streamWriter.WriteLine("{0} {1}", LogMessagePrefix, string.Format(message, messageParams));
             }
         }
+        #endregion
     }
 }

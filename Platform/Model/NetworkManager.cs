@@ -152,7 +152,7 @@ namespace Platform.Model
         /// Get online games request by the user.
         /// </summary>
         /// <remarks>
-        /// To send message for server: SendMessage(MessageCode.GetOpenGames, game.Id) and wait for response.
+        /// To send message for server: SendMessage(MessageCode.GetOpenGames, game.TypeId) and wait for response.
         /// </remarks>
         /// <param name="game">The currently selected game.</param>
         public void GetOnlineGames(IGTGameLogicInterface game) 
@@ -172,9 +172,9 @@ namespace Platform.Model
         {
             var gameToServer = new Game
             {
-                Id = game.Id, 
-                Name = game.Name, 
-                Description = game.Description,
+                TypeId = game.Id, 
+                TypeName = game.Name, 
+                TypeDescription = game.Description,
                 FirstPlayer = PlayerName,
                 Phase = GamePhase.Opened
             };

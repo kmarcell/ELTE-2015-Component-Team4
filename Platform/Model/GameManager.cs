@@ -262,7 +262,7 @@ namespace Platform.Model
 
             if (eventArgs.Game.Phase == GamePhase.Ended)
             {
-                GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });
+                GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = _MNetworkManager.CurrentGame != null && _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });
             }
 
             SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, GameType = _MGameType });

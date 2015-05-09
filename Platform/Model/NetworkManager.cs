@@ -212,10 +212,9 @@ namespace Platform.Model
         /// <remarks>
         /// To send message to the server SendMessage(MessageCode.EndGame, playerName) and wait for response.
         /// </remarks>
-        /// <param name="playerName">The player name who ends the game.</param>
-        public void EndGame(String playerName = null)
+        public void EndGame()
         {
-            SendMessage(MessageCode.EndGame, playerName);
+            SendMessage(MessageCode.EndGame, PlayerName);
         }
         #endregion
 

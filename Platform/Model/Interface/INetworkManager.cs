@@ -156,8 +156,7 @@ namespace Platform.Model.Interface
         /// <remarks>
         /// To send message to the server SendMessage(MessageCode.EndGame, playerName) and wait for response.
         /// </remarks>
-        /// <param name="playerName">The player name who ends the game.</param>
-        void EndGame(String playerName = null);
+        void EndGame();
         #endregion
 
 

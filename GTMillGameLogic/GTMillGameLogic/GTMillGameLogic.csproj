@@ -30,6 +30,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GTGame.cs" />
     <Compile Include="GTMillGameMillDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GTMillGameLogic.cs" />

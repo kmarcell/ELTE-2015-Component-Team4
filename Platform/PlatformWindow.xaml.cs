@@ -32,6 +32,7 @@ namespace Platform
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
         private Boolean _IsAiAiGameStarted;
+        private GTGuiInterface _MCurrenGui;
 
         private const String LogfileName = "platform.log";
         private String LogMessagePrefix
@@ -237,10 +238,11 @@ namespace Platform
         {
             var headerName = ((MenuItem)routedEventArgs.Source).Header.ToString();
 
-            GameContentControl.Content = _MGameManager.GameGuiList.First(x => x.GuiName == headerName);
+            _MCurrenGui = _MGameManager.GameGuiList.First(x => x.GuiName == headerName);
+            GameContentControl.Content = _MCurrenGui;
             GameContentControl.Width = GameContentControl.Height = 500;
-            _MGameManager.SetCurrentGui(_MGameManager.GameGuiList.First(x => x.GuiName == headerName));
-
+            _MGameManager.SetCurrentGui(_MCurrenGui);
+            
             _GuiListMenuItems.ForEach(item =>
             {
                 item.IsChecked = item.Header.ToString() == headerName;
@@ -251,6 +253,7 @@ namespace Platform
         {
             var headerName = ((MenuItem)routedEventArgs.Source).Header.ToString();
             _MGameManager.SetCurrentGame(_MGameManager.GameLogicList.First(x => x.Name == headerName));
+            _MGameManager.SetCurrentGui(_MCurrenGui);
 
             _GameListMenuItems.ForEach(item =>
             {
@@ -567,7 +570,8 @@ namespace Platform
             _MGameManager.InitializeGui(guiList);
             GameContentControl.Content = guiList.First();
             GameContentControl.Width = GameContentControl.Height = 500;
-
+            _MCurrenGui = guiList.First();
+            
             foreach (var gameGui in _MGameManager.GameGuiList)
             {
                 var menuItem = new MenuItem

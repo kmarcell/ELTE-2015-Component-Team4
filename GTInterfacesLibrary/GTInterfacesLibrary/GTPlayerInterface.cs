@@ -20,9 +20,9 @@ namespace GTInterfacesLibrary
 
     }
 
-	class GTPlayer<E, P> : GTPlayerInterface<E, P>
+	public class GTPlayer<E, P> : GTPlayerInterface<E, P>
         where E : GTGameSpaceElementInterface
-        where P : GTPosition
+        where P : IPosition
     {
 
         int _id;

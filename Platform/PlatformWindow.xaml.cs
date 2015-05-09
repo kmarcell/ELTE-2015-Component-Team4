@@ -31,6 +31,13 @@ namespace Platform
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
         private Boolean _IsAiAiGameStarted;
+
+        private const String LogfileName = "platform.log";
+        private String LogMessagePrefix
+        {
+            get { return string.Format("{0} - ", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")); }
+            
+        }
         #endregion
 
 
@@ -583,23 +590,26 @@ namespace Platform
         }
         #endregion
 
-
+        
         private void PrintStatusBarMessage(string message, params object[] messageParams)
         {
-            var messageToLog = string.Format("{0} - {1}", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), string.Format(message, messageParams));
+            var messageToLog = string.Format("{0} {1}", LogMessagePrefix, string.Format(message, messageParams));
             MainStatusBarTextBlock.Text = messageToLog;
+            WriteLog(message, messageParams);
+        }
 
-            const string logFileName = "platform.log";
+        private void WriteLog(string message, params object[] messageParams)
+        {
             // create log
-            if (File.Exists(logFileName))
+            if (File.Exists(LogfileName))
             {
-                File.Create(logFileName);
+                File.Create(LogfileName);
             }
 
-            using (var fileStream = new FileStream(logFileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            using (var fileStream = new FileStream(LogfileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
             using (var streamWriter = new StreamWriter(fileStream))
             {
-                streamWriter.WriteLine(messageToLog);
+                streamWriter.WriteLine("{0} {1}", LogMessagePrefix, string.Format(message, messageParams));
             }
         }
     }

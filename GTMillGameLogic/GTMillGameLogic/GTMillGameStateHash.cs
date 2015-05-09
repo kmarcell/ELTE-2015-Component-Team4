@@ -414,7 +414,7 @@ namespace GTMillGameLogic
             return blocked;
         }
 
-        private void countPieces()
+        private void evaulate()
         {
             this.opponentElements = new List<KeyValuePair<GTMillPosition, GTMillGameElement>>();
             this.ownElements = new List<KeyValuePair<GTMillPosition, GTMillGameElement>>();
@@ -489,7 +489,7 @@ namespace GTMillGameLogic
             this.opponentElements = new List<KeyValuePair<GTMillPosition, GTMillGameElement>>();
             this.ownElements = new List<KeyValuePair<GTMillPosition, GTMillGameElement>>();
 
-            this.countPieces();
+            this.evaulate();
 
             int factor = 0;
             if (player.figuresRemaining > 0)

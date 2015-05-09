@@ -13,6 +13,7 @@ namespace CheckersGame
     {
         private GTPlatformManagerInterface PlatformGameManager;
         private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition> AI;
+        private GTGuiInterface GUI;
         private Logic.Logic logic;
 
 		public Game()
@@ -47,7 +48,28 @@ namespace CheckersGame
 
         public void RegisterGui(GTGuiInterface gui)
         {
-            // register
+            GUI = gui;
+            byte[,] damaBackGround = { 
+                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
+                { 11, 12, 11, 12, 11, 12, 11, 12 },
+                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
+                { 11, 12, 11, 12, 11, 12, 11, 12 },
+                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
+                { 11, 12, 11, 12, 11, 12, 11, 12 },
+                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
+                { 11, 12, 11, 12, 11, 12, 11, 12 }};
+            byte[,] damaField = { 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0 }};
+
+            GUI.SetFieldBackground(damaBackGround);
+            GUI.SetField(damaField);
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)

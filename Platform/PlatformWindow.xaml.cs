@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GTInterfacesLibrary;
+using GTInterfacesLibrary.GameEvents;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -19,6 +20,7 @@ namespace Platform
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region private fields
         private readonly List<MenuItem> _GuiListMenuItems = new List<MenuItem>();
         private readonly List<MenuItem> _GameListMenuItems = new List<MenuItem>();
         private readonly NetworkManager _MNetworkManager;
@@ -28,7 +30,9 @@ namespace Platform
 
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
-        private Boolean _IsAiAiGameStarted; 
+        private Boolean _IsAiAiGameStarted;
+        #endregion
+
 
         public MainWindow()
         {
@@ -63,6 +67,7 @@ namespace Platform
             _MNetworkManager.GameCancelledEvent += MNetworkManager_OnGameCancelledEvent;
             _MNetworkManager.GameJoinAcceptedEvent += MNetworkManagerOnGameJoinAcceptedEvent;
             _MNetworkManager.GameJoinRejectedEvent += MNetworkManagerOnGameJoinRejectedEvent;
+            _MNetworkManager.GameStatusReceived += MNetworkManager_OnGameStatusReceived;
 
             _MGameManager = new GameManager(_MNetworkManager);
             _MGameManager.GameStartedEvent += MGameManager_OnGameStartedEvent;
@@ -88,6 +93,7 @@ namespace Platform
             }
         }
 
+
         private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
         {
             if (MessageBox.Show("Do you want to quit?", "Platform", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
@@ -95,6 +101,7 @@ namespace Platform
                 cancelEventArgs.Cancel = true;
             }
         }
+
 
         #region Menuitem events
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
@@ -173,7 +180,7 @@ namespace Platform
                 { 
                     _MGameManager.LoadLocalGame(openFileDialog.FileName);
 
-                    MainStatusBarTextBlock.Text = "Game loaded successfuly!";
+                    PrintStatusBarMessage("Game loaded successfuly!");
                 }
             }
             catch (Exception)
@@ -197,7 +204,7 @@ namespace Platform
                 {
                     _MGameManager.SaveLocalGame(saveFileDialog.FileName);
 
-                    MainStatusBarTextBlock.Text = "Game saved successfuly!";
+                    PrintStatusBarMessage("Game saved successfuly!");
                 }
             }
             catch (Exception)
@@ -247,7 +254,7 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                MainStatusBarTextBlock.Text = "Game started.";
+                PrintStatusBarMessage("Game started.");
 
                 CreateOnlineGameMenuItem.IsEnabled = false;
                 ConnectOnlineGameMenuItem.IsEnabled = false;
@@ -281,7 +288,7 @@ namespace Platform
 
             Dispatcher.Invoke(() =>
             {
-                MainStatusBarTextBlock.Text = "Game finished.";
+                PrintStatusBarMessage("Game finished.");
 
                 CreateOnlineGameMenuItem.IsEnabled = false;
                 ConnectOnlineGameMenuItem.IsEnabled = false;
@@ -301,7 +308,6 @@ namespace Platform
 
 
         #region Networkmanager events
-
         private void NetworkManager_OnConnectAcceptedEvent(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -320,7 +326,7 @@ namespace Platform
                 GameMenuItem.IsEnabled = false;
 
                 _MServerConnectWindow.Close();
-                MainStatusBarTextBlock.Text = "Connect to the server successful!";
+                PrintStatusBarMessage("Connect to the server successful!");
                 MessageBox.Show("Connect to the server successful.", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
@@ -341,6 +347,15 @@ namespace Platform
             });
         }
 
+        private void MNetworkManager_OnGameStatusReceived(object sender, GameEventArgs gameEventArgs)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if(gameEventArgs.Game.Phase != GamePhase.Ended)
+                    PrintStatusBarMessage("Game changed, player turn: {0}.", gameEventArgs.Game.PlayerTurn);
+            });
+        }
+
         private void NetworkManager_OnDisconnectedEvent(object sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -358,7 +373,7 @@ namespace Platform
                 EndAiAiGameMenuItem.IsEnabled = false;
                 GameMenuItem.IsEnabled = true;
 
-                MainStatusBarTextBlock.Text = "You are disconnected from the server!";
+                PrintStatusBarMessage("You are disconnected from the server!");
                 MessageBox.Show("You are disconnected from the server.", "Platform", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             });
         }
@@ -381,7 +396,7 @@ namespace Platform
                     GameMenuItem.IsEnabled = false;
 
                     _MCreateGameWindow.Close();
-                    MainStatusBarTextBlock.Text = "Game created! Waiting for another player.";
+                    PrintStatusBarMessage("Game created! Waiting for another player.");
                 });
         }
 
@@ -395,7 +410,7 @@ namespace Platform
 
             Dispatcher.Invoke(() =>
             {
-                MainStatusBarTextBlock.Text = message;
+                PrintStatusBarMessage(message);
                 CreateOnlineGameMenuItem.IsEnabled = true;
                 ConnectOnlineGameMenuItem.IsEnabled = true;
                 LeaveOnlineGameMenuItem.IsEnabled = false;
@@ -416,7 +431,7 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                MainStatusBarTextBlock.Text = "Game cancelled!";
+                PrintStatusBarMessage("Game cancelled!");
 
                 CreateOnlineGameMenuItem.IsEnabled = true;
                 ConnectOnlineGameMenuItem.IsEnabled = true;
@@ -439,11 +454,11 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                MainStatusBarTextBlock.Text = "Join game rejected!";
+                PrintStatusBarMessage("Join game rejected!");
             });
         }
 
-        private void MNetworkManagerOnGameJoinAcceptedEvent(object sender, EventArgs eventArgs)
+        private void MNetworkManagerOnGameJoinAcceptedEvent(object sender, GameEventArgs eventArgs)
         {
             Dispatcher.Invoke(() =>
             {
@@ -460,7 +475,7 @@ namespace Platform
                 EndAiAiGameMenuItem.IsEnabled = false;
                 GameMenuItem.IsEnabled = false;
 
-                MainStatusBarTextBlock.Text = "Join game accepted, game could started!";
+                PrintStatusBarMessage("Join game accepted, game could started, player turn: {0}!", eventArgs.Game.PlayerTurn);
             });
         }
         #endregion
@@ -553,19 +568,39 @@ namespace Platform
             const string aiDirectory = @"ArtificialIntelligence";
             if (!Directory.Exists(aiDirectory))
             {
-                MainStatusBarTextBlock.Text = "AI could not be loaded, directory does not exists, local game not possible";
+                PrintStatusBarMessage("AI could not be loaded, directory does not exists, local game not possible");
                 return;
             }
 
             var aiFromDirectory = Directory.GetFiles(aiDirectory, "*.dll", SearchOption.TopDirectoryOnly);
             if (!aiFromDirectory.Any())
             {
-                MainStatusBarTextBlock.Text = "AI could not be loaded, AI in the directory could not be found, local game not possible";
+                PrintStatusBarMessage("AI could not be loaded, AI in the directory could not be found, local game not possible");
                 return;
             }
 
             _MGameManager.InitializeArtificialIntelligence(aiDirectory);
         }
         #endregion
+
+
+        private void PrintStatusBarMessage(string message, params object[] messageParams)
+        {
+            var messageToLog = string.Format("{0} - {1}", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), string.Format(message, messageParams));
+            MainStatusBarTextBlock.Text = messageToLog;
+
+            const string logFileName = "platform.log";
+            // create log
+            if (File.Exists(logFileName))
+            {
+                File.Create(logFileName);
+            }
+
+            using (var fileStream = new FileStream(logFileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            using (var streamWriter = new StreamWriter(fileStream))
+            {
+                streamWriter.WriteLine(messageToLog);
+            }
+        }
     }
 }

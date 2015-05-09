@@ -94,7 +94,7 @@ namespace Platform.Model
         /// <summary>
         /// The event will raise to inform user and game logic (game start) when the user joined to an open game and the server accepted.
         /// </summary>
-        public event EventHandler<EventArgs> GameJoinAcceptedEvent;
+        public event EventHandler<GameEventArgs> GameJoinAcceptedEvent;
 
         /// <summary>
         /// The event will raise to inform user and game logic (game end) when the played game has finished.
@@ -316,6 +316,7 @@ namespace Platform.Model
                         break;
                     case MessageCode.JoinAccepted:
                         CurrentGame = message.Content as Game;
+                        GameStatusReceived(this, new GameEventArgs { Game = CurrentGame });
                         GameJoinAcceptedEvent(this, new GameEventArgs { Game = CurrentGame });
                         break;
                     case MessageCode.JoinRejected:
@@ -323,10 +324,21 @@ namespace Platform.Model
                         break;
                     case MessageCode.EndGame:
                         var game = message.Content as Game;
-                        if(game != null && game.Phase == GamePhase.Ended)
-                            GameEndedEvent(this, new GameEventArgs { Game = game });
+                        if (game != null && game.Phase == GamePhase.Ended)
+                        {
+                            GameStatusReceived(this, new GameEventArgs { Game = game });
+                            GameEndedEvent(this, new GameEventArgs {Game = game});
+                        }
+
                         else
-                            GameCancelledEvent(this, new GameEventArgs { Game = game });
+                        {
+                            if (game != null)
+                            {
+                                game.Phase = GamePhase.Ended;
+                                GameStatusReceived(this, new GameEventArgs { Game = game });
+                                GameCancelledEvent(this, new GameEventArgs { Game = game });
+                            }
+                        }
                         break;
                 }
 

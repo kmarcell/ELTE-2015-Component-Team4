@@ -80,7 +80,7 @@ namespace Platform.Model.Interface
         /// <summary>
         /// The event will raise to inform user and game logic (game start) when the user joined to an open game and the server accepted.
         /// </summary>
-        event EventHandler<EventArgs> GameJoinAcceptedEvent;
+        event EventHandler<GameEventArgs> GameJoinAcceptedEvent;
 
         /// <summary>
         /// The event will raise to inform user and game logic (game end) when the played game has finished.

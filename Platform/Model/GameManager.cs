@@ -30,6 +30,8 @@ namespace Platform.Model
         private GameType _MGameType;
         #endregion
 
+
+        #region constructor
         /// <summary>
         /// Create an instance of <see cref="GameManager"/>.
         /// </summary>
@@ -44,6 +46,7 @@ namespace Platform.Model
             _MNetworkManager = networkManager;
             _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
         }
+        #endregion
 
 
         #region component fields

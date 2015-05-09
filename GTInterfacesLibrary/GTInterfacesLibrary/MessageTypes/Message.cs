@@ -5,10 +5,16 @@ using GTInterfacesLibrary.GameEvents;
 
 namespace GTInterfacesLibrary.MessageTypes
 {
+    /// <summary>
+    /// The message code to send/recieve message from server/client and identify the message.
+    /// </summary>
     public enum MessageCode {
         Login, Disconnect, ConnectAccepted, ConnectRejected, CreateGame, JoinGame, JoinAccepted, JoinRejected, EndGame, ChangeGameState, GetOpenGames
     }
 
+    /// <summary>
+    /// The message class to serialize/deserialize messages
+    /// </summary>
     [XmlRoot]
     [XmlInclude(typeof(GamePhase)),
      XmlInclude(typeof(MessageCode)), 

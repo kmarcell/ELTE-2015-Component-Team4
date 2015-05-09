@@ -7,10 +7,10 @@ namespace Server
     {
         static void Main()
         {
+            // get the instance of the server manager and start
             var manager = ServerManager.ServerManagerInstance;
             manager.Start();
 
-            
             if (manager.Running)
             {
                 Console.WriteLine("Server started with ip address: {0}, port number: {1}", manager.ServerIp, manager.ServerPort);

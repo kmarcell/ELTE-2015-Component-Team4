@@ -72,6 +72,10 @@ namespace GTMillGameLogic
         private HashSet<GTMillGameElement> vertical2Pieces;
         private HashSet<GTMillGameElement> diagonal2Pieces;
 
+        private HashSet<GTMillGameElement> horizontal3Pieces;
+        private HashSet<GTMillGameElement> vertical3Pieces;
+        private HashSet<GTMillGameElement> diagonal3Pieces;
+
         int morrises;
         int twoPiecesConfiguration;
         int threePiecesConfiguration;
@@ -94,10 +98,11 @@ namespace GTMillGameLogic
          * Returns the neighbour elements of the given position. 
          * The opponent and own elements will be seperated.
          **/
-        private Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> getNeighbours(int direction, GTMillPosition position)
+        private Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> getNeighbours(int direction, GTMillPosition position)
         {
             List<Tuple<GTMillGameElement, bool>> opponentNeighbours = new List<Tuple<GTMillGameElement, bool>>(),
                                                  ownNeighbours = new List<Tuple<GTMillGameElement, bool>>();
+            List<GTMillPosition> freePositions = new List<GTMillPosition>();
 
             if (this.isValidDirection(direction, position))
             {
@@ -122,6 +127,10 @@ namespace GTMillGameLogic
                                     opponentNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
                             }
+                            else
+                            {
+                                freePositions.Add(pos);
+                            }
                         }
 
                         break;
@@ -135,7 +144,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.y) == 1;
 
-							if (element.owner == this.player.id)
+							    if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -143,6 +152,10 @@ namespace GTMillGameLogic
                                 {
                                     opponentNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
+                            }
+                            else
+                            {
+                                freePositions.Add(pos);
                             }
                         }
 
@@ -157,7 +170,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.z) == 1;
 
-							if (element.owner == this.player.id)
+							    if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -166,14 +179,18 @@ namespace GTMillGameLogic
                                     opponentNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
                             }
+                            else
+                            {
+                                freePositions.Add(pos);
+                            }
                         }
 
                         break;
                 }
             }
 
-            Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours
-                = new Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>>(ownNeighbours, opponentNeighbours);
+            Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours
+                = new Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>>(ownNeighbours, opponentNeighbours, freePositions);
 
             return neighbours;
         }
@@ -181,7 +198,7 @@ namespace GTMillGameLogic
         /**
          * Checks morrises in one direction
          **/
-        private void checkMorris(int direction, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours)
+        private void checkMorris(int direction, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours)
         {
             //there is a morris
             if (neighbours.Item1.Count == 3 )
@@ -231,7 +248,7 @@ namespace GTMillGameLogic
         /**
          * Checks 2 and 3 pieces configurations
          **/
-        private void check23Pieces(int direction, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours)
+        private void check23Pieces(int direction, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours)
         {
             //if there is 3 items then it will be a morris
             if (neighbours.Item1.Count == 2 && neighbours.Item2.Count == 0)
@@ -249,6 +266,37 @@ namespace GTMillGameLogic
                             this.twoPiecesConfiguration++;
                         }
 
+                        if (!this.horizontal3Pieces.Contains(neighbours.Item1.First().Item1))
+                        {
+                            GTMillPosition freePos = neighbours.Item3.First();
+                            
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
+                            {
+                                this.horizontal3Pieces.Add(element.Item1);
+                            }
+
+                            for (int i = 0; i < 3; ++i)
+                            {
+                                if (i != direction)
+                                {
+                                    Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> ortogonalNeighbours
+                                        = this.getNeighbours(i, freePos);
+                                    List<Tuple<GTMillGameElement, bool>> ownOrtogonalNeighbours 
+                                        = new List<Tuple<GTMillGameElement, bool>>(ortogonalNeighbours.Item1.Where(item => item.Item2));
+
+                                    if (ownOrtogonalNeighbours.Count > 0)
+                                    {
+                                        foreach (Tuple<GTMillGameElement, bool> ownElement in ownOrtogonalNeighbours)
+                                        {
+                                            this.horizontal3Pieces.Add(ownElement.Item1);
+                                        }
+
+                                        this.threePiecesConfiguration++;
+                                    }
+                                }
+                            }
+                        }
+
                         break;
                     case 1:
                         if (!this.vertical2Pieces.Contains(neighbours.Item1.First().Item1))
@@ -259,6 +307,37 @@ namespace GTMillGameLogic
                             }
 
                             this.twoPiecesConfiguration++;
+                        }
+
+                        if (!this.vertical3Pieces.Contains(neighbours.Item1.First().Item1))
+                        {
+                            GTMillPosition freePos = neighbours.Item3.First();
+
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
+                            {
+                                this.vertical3Pieces.Add(element.Item1);
+                            }
+
+                            for (int i = 0; i < 3; ++i)
+                            {
+                                if (i != direction)
+                                {
+                                    Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> ortogonalNeighbours
+                                        = this.getNeighbours(i, freePos);
+                                    List<Tuple<GTMillGameElement, bool>> ownOrtogonalNeighbours
+                                        = new List<Tuple<GTMillGameElement, bool>>(ortogonalNeighbours.Item1.Where(item => item.Item2));
+
+                                    if (ownOrtogonalNeighbours.Count > 0)
+                                    {
+                                        foreach (Tuple<GTMillGameElement, bool> ownElement in ownOrtogonalNeighbours)
+                                        {
+                                            this.vertical3Pieces.Add(ownElement.Item1);
+                                        }
+
+                                        this.threePiecesConfiguration++;
+                                    }
+                                }
+                            }
                         }
 
                         break;
@@ -273,6 +352,37 @@ namespace GTMillGameLogic
                             this.twoPiecesConfiguration++;
                         }
 
+                        if (!this.diagonal3Pieces.Contains(neighbours.Item1.First().Item1))
+                        {
+                            GTMillPosition freePos = neighbours.Item3.First();
+
+                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
+                            {
+                                this.diagonal3Pieces.Add(element.Item1);
+                            }
+
+                            for (int i = 0; i < 3; ++i)
+                            {
+                                if (i != direction)
+                                {
+                                    Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> ortogonalNeighbours
+                                        = this.getNeighbours(i, freePos);
+                                    List<Tuple<GTMillGameElement, bool>> ownOrtogonalNeighbours
+                                        = new List<Tuple<GTMillGameElement, bool>>(ortogonalNeighbours.Item1.Where(item => item.Item2));
+
+                                    if (ownOrtogonalNeighbours.Count > 0)
+                                    {
+                                        foreach (Tuple<GTMillGameElement, bool> ownElement in ownOrtogonalNeighbours)
+                                        {
+                                            this.diagonal3Pieces.Add(ownElement.Item1);
+                                        }
+
+                                        this.threePiecesConfiguration++;
+                                    }
+                                }
+                            }
+                        }
+
                         break;
                 }
             }
@@ -281,7 +391,7 @@ namespace GTMillGameLogic
         /**
          * Returns true if blocked in one direction
          **/
-        private bool isBlocked(int direction, GTMillPosition position, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours)
+        private bool isBlocked(int direction, GTMillPosition position, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours)
         {
             List<Tuple<GTMillGameElement, bool>> ownNeighbours 
                 = new List<Tuple<GTMillGameElement, bool>>(neighbours.Item1.Where(item => item.Item2));
@@ -326,7 +436,7 @@ namespace GTMillGameLogic
                     //if possible to jump this direction
                     if (this.isValidDirection(direction, element.Key)) 
                     {
-                        Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>> neighbours
+                        Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours
                                = this.getNeighbours(direction, element.Key);
 
                         //if the next player has element at the position
@@ -369,6 +479,10 @@ namespace GTMillGameLogic
             this.horizontal2Pieces = new HashSet<GTMillGameElement>();
             this.vertical2Pieces = new HashSet<GTMillGameElement>();
             this.diagonal2Pieces = new HashSet<GTMillGameElement>();
+
+            this.horizontal3Pieces = new HashSet<GTMillGameElement>();
+            this.vertical3Pieces = new HashSet<GTMillGameElement>();
+            this.diagonal3Pieces = new HashSet<GTMillGameElement>();
 
             this.opponentElements = new List<KeyValuePair<GTMillPosition, GTMillGameElement>>();
             this.ownElements = new List<KeyValuePair<GTMillPosition, GTMillGameElement>>();

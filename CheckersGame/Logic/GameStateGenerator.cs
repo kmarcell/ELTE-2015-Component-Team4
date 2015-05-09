@@ -8,7 +8,7 @@ namespace CheckersGame.Logic
 
     public class GameStateGenerator : GTGameStateGeneratorInterface<Element, Position>
     {
-        public Task<TaskReturnType> availableStatesFrom(GTGameSpaceInterface<Element, Position> state)
+        public Task<TaskReturnType> availableStatesFrom(GTGameSpaceInterface<Element, Position> state, GTPlayerInterface<Element, Position> player)
         {
             Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew(() =>
             {
@@ -16,7 +16,7 @@ namespace CheckersGame.Logic
 
                 foreach (KeyValuePair<Position, Element> kv in state)
                 {
-                    if (kv.Value.owner == state.nextPlayer)
+                    if (kv.Value.owner == player.id)
                         steps.AddRange(stepsFromPositionWithState(state as GameSpace, kv.Key));
                 }
 

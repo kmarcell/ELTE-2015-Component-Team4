@@ -7,22 +7,12 @@ using GTInterfacesLibrary.GameEvents;
 
 namespace CheckersGame.Logic
 {
-    public class Logic: GTGameLogicInterface<Element, Position>, IGTGameLogicInterface
+    public class Logic: GTGameLogicInterface<Element, Position>
     {
-        private GTPlatformManagerInterface PlatformGameManager;
-        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition> AI;
-
 		public Logic()
         {
-            Name = "CheckersGame";
-            Id = 2;
-            Description = "CheckersGame";
             init();
 		}
-        
-        public string Name { get; private set; }
-        public int Id { get; private set; }
-        public string Description { get; private set; }
 
         // properties
         public GameSpace state = new GameSpace();
@@ -59,67 +49,14 @@ namespace CheckersGame.Logic
 			return new GameStateHash();
 		}
 
-        public event EventHandler<GameStateChangedEventArgs> SendGameStateChangedEventArg;
-        public void SendGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs)
+        public GTPlayerInterface<Element, Position> nextPlayer
         {
-            GameStateChangedEventArgs eventArgs = new GameStateChangedEventArgs();
-            eventArgs.GamePhase = isGameOver() ? GamePhase.Ended : GamePhase.Playing;
-            eventArgs.GameState = BytesFromGameState((GameSpace)getCurrentState());
-            SendGameStateChangedEventArg(this, eventArgs);
+            get { throw new NotImplementedException(); }
         }
 
-        public void RegisterGameManager(GTPlatformManagerInterface platformGameManager)
+        public int gamePhase
         {
-            PlatformGameManager = platformGameManager;
-            PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;
-        }
-
-        public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
-        {
-            AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition>)artificialIntelligence;
-        }
-
-        public void RegisterGui(GTGuiInterface gui)
-        {
-            // register
-        }
-
-        public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
-        {
-            if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)
-            {
-                GameSpace receivedState = StateFromBytes(gameStateChangedEventArgs.GameState);
-                state = receivedState;
-            }
-        }
-        public void LoadGame(byte[] gameState)
-        {
-            throw new NotImplementedException();
-        }
-
-        public byte[] SaveGame()
-        {
-            throw new NotImplementedException();
-        }
-
-        private GameSpace StateFromBytes(byte[] bytes)
-        {
-            MemoryStream memStream = new MemoryStream();
-            BinaryFormatter binForm = new BinaryFormatter();
-            memStream.Write(bytes, 0, bytes.Length);
-            memStream.Seek(0, SeekOrigin.Begin);
-            GameSpace state = (GameSpace)binForm.Deserialize(memStream);
-            return state;
-        }
-
-        private byte[] BytesFromGameState(GameSpace state)
-        {
-            if (state == null)
-                return null;
-            BinaryFormatter bf = new BinaryFormatter();
-            MemoryStream ms = new MemoryStream();
-            bf.Serialize(ms, state);
-            return ms.ToArray();
+            get { return 0; }
         }
     }
 }

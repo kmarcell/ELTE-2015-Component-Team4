@@ -33,6 +33,7 @@ namespace Platform
         private GameConfigurationWindow _MGameConfigurationWindow;
         private Boolean _IsAiAiGameStarted;
         private GTGuiInterface _MCurrenGui;
+        private List<GTGuiInterface> _GuiList;
 
         private const String LogfileName = "platform.log";
         private String LogMessagePrefix
@@ -238,7 +239,7 @@ namespace Platform
         {
             var headerName = ((MenuItem)routedEventArgs.Source).Header.ToString();
 
-            _MCurrenGui = _MGameManager.GameGuiList.First(x => x.GuiName == headerName);
+            _MCurrenGui = CreateSelectedGui(_MGameManager.GameGuiList.First(x => x.GuiName == headerName).GuiName);
             GameContentControl.Content = _MCurrenGui;
             GameContentControl.Width = GameContentControl.Height = 500;
             _MGameManager.SetCurrentGui(_MCurrenGui);
@@ -253,6 +254,8 @@ namespace Platform
         {
             var headerName = ((MenuItem)routedEventArgs.Source).Header.ToString();
             _MGameManager.SetCurrentGame(_MGameManager.GameLogicList.First(x => x.Name == headerName));
+            _MCurrenGui = CreateSelectedGui(_MCurrenGui.GuiName);
+            GameContentControl.Content = _MCurrenGui;
             _MGameManager.SetCurrentGui(_MCurrenGui);
 
             _GameListMenuItems.ForEach(item =>
@@ -262,6 +265,15 @@ namespace Platform
         }
         #endregion
 
+        private GTGuiInterface CreateSelectedGui(string guiName)
+        {
+            var newGuiType = _GuiList.First(x => x.GuiName == guiName).GetType();
+            var newGui = (GTGuiInterface) Activator.CreateInstance(newGuiType);
+            var control = (AbstractGUIControl)newGui;
+            control.Width = 500;
+            control.Height = 500;
+            return newGui;
+        }
 
         #region Gamemanager events
         private void MGameManager_OnGameStartedEvent(object sender, EventArgs eventArgs)
@@ -561,16 +573,16 @@ namespace Platform
             ligthGui.InvalidateVisual();
             darkGui.InvalidateVisual();
 
-            var guiList = new List<GTGuiInterface>
+            _GuiList = new List<GTGuiInterface>
             {
                 ligthGui,
                 darkGui
             };
-            
-            _MGameManager.InitializeGui(guiList);
-            GameContentControl.Content = guiList.First();
+
+            _MGameManager.InitializeGui(_GuiList);
+            GameContentControl.Content = _GuiList.First();
             GameContentControl.Width = GameContentControl.Height = 500;
-            _MCurrenGui = guiList.First();
+            _MCurrenGui = _GuiList.First();
             
             foreach (var gameGui in _MGameManager.GameGuiList)
             {

@@ -33,7 +33,7 @@ namespace Platform.WindowServerRelated
                 return;
             }
 
-            _MNetworkManager.CreateGame(_MGameManager.CurrentGame, _MGameManager.CurrentGame.GetHashCode());
+            _MNetworkManager.CreateGame(_MGameManager.CurrentGame);
         }
     }
 }

@@ -120,7 +120,7 @@ namespace Platform.Model.Interface
         /// To send message for server: SendMessage(MessageCode.GetOpenGames, game.TypeId) and wait for response.
         /// </remarks>
         /// <param name="game">The currently selected game.</param>
-        void GetOnlineGames(IGTGameLogicInterface game);
+        void GetOnlineGames(GTGameInterface game);
 
         /// <summary>
         /// Create game on server by the user.
@@ -130,7 +130,7 @@ namespace Platform.Model.Interface
         /// IGTGameLogicInterface should be converted to Game as xml message.
         /// </remarks>
         /// <param name="game">The currently selected game.</param>
-        void CreateGame(IGTGameLogicInterface game);
+        void CreateGame(GTGameInterface game);
 
         /// <summary>
         /// Join game by the user.

@@ -14,7 +14,7 @@ namespace Platform.Model
 {
     /// <summary>
     /// The GameManager in Platform. Which implements the <see cref="IGameManager"/> interface to handle user inputs on its GUI.
-    /// In addition it also implements <see cref="GTPlatformManagerInterface"/> for communicating with <see cref="IGTGameLogicInterface"/>.
+    /// In addition it also implements <see cref="GTPlatformManagerInterface"/> for communicating with <see cref="GTGameInterface"/>.
     /// </summary>
     public class GameManager : IGameManager, GTPlatformManagerInterface
     {
@@ -40,7 +40,7 @@ namespace Platform.Model
         {
             ArtificialIntelligenceList = new List<IGTArtificialIntelligenceInterface>();
             GameGuiList = new List<GTGuiInterface>();
-            GameLogicList = new List<IGTGameLogicInterface>();
+            GameLogicList = new List<GTGameInterface>();
 
             _MGameType = GameType.Online;
             _MNetworkManager = networkManager;
@@ -53,7 +53,7 @@ namespace Platform.Model
         /// <summary>
         /// The instance of the currently loaded (selected) GameLogic in the platfrom.
         /// </summary>
-        public IGTGameLogicInterface CurrentGame { get; private set; }
+        public GTGameInterface CurrentGame { get; private set; }
 
         /// <summary>
         /// The instance of the currently loaded (selected) Gui in the platfrom.
@@ -73,7 +73,7 @@ namespace Platform.Model
         /// <summary>
         /// The list of available GameLogic instances in the platform.
         /// </summary>
-        public List<IGTGameLogicInterface> GameLogicList { get; private set; }
+        public List<GTGameInterface> GameLogicList { get; private set; }
         #endregion
 
 
@@ -103,11 +103,11 @@ namespace Platform.Model
 
         #region initialize components
         /// <summary>
-        /// Load the <see cref="IGTGameLogicInterface"/> components from DLL from the given directory.
+        /// Load the <see cref="GTGameInterface"/> components from DLL from the given directory.
         /// Create instance of all Game, and register in <see cref="GameLogicList"/>.
         /// Select one, register <see cref="GTGuiInterface"/> for it and register <see cref="IGameManager"/> instance.
         /// </summary>
-        /// <param name="gameLogicDirectory">The directory where the <see cref="IGTGameLogicInterface"/> components should be.</param>
+        /// <param name="gameLogicDirectory">The directory where the <see cref="GTGameInterface"/> components should be.</param>
         public void InitializeGameLogic(string gameLogicDirectory)
         {
             var logicFromDirectory = Directory.GetFiles(gameLogicDirectory, "*.dll", SearchOption.TopDirectoryOnly);
@@ -118,7 +118,7 @@ namespace Platform.Model
 
                 try
                 {
-                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterfaces().Any(y => y.Name.Contains("IGTGameLogicInterface") && !x.IsInterface));
+                    gameType = gameAssembly.GetTypes().FirstOrDefault(x => x.GetInterfaces().Any(y => y.Name.Contains("GTGameInterface") && !x.IsInterface));
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -131,7 +131,7 @@ namespace Platform.Model
                 }
 
 
-                var gameLogicObject = (IGTGameLogicInterface)Activator.CreateInstance(gameType);
+                var gameLogicObject = (GTGameInterface)Activator.CreateInstance(gameType);
                 GameLogicList.Add(gameLogicObject);
             }
 
@@ -228,10 +228,10 @@ namespace Platform.Model
 
         #region set component
         /// <summary>
-        /// Set current GameLogic which is set after selecting in the Platform Gui <see cref="IGTGameLogicInterface"/>.
+        /// Set current GameLogic which is set after selecting in the Platform Gui <see cref="GTGameInterface"/>.
         /// </summary>
         /// <param name="game">The currently selected GameLogic.</param>
-        public void SetCurrentGame(IGTGameLogicInterface game)
+        public void SetCurrentGame(GTGameInterface game)
         {
             CurrentGame = game;
         }
@@ -269,9 +269,9 @@ namespace Platform.Model
         }
 
         /// <summary>
-        /// The subscriber for event of <see cref="IGTGameLogicInterface"/>.
+        /// The subscriber for event of <see cref="GTGameInterface"/>.
         /// </summary>
-        /// <param name="sender">the sender which is <see cref="IGTGameLogicInterface"/>.</param>
+        /// <param name="sender">the sender which is <see cref="GTGameInterface"/>.</param>
         /// <param name="eventArgs">the game state represented eventargs with all fields</param>
         public void RecieveGameStateFromLogic(object sender, GameStateChangedEventArgs eventArgs)
         {

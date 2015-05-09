@@ -430,6 +430,180 @@ namespace UnitTests
         }
 
         /**
+         * 3 pieces configurations
+         **/
+        [TestMethod()]
+        public void TestCaseHashHorizontal3Pieces1()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Top morrises
+            GTMillGameSpace state1 = new GTMillGameSpace();
+            state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(2, 1, 1));
+            state1.setElementAt(new GTMillPosition(1, 0, 1), new GTMillGameElement(3, 1, 1));
+
+            int factor = hash.evaluateState(state1, ownPlayer);
+
+            Assert.IsTrue(
+                factor
+                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                    + GTMillGameStateHash.phase1Coefficients.threePiecesConfiguration * 1
+            );
+        }
+
+        [TestMethod()]
+        public void TestCaseHashHorizontal3Pieces2()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Top morrises
+            GTMillGameSpace state1 = new GTMillGameSpace();
+            state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(2, 1, 1));
+            state1.setElementAt(new GTMillPosition(0, 1, 0), new GTMillGameElement(3, 1, 1));
+
+            int factor = hash.evaluateState(state1, ownPlayer);
+
+            Assert.IsTrue(
+                factor
+                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 2
+            );
+        }
+
+        [TestMethod()]
+        public void TestCaseHashVertical3Pieces1()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Top morrises
+            GTMillGameSpace state1 = new GTMillGameSpace();
+            state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(1, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 2, 0), new GTMillGameElement(2, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 1, 1), new GTMillGameElement(3, 1, 1));
+
+            int factor = hash.evaluateState(state1, ownPlayer);
+
+            Assert.IsTrue(
+                factor
+                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                    + GTMillGameStateHash.phase1Coefficients.threePiecesConfiguration * 1
+            );
+        }
+
+        [TestMethod()]
+        public void TestCaseHashVertical3Pieces2()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Top morrises
+            GTMillGameSpace state1 = new GTMillGameSpace();
+            state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(1, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 2, 0), new GTMillGameElement(2, 1, 1));
+            state1.setElementAt(new GTMillPosition(1, 2, 0), new GTMillGameElement(3, 1, 1));
+
+            int factor = hash.evaluateState(state1, ownPlayer);
+
+            Assert.IsTrue(
+                factor
+                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 2
+            );
+        }
+
+        [TestMethod()]
+        public void TestCaseHashDiagonal3Pieces1()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Top morrises
+            GTMillGameSpace state1 = new GTMillGameSpace();
+            state1.setElementAt(new GTMillPosition(2, 1, 2), new GTMillGameElement(1, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 1, 0), new GTMillGameElement(2, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 0, 1), new GTMillGameElement(3, 1, 1));
+
+            int factor = hash.evaluateState(state1, ownPlayer);
+
+            Assert.IsTrue(
+                factor
+                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                    + GTMillGameStateHash.phase1Coefficients.threePiecesConfiguration * 1
+            );
+        }
+
+        [TestMethod()]
+        public void TestCaseHashDiagonal3Pieces2()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Top morrises
+            GTMillGameSpace state1 = new GTMillGameSpace();
+            state1.setElementAt(new GTMillPosition(2, 1, 2), new GTMillGameElement(1, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 1, 0), new GTMillGameElement(2, 1, 1));
+            state1.setElementAt(new GTMillPosition(2, 0, 2), new GTMillGameElement(3, 1, 1));
+
+            int factor = hash.evaluateState(state1, ownPlayer);
+
+            Assert.IsTrue(
+                factor
+                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 2
+            );
+        }
+
+        /**
          * Blocked opponent
          **/
         [TestMethod()]

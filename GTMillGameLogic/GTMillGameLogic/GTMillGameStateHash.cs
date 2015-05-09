@@ -89,8 +89,10 @@ namespace GTMillGameLogic
             return !(direction == 0 && position.y == 1) //you cant jump horizontal
                     && !(direction == 1 && position.x == 1) //you cant jump vertical
                     && !(direction == 2 && (
-                    position.x == 2 || position.y == 2
-                    || position.x == 0 || position.y == 0) //we can only jump diagonal from there
+                    (position.x == 0 && position.y == 0)
+                    || (position.x == 2 && position.y == 2)
+                    || (position.x == 0 && position.y == 2)
+                    || (position.x == 2 && position.y == 0)) //we can only jump diagonal from there
             ); 
         }
 
@@ -269,11 +271,6 @@ namespace GTMillGameLogic
                         if (!this.horizontal3Pieces.Contains(neighbours.Item1.First().Item1))
                         {
                             GTMillPosition freePos = neighbours.Item3.First();
-                            
-                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
-                            {
-                                this.horizontal3Pieces.Add(element.Item1);
-                            }
 
                             for (int i = 0; i < 3; ++i)
                             {
@@ -289,6 +286,11 @@ namespace GTMillGameLogic
                                         foreach (Tuple<GTMillGameElement, bool> ownElement in ownOrtogonalNeighbours)
                                         {
                                             this.horizontal3Pieces.Add(ownElement.Item1);
+                                        }
+
+                                        foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
+                                        {
+                                            this.horizontal3Pieces.Add(element.Item1);
                                         }
 
                                         this.threePiecesConfiguration++;
@@ -313,11 +315,6 @@ namespace GTMillGameLogic
                         {
                             GTMillPosition freePos = neighbours.Item3.First();
 
-                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
-                            {
-                                this.vertical3Pieces.Add(element.Item1);
-                            }
-
                             for (int i = 0; i < 3; ++i)
                             {
                                 if (i != direction)
@@ -332,6 +329,11 @@ namespace GTMillGameLogic
                                         foreach (Tuple<GTMillGameElement, bool> ownElement in ownOrtogonalNeighbours)
                                         {
                                             this.vertical3Pieces.Add(ownElement.Item1);
+                                        }
+
+                                        foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
+                                        {
+                                            this.vertical3Pieces.Add(element.Item1);
                                         }
 
                                         this.threePiecesConfiguration++;
@@ -356,11 +358,6 @@ namespace GTMillGameLogic
                         {
                             GTMillPosition freePos = neighbours.Item3.First();
 
-                            foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
-                            {
-                                this.diagonal3Pieces.Add(element.Item1);
-                            }
-
                             for (int i = 0; i < 3; ++i)
                             {
                                 if (i != direction)
@@ -375,6 +372,11 @@ namespace GTMillGameLogic
                                         foreach (Tuple<GTMillGameElement, bool> ownElement in ownOrtogonalNeighbours)
                                         {
                                             this.diagonal3Pieces.Add(ownElement.Item1);
+                                        }
+
+                                        foreach (Tuple<GTMillGameElement, bool> element in neighbours.Item1)
+                                        {
+                                            this.diagonal3Pieces.Add(element.Item1);
                                         }
 
                                         this.threePiecesConfiguration++;

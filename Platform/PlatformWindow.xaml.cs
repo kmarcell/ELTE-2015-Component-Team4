@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
+using GUIImplementation;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -235,6 +236,9 @@ namespace Platform
         private void GuiMenuItemOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             var headerName = ((MenuItem)routedEventArgs.Source).Header.ToString();
+
+            GameContentControl.Content = _MGameManager.GameGuiList.First(x => x.GuiName == headerName);
+            GameContentControl.Width = GameContentControl.Height = 500;
             _MGameManager.SetCurrentGui(_MGameManager.GameGuiList.First(x => x.GuiName == headerName));
 
             _GuiListMenuItems.ForEach(item =>
@@ -522,7 +526,10 @@ namespace Platform
                 _GameListMenuItems.Add(menuItem);
             }
 
-            _GameListMenuItems.First().IsChecked = true;
+            if(_GameListMenuItems.Any())
+                _GameListMenuItems.First().IsChecked = true;
+            else
+                PrintStatusBarMessage("GameLogic could not be loaded, GameLogic in the directory could not be found, game not possible!");
         }
 
         private void LoadGui()
@@ -546,14 +553,20 @@ namespace Platform
 
             //_MGameManager.InitializeGui(guiDirectory);
 
+            var ligthGui = new LightGUI {Width = 500, Height = 500};
+            var darkGui = new DarkGUI {Width = 500, Height = 500};
+            ligthGui.InvalidateVisual();
+            darkGui.InvalidateVisual();
+
             var guiList = new List<GTGuiInterface>
             {
-                new GUIImplementation.LightGUI(),
-                new GUIImplementation.DarkGUI()
+                ligthGui,
+                darkGui
             };
             
             _MGameManager.InitializeGui(guiList);
-            GameContentControl = (UserControl)guiList.First();
+            GameContentControl.Content = guiList.First();
+            GameContentControl.Width = GameContentControl.Height = 500;
 
             foreach (var gameGui in _MGameManager.GameGuiList)
             {

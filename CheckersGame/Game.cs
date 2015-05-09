@@ -46,10 +46,7 @@ namespace CheckersGame
             AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition>)artificialIntelligence;
         }
 
-        public void RegisterGui(GTGuiInterface gui)
-        {
-            GUI = gui;
-            byte[,] damaBackGround = { 
+        byte[,] damaBackGround = { 
                 { 12, 11, 12, 11, 12, 11, 12, 11 }, 
                 { 11, 12, 11, 12, 11, 12, 11, 12 },
                 { 12, 11, 12, 11, 12, 11, 12, 11 }, 
@@ -58,7 +55,7 @@ namespace CheckersGame
                 { 11, 12, 11, 12, 11, 12, 11, 12 },
                 { 12, 11, 12, 11, 12, 11, 12, 11 }, 
                 { 11, 12, 11, 12, 11, 12, 11, 12 }};
-            byte[,] damaField = { 
+        byte[,] damaField = { 
                 { 0, 0, 0, 0, 0, 0, 0, 0 }, 
                 { 0, 0, 0, 0, 0, 0, 0, 0 }, 
                 { 0, 0, 0, 0, 0, 0, 0, 0 }, 
@@ -68,8 +65,19 @@ namespace CheckersGame
                 { 0, 0, 0, 0, 0, 0, 0, 0 },
                 { 0, 0, 0, 0, 0, 0, 0, 0 }};
 
+        public void RegisterGui(GTGuiInterface gui)
+        {
+            GUI = gui;
+
             GUI.SetFieldBackground(damaBackGround);
             GUI.SetField(damaField);
+            GUI.FieldClicked += GuiOnFieldClicked;
+        }
+
+        private void GuiOnFieldClicked(GTGuiInterface gui, int row, int column)
+        {
+            damaField[row, column] = (byte)((damaField[row, column] + 1) % 3);
+            gui.SetField(damaField);
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)

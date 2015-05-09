@@ -1,7 +1,8 @@
 ﻿<Window x:Class="Platform.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Platform" Height="500" Width="525">
+        xmlns:guiImplementation="clr-namespace:GUIImplementation;assembly=GUIImplementation"
+        Title="Platform" Height="600" Width="525">
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -37,8 +38,7 @@
                 <MenuItem Name="LeaveOnlineGameMenuItem" Header="Leave Game" Click="LeaveGameMenuItem_Click" />
             </MenuItem>
         </Menu>
-        <ContentControl Grid.Row="1" Name="GameContentControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            
+        <ContentControl Grid.Row="1" Name="GameContentControl" Width="500" Height="500">
         </ContentControl>
         <StatusBar Name="MainStatusBar" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <StatusBarItem>

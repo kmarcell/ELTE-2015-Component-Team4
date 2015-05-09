@@ -16,7 +16,7 @@ namespace Platform.Model.Interface
         /// <summary>
         /// The instance of the currently loaded (selected) GameLogic in the platfrom.
         /// </summary>
-        IGTGameLogicInterface CurrentGame { get; }
+        GTGameInterface CurrentGame { get; }
 
         /// <summary>
         /// The instance of the currently loaded (selected) Gui in the platfrom.
@@ -36,7 +36,7 @@ namespace Platform.Model.Interface
         /// <summary>
         /// The list of available GameLogic instances in the platform.
         /// </summary>
-        List<IGTGameLogicInterface> GameLogicList { get; }
+        List<GTGameInterface> GameLogicList { get; }
         #endregion
 
 
@@ -61,11 +61,11 @@ namespace Platform.Model.Interface
 
         #region initialize components
         /// <summary>
-        /// Load the <see cref="IGTGameLogicInterface"/> components from DLL from the given directory.
+        /// Load the <see cref="GTGameInterface"/> components from DLL from the given directory.
         /// Create instance of all Game, and register in <see cref="GameLogicList"/>.
         /// Select one, register <see cref="GTGuiInterface"/> for it and register <see cref="IGameManager"/> instance.
         /// </summary>
-        /// <param name="gameLogicDirectory">The directory where the <see cref="IGTGameLogicInterface"/> components should be.</param>
+        /// <param name="gameLogicDirectory">The directory where the <see cref="GTGameInterface"/> components should be.</param>
         void InitializeGameLogic(string gameLogicDirectory);
 
         /// <summary>
@@ -92,10 +92,10 @@ namespace Platform.Model.Interface
 
         #region set component
         /// <summary>
-        /// Set current GameLogic which is set after selecting in the Platform Gui <see cref="IGTGameLogicInterface"/>.
+        /// Set current GameLogic which is set after selecting in the Platform Gui <see cref="GTGameInterface"/>.
         /// </summary>
-        /// <param name="game">The currently selected <see cref="IGTGameLogicInterface"/>.</param>
-        void SetCurrentGame(IGTGameLogicInterface game);
+        /// <param name="game">The currently selected <see cref="GTGameInterface"/>.</param>
+        void SetCurrentGame(GTGameInterface game);
 
         /// <summary>
         /// Set current Gui which is set after selecting in the Platform Gui <see cref="GTGuiInterface"/> and register in the GameLogic.

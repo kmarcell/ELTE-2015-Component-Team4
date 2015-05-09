@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GameEvents\GameStateChangedEventArgs.cs" />
+    <Compile Include="GTGameInterface.cs" />
     <Compile Include="GTGuiInterface.cs" />
     <Compile Include="GTPlatformManagerInterface.cs" />
     <Compile Include="GTPlayerInterface.cs" />

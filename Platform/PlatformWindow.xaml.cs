@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
+using GUIImplementation;
 using Platform.Model;
 using Platform.WindowGameRelated;
 using Platform.WindowServerRelated;
@@ -31,6 +32,8 @@ namespace Platform
         private readonly GameManager _MGameManager;
         private GameConfigurationWindow _MGameConfigurationWindow;
         private Boolean _IsAiAiGameStarted;
+        private GTGuiInterface _MCurrenGui;
+        private List<GTGuiInterface> _GuiList;
 
         private const String LogfileName = "platform.log";
         private String LogMessagePrefix
@@ -235,8 +238,12 @@ namespace Platform
         private void GuiMenuItemOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             var headerName = ((MenuItem)routedEventArgs.Source).Header.ToString();
-            _MGameManager.SetCurrentGui(_MGameManager.GameGuiList.First(x => x.GuiName == headerName));
 
+            _MCurrenGui = CreateSelectedGui(_MGameManager.GameGuiList.First(x => x.GuiName == headerName).GuiName);
+            GameContentControl.Content = _MCurrenGui;
+            GameContentControl.Width = GameContentControl.Height = 500;
+            _MGameManager.SetCurrentGui(_MCurrenGui);
+            
             _GuiListMenuItems.ForEach(item =>
             {
                 item.IsChecked = item.Header.ToString() == headerName;
@@ -247,6 +254,9 @@ namespace Platform
         {
             var headerName = ((MenuItem)routedEventArgs.Source).Header.ToString();
             _MGameManager.SetCurrentGame(_MGameManager.GameLogicList.First(x => x.Name == headerName));
+            _MCurrenGui = CreateSelectedGui(_MCurrenGui.GuiName);
+            GameContentControl.Content = _MCurrenGui;
+            _MGameManager.SetCurrentGui(_MCurrenGui);
 
             _GameListMenuItems.ForEach(item =>
             {
@@ -255,6 +265,15 @@ namespace Platform
         }
         #endregion
 
+        private GTGuiInterface CreateSelectedGui(string guiName)
+        {
+            var newGuiType = _GuiList.First(x => x.GuiName == guiName).GetType();
+            var newGui = (GTGuiInterface) Activator.CreateInstance(newGuiType);
+            var control = (AbstractGUIControl)newGui;
+            control.Width = 500;
+            control.Height = 500;
+            return newGui;
+        }
 
         #region Gamemanager events
         private void MGameManager_OnGameStartedEvent(object sender, EventArgs eventArgs)
@@ -522,7 +541,10 @@ namespace Platform
                 _GameListMenuItems.Add(menuItem);
             }
 
-            _GameListMenuItems.First().IsChecked = true;
+            if(_GameListMenuItems.Any())
+                _GameListMenuItems.First().IsChecked = true;
+            else
+                PrintStatusBarMessage("GameLogic could not be loaded, GameLogic in the directory could not be found, game not possible!");
         }
 
         private void LoadGui()
@@ -546,15 +568,22 @@ namespace Platform
 
             //_MGameManager.InitializeGui(guiDirectory);
 
-            var guiList = new List<GTGuiInterface>
-            {
-                new GUIImplementation.LightGUI(),
-                new GUIImplementation.DarkGUI()
-            };
-            
-            _MGameManager.InitializeGui(guiList);
-            GameContentControl = (UserControl)guiList.First();
+            var ligthGui = new LightGUI {Width = 500, Height = 500};
+            var darkGui = new DarkGUI {Width = 500, Height = 500};
+            ligthGui.InvalidateVisual();
+            darkGui.InvalidateVisual();
 
+            _GuiList = new List<GTGuiInterface>
+            {
+                ligthGui,
+                darkGui
+            };
+
+            _MGameManager.InitializeGui(_GuiList);
+            GameContentControl.Content = _GuiList.First();
+            GameContentControl.Width = GameContentControl.Height = 500;
+            _MCurrenGui = _GuiList.First();
+            
             foreach (var gameGui in _MGameManager.GameGuiList)
             {
                 var menuItem = new MenuItem

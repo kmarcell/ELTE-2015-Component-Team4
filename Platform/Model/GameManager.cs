@@ -234,6 +234,8 @@ namespace Platform.Model
         public void SetCurrentGame(GTGameInterface game)
         {
             CurrentGame = game;
+            CurrentGame.RegisterGameManager(this);
+            CurrentGame.SendGameStateChangedEventArg += RecieveGameStateFromLogic;
         }
 
         /// <summary>

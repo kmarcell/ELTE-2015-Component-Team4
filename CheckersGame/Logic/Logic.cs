@@ -20,12 +20,14 @@ namespace CheckersGame.Logic
 		// Input
 		public void init()
 		{
-            StartingStateBuilder.BuildStartingState(state); 
+            StartingStateBuilder.BuildStartingState(state);
+            StepSupervisor.RefreshState(state);
 		}
 
         public void updateGameSpace(GTGameStepInterface<Element, Position> step)
 		{
-			state.mutateStateWith(step);
+            if (StepSupervisor.IsValidStep(state, (Step)step))
+			    state.mutateStateWith(step);
 		}
 
 		// Output

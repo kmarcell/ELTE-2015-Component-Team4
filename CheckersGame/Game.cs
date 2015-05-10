@@ -16,6 +16,7 @@ namespace CheckersGame
         private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition> AI;
         private GTGuiInterface GUI;
         private Logic.Logic logic;
+        private Step step;
 
 		public Game()
         {
@@ -77,8 +78,23 @@ namespace CheckersGame
 
         private void GuiOnFieldClicked(GTGuiInterface gui, int row, int column)
         {
-            damaField[row, column] = (byte)((damaField[row, column] + 1) % 3);
-            gui.SetField(damaField);
+            if (step == null)
+            {
+                Position pos = new Position(7 - row, column);
+                if (logic.getCurrentState().hasElementAt(pos))
+                {
+                    step = new Step(logic.getCurrentState().elementAt(pos), pos, null);
+                }
+            }
+            else
+            {
+                Position pos = new Position(7 - row, column);
+                step = new Step(step.element, step.from, pos);
+                logic.updateGameSpace(step);
+                step = null;
+            }
+
+            gui.SetField(StateToBytes(logic.getCurrentState()));
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)

@@ -18,6 +18,9 @@ namespace GTInterfacesLibrary
         int figuresRemaining {get; set;}
         int figuresLost { get; set; }
 
+        bool isAI { get; }
+        GTArtificialIntelligenceInterface<E, P> ai { get; }
+
     }
 
 	public class GTPlayer<E, P> : GTPlayerInterface<E, P>
@@ -89,6 +92,22 @@ namespace GTInterfacesLibrary
             player.id = id;
             player.ai = ai;
             return player;
+        }
+
+        public bool isAI()
+        {
+            return ai != null;
+        }
+
+
+        bool GTPlayerInterface<E, P>.isAI
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        GTArtificialIntelligenceInterface<E, P> GTPlayerInterface<E, P>.ai
+        {
+            get { return ai; }
         }
     }
 }

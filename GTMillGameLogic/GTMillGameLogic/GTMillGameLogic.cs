@@ -1,8 +1,10 @@
-﻿using System;
-using GTInterfacesLibrary;
+﻿using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
+using GTInterfacesLibrary.GameEvents;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace GTMillGameLogic
 {
@@ -18,15 +20,30 @@ namespace GTMillGameLogic
 		{
 		}
 
-		public void updateGameSpace (GTGameStepInterface<GTMillGameElement, GTMillPosition> step)
-		{
-			this._state.mutateStateWith (step);
-		}
+        public void updateGameSpace(GTGameStepInterface<GTMillGameElement, GTMillPosition> step)
+        {
+            this._state.mutateStateWith(step);
+        }
 
 		// Output
 		public Boolean isGameOver()
 		{
-			return false;
+            GTPlayerInterface<GTMillGameElement, GTMillPosition> player = this.nextPlayer;
+            if (player.figuresInitial - player.figuresLost <= 2)
+            {
+                // only 2 figures left
+                return true;
+            }
+
+            int choises = this.getStateGenerator().availableStatesFrom(_state, player).Result.Count;
+            if (choises == 0)
+            {
+                // no more steps
+                return true;
+            }
+
+            return false;
+
 		}
 
 		public GTGameSpaceInterface<GTMillGameElement, GTMillPosition> getCurrentState()
@@ -74,6 +91,14 @@ namespace GTMillGameLogic
 				}
 			}
 		}
+
+        // Private Game Management
+
+        private void makeStepWithAI(GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition> ai)
+        {
+            Task<GTGameStepInterface<GTMillGameElement, GTMillPosition>> task = ai.calculateNextStep(_state, this.getStateGenerator(), this.getStateHash());
+            this._state.mutateStateWith(task.Result);
+        }
 	}
 }
 

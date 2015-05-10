@@ -61,22 +61,19 @@ namespace GTMillGameLogic
                 { 10, 3, 9, 8, 9, 2, 10 },
                 { 3, 9, 9, 6, 9, 9, 2 }};
 
-        //byte[,] malomField { 
-        //    get {
-        byte[,] malomField =
-        { 
-            { 2, 2, 2, 2, 2, 2, 2 }, 
-            { 2, 2, 2, 2, 2, 2, 2 }, 
-            { 2, 2, 2, 2, 2, 2, 2 },
-            { 2, 2, 2, 2, 2, 2, 2 },
-            { 2, 2, 2, 2, 2, 2, 2 },
-            { 2, 2, 2, 2, 2, 2, 2 },
-            { 2, 2, 2, 2, 2, 2, 2 }};
-
-        //        return malomField;
-        //    }
-        //}
-
+        byte[,] malomField
+        {
+            get
+            {
+                return new byte[,] {{ 2, 2, 2, 2, 2, 2, 2 }, 
+                                    { 2, 2, 2, 2, 2, 2, 2 }, 
+                                    { 2, 2, 2, 2, 2, 2, 2 },
+                                    { 2, 2, 2, 2, 2, 2, 2 },
+                                    { 2, 2, 2, 2, 2, 2, 2 },
+                                    { 2, 2, 2, 2, 2, 2, 2 },
+                                    { 2, 2, 2, 2, 2, 2, 2 }};
+            }
+        }
 
         public void RegisterGui(GTGuiInterface gui)
         {
@@ -164,7 +161,7 @@ namespace GTMillGameLogic
                 return;
             }
 
-            GTMillGameSpace state = (GTMillGameSpace)_Logic.nextPlayer.ai.calculateNextStep(_Logic.getCurrentState(), _Logic.getStateGenerator(), _Logic.getStateHash()).Result;
+            GTMillGameSpace state = (GTMillGameSpace)this.AI.calculateNextStep(_Logic.getCurrentState(), _Logic.getStateGenerator(), _Logic.getStateHash()).Result;
             _Logic.SetState(state);
             _Gui.SetField(convertStateToField(state));
             _Logic.playerDidStep();
@@ -194,6 +191,31 @@ namespace GTMillGameLogic
         {
             if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)
             {
+                LoadGame(gameStateChangedEventArgs.GameState);
+                GTMillGameSpace currentState = (GTMillGameSpace)_Logic.getCurrentState();
+                _Gui.SetField(convertStateToField(currentState));
+                _Logic.playerDidStep();
+                stepWithNextUser();
+            }
+            if (gameStateChangedEventArgs.GamePhase == GamePhase.Started)
+            {
+                if (gameStateChangedEventArgs.GameType == GameType.Local)
+                {
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1));
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 2));
+                }
+                else if (gameStateChangedEventArgs.GameType == GameType.Ai)
+                {
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 1));
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 2));
+                }
+                else if (gameStateChangedEventArgs.GameType == GameType.Online)
+                {
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1));
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(2));
+                }
+
+                stepWithNextUser();
             }
         }
 

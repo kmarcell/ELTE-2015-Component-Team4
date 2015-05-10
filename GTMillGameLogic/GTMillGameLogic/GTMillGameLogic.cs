@@ -20,6 +20,11 @@ namespace GTMillGameLogic
 		{
 		}
 
+        public void addPlayer(GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+        {
+            _players.Add(player);
+        }
+
         public void updateGameSpace(GTGameStepInterface<GTMillGameElement, GTMillPosition> step)
         {
             this._state.mutateStateWith(step);

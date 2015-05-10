@@ -53,26 +53,26 @@ namespace GTMillGameLogic
                 { 10, 3, 9, 8, 9, 2, 10 },
                 { 3, 9, 9, 6, 9, 9, 2 }};
 
-        byte[,] malomField { 
-            get {
-                byte[,] malomField =
-                { 2, 2, 2, 2, 2, 2, 2 }, 
-                { 2, 2, 2, 2, 2, 2, 2 }, 
-                { 2, 2, 2, 2, 2, 2, 2 },
-                { 2, 2, 2, 2, 2, 2, 2 },
-                { 2, 2, 2, 2, 2, 2, 2 },
-                { 2, 2, 2, 2, 2, 2, 2 },
-                { 2, 2, 2, 2, 2, 2, 2 }
+        //byte[,] malomField { 
+        //    get {
+        byte[,] malomField =
+        { 
+            { 2, 2, 2, 2, 2, 2, 2 }, 
+            { 2, 2, 2, 2, 2, 2, 2 }, 
+            { 2, 2, 2, 2, 2, 2, 2 },
+            { 2, 2, 2, 2, 2, 2, 2 },
+            { 2, 2, 2, 2, 2, 2, 2 },
+            { 2, 2, 2, 2, 2, 2, 2 },
+            { 2, 2, 2, 2, 2, 2, 2 }};
 
-                return malomField;
-            }
-        }
+        //        return malomField;
+        //    }
+        //}
 
 
         public void RegisterGui(GTGuiInterface gui)
         {
             _Gui = gui;
-
             _Gui.SetFieldBackground(malomBackGround);
             _Gui.SetField(malomField);
             _Gui.FieldClicked += GuiOnFieldClicked;
@@ -114,7 +114,9 @@ namespace GTMillGameLogic
             }
 
             _Logic.updateGameSpace(step);
-            _Gui.SetField();
+
+            malomField = convertStateToField(newState);
+            _Gui.SetField(malomField);
 
             if (_Logic.isGameOver())
             {
@@ -197,14 +199,14 @@ namespace GTMillGameLogic
 
         byte[,] convertStateToField(GTMillGameSpace state)
         {
-            byte[,] field;
+            byte[,] field = malomField;
             foreach (KeyValuePair<GTMillPosition, GTMillGameElement> kv in state)
             {
                 GTMillPosition p = kv.Key;
-                int row;
-                int column;
+                int row = (3-p.z) * p.x + p.z;
+                int column = (3-p.z) * p.y + p.z;
 
-                throw new NotImplementedException();
+                field[row, column] = (byte)kv.Value.id;
             }
 
             return field;

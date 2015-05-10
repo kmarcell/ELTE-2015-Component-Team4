@@ -214,7 +214,7 @@ namespace Platform.Model
         /// </remarks>
         public void EndGame()
         {
-            SendMessage(MessageCode.EndGame, PlayerName);
+            SendMessage(MessageCode.EndGame, string.Empty);
         }
         #endregion
 

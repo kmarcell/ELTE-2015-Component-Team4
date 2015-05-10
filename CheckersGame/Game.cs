@@ -109,8 +109,23 @@ namespace CheckersGame
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
         {
-            if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)
+            if (gameStateChangedEventArgs.GamePhase == GamePhase.Started)
             {
+                if (gameStateChangedEventArgs.GameType == GameType.Local)
+                {
+                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
+                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(this.AI, 2));
+                }
+                else if (gameStateChangedEventArgs.GameType == GameType.Ai)
+                {
+                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(this.AI, 1));
+                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(this.AI, 2));
+                }
+                else if (gameStateChangedEventArgs.GameType == GameType.Online)
+                {
+                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
+                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(2));
+                }
             }
         }
         public void LoadGame(byte[] gameState)

@@ -4,11 +4,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
+using System.Collections.Generic;
 
 namespace CheckersGame.Logic
 {
     public class Logic: GTGameLogicInterface<Element, Position>
     {
+        private List<GTPlayerInterface<Element, Position>> _players = new List<GTPlayerInterface<Element, Position>>();
+
 		public Logic()
         {
             init();
@@ -29,6 +32,11 @@ namespace CheckersGame.Logic
             if (StepSupervisor.IsValidStep(state, (Step)step))
 			    state.mutateStateWith(step);
 		}
+
+        public void addPlayer(GTPlayerInterface<Element, Position> player)
+        {
+            _players.Add(player);
+        }
 
 		// Output
 		public Boolean isGameOver()
@@ -55,7 +63,7 @@ namespace CheckersGame.Logic
 
         public GTPlayerInterface<Element, Position> nextPlayer
         {
-            get { throw new NotImplementedException(); }
+            get { return _players[state.nextPlayer]; }
         }
 
         public int gamePhase

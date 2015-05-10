@@ -53,13 +53,13 @@ namespace GTMillGameLogic
                 { 10, 3, 9, 8, 9, 2, 10 },
                 { 3, 9, 9, 6, 9, 9, 2 }};
         byte[,] malomField = { 
-                { 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0 }};
+                { 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2 },
+                { 2, 2, 2, 2, 2, 2, 2 },
+                { 2, 2, 2, 2, 2, 2, 2 },
+                { 2, 2, 2, 2, 2, 2, 2 },
+                { 2, 2, 2, 2, 2, 2, 2 }};
 
 
         public void RegisterGui(GTGuiInterface gui)
@@ -73,6 +73,9 @@ namespace GTMillGameLogic
 
         private void GuiOnFieldClicked(GTGuiInterface gui, int row, int column)
         {
+            if (malomBackGround[row, column] == 9 || malomBackGround[row, column] == 10 || malomBackGround[row, column] == 11)
+                return;
+
             malomField[row, column] = (byte)((malomField[row, column] + 1) % 3);
             gui.SetField(malomField);
         }

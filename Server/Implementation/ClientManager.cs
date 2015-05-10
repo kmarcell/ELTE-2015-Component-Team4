@@ -230,7 +230,7 @@ namespace Server.Implementation
         /// <param name="playerName">The name of the winner.</param>
         public void SendEndGame(String playerName)
         {
-            if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
+            if (CurrentGame != null && CurrentGame.Phase != GamePhase.Ended)
             {
                 DataManager.DataManagerInstance.EndGame(CurrentGame, Player, playerName);
             }

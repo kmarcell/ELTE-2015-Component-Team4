@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
 using GTInterfacesLibrary.MessageTypes;
+using CheckersGame.Logic;
 
 namespace CheckersGame
 {
@@ -43,34 +44,34 @@ namespace CheckersGame
 
         public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition>)artificialIntelligence;
+            //AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition>)artificialIntelligence;
         }
 
         byte[,] damaBackGround = { 
-                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
-                { 11, 12, 11, 12, 11, 12, 11, 12 },
-                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
-                { 11, 12, 11, 12, 11, 12, 11, 12 },
-                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
-                { 11, 12, 11, 12, 11, 12, 11, 12 },
-                { 12, 11, 12, 11, 12, 11, 12, 11 }, 
-                { 11, 12, 11, 12, 11, 12, 11, 12 }};
+                { 11, 12, 11, 12, 11, 12, 11, 12 }, 
+                { 12, 11, 12, 11, 12, 11, 12, 11 },
+                { 11, 12, 11, 12, 11, 12, 11, 12 }, 
+                { 12, 11, 12, 11, 12, 11, 12, 11 },
+                { 11, 12, 11, 12, 11, 12, 11, 12 }, 
+                { 12, 11, 12, 11, 12, 11, 12, 11 },
+                { 11, 12, 11, 12, 11, 12, 11, 12 }, 
+                { 12, 11, 12, 11, 12, 11, 12, 11 }};
         byte[,] damaField = { 
-                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 }};
+                { 2, 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2, 2 }, 
+                { 2, 2, 2, 2, 2, 2, 2, 2 },
+                { 2, 2, 2, 2, 2, 2, 2, 2 }};
 
         public void RegisterGui(GTGuiInterface gui)
         {
             GUI = gui;
 
             GUI.SetFieldBackground(damaBackGround);
-            GUI.SetField(damaField);
+            GUI.SetField(StateToBytes(logic.getCurrentState()));
             GUI.FieldClicked += GuiOnFieldClicked;
         }
 
@@ -94,6 +95,29 @@ namespace CheckersGame
         public byte[] SaveGame()
         {
             throw new NotImplementedException();
+        }
+
+        public byte[,] StateToBytes(GTGameSpaceInterface<CheckersGame.Logic.Element, CheckersGame.Logic.Position> state)
+        {
+            byte[,] bytes = new byte[8, 8];
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    bytes[i, j] = 2;
+                }
+            }
+
+            foreach (KeyValuePair<Position, Element> pair in state)
+            {
+                IPosition pos = pair.Key;
+                GTGameSpaceElementInterface element = pair.Value;
+                if (element.owner == 1)
+                    bytes[7 - pos.coordinates()[0], pos.coordinates()[1]] = 0;
+                else
+                    bytes[7 - pos.coordinates()[0], pos.coordinates()[1]] = 1;
+            }
+            return bytes;
         }
     }
 }

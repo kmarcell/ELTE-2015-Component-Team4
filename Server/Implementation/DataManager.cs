@@ -238,6 +238,10 @@ namespace Server.Implementation
                         ServerManager.ServerManagerInstance.MessagePlayer(game.SecondPlayer, MessageCode.EndGame, game);
                     }
                 }
+                else
+                {
+                    ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.EndGame, game);
+                }
 
                 _OnlineGames.Remove(game);
                 WriteLog("Game deleted from OnlineGames: {0}", game.ToString());

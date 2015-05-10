@@ -5,9 +5,9 @@
     <Grid>
         <DataGrid Name="OnlineGamesDataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="183" Margin="10,53,0,0" VerticalAlignment="Top" Width="367" SelectionMode="Single" SelectionUnit="FullRow">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Game name" IsReadOnly="True" Width="130" />
+                <DataGridTextColumn Binding="{Binding TypeName}" Header="Game name" IsReadOnly="True" Width="130" />
                 <DataGridTextColumn Binding="{Binding FirstPlayer}" Header="PlayerTypeName" IsReadOnly="True" Width="140" />
-                <DataGridTextColumn Binding="{Binding Description}" Header="About" IsReadOnly="True" Width="140" />
+                <DataGridTextColumn Binding="{Binding TypeDescription}" Header="About" IsReadOnly="True" Width="140" />
             </DataGrid.Columns>
         </DataGrid>
         <Button Name="ConnectGameButton" Content="Connect Game" HorizontalAlignment="Left" Margin="10,242,0,0" VerticalAlignment="Top" Width="367" Click="ConnectGameButton_Click"/>

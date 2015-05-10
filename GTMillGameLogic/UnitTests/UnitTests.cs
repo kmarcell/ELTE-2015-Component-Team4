@@ -76,10 +76,13 @@ namespace UnitTests
         {
 
             // given
-            GTPlayer<GTMillGameElement, GTMillPosition> player = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            GTPlayerInterface<GTMillGameElement, GTMillPosition> player = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1);
+            player.figuresInitial = 9;
+            player.figuresRemaining = 0;
+            player.figuresLost = 5;
 
             GTMillGameSpace state = new GTMillGameSpace();
-            GTMillGameElement figure1 = new GTMillGameElement(1, 1, 1);
+            GTMillGameElement figure1 = new GTMillGameElement(1, 1, player.id);
             GTMillPosition position1 = new GTMillPosition(0, 0, 0);
             state.setElementAt(position1, figure1);
 
@@ -102,10 +105,13 @@ namespace UnitTests
         {
 
             // given
-            GTPlayer<GTMillGameElement, GTMillPosition> player = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            GTPlayerInterface<GTMillGameElement, GTMillPosition> player = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1);
+            player.figuresInitial = 9;
+            player.figuresRemaining = 0;
+            player.figuresLost = 5;
 
             GTMillGameSpace state = new GTMillGameSpace();
-            GTMillGameElement figure1 = new GTMillGameElement(1, 1, 1);
+            GTMillGameElement figure1 = new GTMillGameElement(1, 1, player.id);
             GTMillPosition position1 = new GTMillPosition(2, 1, 0);
             state.setElementAt(position1, figure1);
 

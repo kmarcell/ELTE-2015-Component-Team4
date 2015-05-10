@@ -13,7 +13,6 @@ namespace GTMillGameLogic
 		{
 			this.gameField = new Dictionary<GTMillPosition, GTMillGameElement> ();
 		}
-
 		public Boolean hasElementAt (GTMillPosition position)
 		{
 			return this.gameField.ContainsKey(position);
@@ -57,7 +56,13 @@ namespace GTMillGameLogic
 		{
 			return this.gameField.GetEnumerator ();
 		}
-	}
+
+
+        GTPlayerInterface<GTMillGameElement, GTMillPosition> GTGameSpaceInterface<GTMillGameElement, GTMillPosition>.getNextPlayer()
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 }
 

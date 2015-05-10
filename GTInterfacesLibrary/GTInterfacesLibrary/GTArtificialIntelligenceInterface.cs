@@ -16,7 +16,8 @@ namespace GTInterfacesLibrary
 	{
 		/**
 		 *  Implement this function with async directive.
-		 async*/ Task<GTGameStepInterface<E, P>> calculateNextStep(GTGameSpaceInterface<E, P> gameSpace, GTGameStateGeneratorInterface<E, P> generator, GTGameStateHashInterface<E, P> hash);
+		 async*/
+        Task<GTGameSpaceInterface<E, P>> calculateNextStep(GTGameSpaceInterface<E, P> gameSpace, GTGameStateGeneratorInterface<E, P> generator, GTGameStateHashInterface<E, P> hash);
 	}
 
     public interface IGTArtificialIntelligenceInterface

@@ -18,6 +18,7 @@ namespace ArtificialIntelligence
         {
             TaskReturnType best= null;
             int bestValue = int.MinValue;
+            GTPlayerInterface<GTGameSpaceElementInterface, IPosition> actualPlayer = gameSpace.getNextPlayer();
 
             Task<List<TaskReturnType>> listTask = generator.availableStatesFrom(gameSpace, gameSpace.getNextPlayer());
 
@@ -27,7 +28,7 @@ namespace ArtificialIntelligence
 
             foreach (TaskReturnType item in states)
             {
-                int current = hash.evaluateState(item, item.getNextPlayer());
+                int current = hash.evaluateState(item, actualPlayer);
                 if (current > bestValue)
                 {
                     best = item;

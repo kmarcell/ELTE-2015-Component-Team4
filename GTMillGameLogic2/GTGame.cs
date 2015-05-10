@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
-using 
+using ArtificialIntelligence;
 
 namespace GTMillGameLogic
 {
     public class GTGame : GTGameInterface
     {
         private GTPlatformManagerInterface _PlatformGameManager;
-        private GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition> AI;
+        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> AI;
         private GTGuiInterface _Gui;
         private readonly GTMillGameLogic _Logic;
         private GTMillPosition selectedPosition;
@@ -200,15 +200,18 @@ namespace GTMillGameLogic
             }
             if (gameStateChangedEventArgs.GamePhase == GamePhase.Started)
             {
+                this.AI = new CorrectAi();
+                GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition> ai = (GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition>)this.AI;
+
                 if (gameStateChangedEventArgs.GameType == GameType.Local)
                 {
                     _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1));
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 2));
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(ai, 2));
                 }
                 else if (gameStateChangedEventArgs.GameType == GameType.Ai)
                 {
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 1));
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 2));
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(ai, 1));
+                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(ai, 2));
                 }
                 else if (gameStateChangedEventArgs.GameType == GameType.Online)
                 {

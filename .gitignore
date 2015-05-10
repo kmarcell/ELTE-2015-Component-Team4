@@ -12,5 +12,6 @@ GTMillGameLogic/GTMillGameLogicTests/obj/Debug
 *.csproj.FileListAbsolute.txt
 *.suo
 *.DotSettings.user.orig
+*.sln.DotSettings.user
 bin/
 obj/

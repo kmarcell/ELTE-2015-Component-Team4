@@ -30,22 +30,23 @@ namespace CheckersGame.Logic
 
         public void mutateStateWith(GTGameStepInterface<Element, Position> step)
         {
-            elements.Remove(step.from);
-            elements.Add(step.to, step.element);
-
             Step s = new Step(step.element, step.from, step.to);
-
-            if (StepSupervisor.IsStepToKingsRow(s))
-                step.element.type = 1;
-            
             if (s.IsCapture())
             {
                 Position pos = StepSupervisor.CapturedElementPos(s);
                 elements.Remove(pos);
+
+                //if (StepSupervisor.CanCapture())
+                //nextP = 1 - step.element.owner;
             }
 
-            if (!StepSupervisor.CanCapture())
-                nextP = 1 - step.element.owner;
+            elements.Remove(step.from);
+            elements.Add(step.to, step.element);
+
+            if (StepSupervisor.IsStepToKingsRow(s))
+                step.element.type = 1;
+
+            nextP = 1 - nextP;
 
             StepSupervisor.RefreshState(this);
         }

@@ -33,7 +33,9 @@ namespace CheckersGame.Logic
 		// Output
 		public Boolean isGameOver()
 		{
-            return state.Count() == 1;
+            int whiteCount = state.Count(x => x.Value.owner == 1);
+            int blackCount = state.Count(x => x.Value.owner == 0);
+            return (whiteCount == 0 || blackCount == 0);
 		}
 
         public GTGameSpaceInterface<Element, Position> getCurrentState()

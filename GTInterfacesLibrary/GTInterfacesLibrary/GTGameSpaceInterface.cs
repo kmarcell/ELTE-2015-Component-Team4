@@ -15,6 +15,9 @@ namespace GTInterfacesLibrary
 		void setElementAt(P position, E element);
 		void mutateStateWith(GTGameStepInterface<E, P> step);
 		GTGameSpaceInterface<E, P> stateWithStep(GTGameStepInterface<E, P> step);
+
+        GTPlayerInterface<E, P> getNextPlayer();
+
 	}
 }
 

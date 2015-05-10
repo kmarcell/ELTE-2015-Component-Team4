@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform", "Platform\Platform.csproj", "{B8F21F68-414C-4525-9765-34479994C7FE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUIImplementation", "GUIImplementation\GUIImplementation.csproj", "{37D59D2A-42F0-4819-8FCA-11F2F8DE2A08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUILibrary", "GUILibrary\GUILibrary.csproj", "{A632C624-748C-4094-A17A-8B2C108BB1B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtificialIntelligence", "ArtificialIntelligence\ArtificialIntelligence.csproj", "{363B5CAE-8425-4125-93B1-58CDF04B2891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,10 @@ Global
 		{A632C624-748C-4094-A17A-8B2C108BB1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A632C624-748C-4094-A17A-8B2C108BB1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A632C624-748C-4094-A17A-8B2C108BB1B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363B5CAE-8425-4125-93B1-58CDF04B2891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363B5CAE-8425-4125-93B1-58CDF04B2891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363B5CAE-8425-4125-93B1-58CDF04B2891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363B5CAE-8425-4125-93B1-58CDF04B2891}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -92,5 +92,11 @@ namespace CheckersGame.Logic
                 return 0;
             }
         }
+
+
+        public GTPlayerInterface<Element, Position> getNextPlayer()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

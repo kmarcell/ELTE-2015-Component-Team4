@@ -299,6 +299,11 @@ namespace Platform
 
         private void MGameManager_OnGameEndedEvent(object sender, GameEndedEventArgs eventArgs)
         {
+            if (_MGameManager.MGameType == GameType.Online)
+            {
+                return;
+            }
+
             if (eventArgs.IsEnded && eventArgs.IsWin)
             {
                 MessageBox.Show("Game finished. Congratulation you won!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);     

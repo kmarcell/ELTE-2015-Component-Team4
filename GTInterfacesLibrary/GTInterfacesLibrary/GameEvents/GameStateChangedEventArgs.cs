@@ -10,7 +10,8 @@ namespace GTInterfacesLibrary.GameEvents
         Opened,
         Started,
         Playing,
-        Ended
+        Ended,
+        Cancelled
     }
 
     /// <summary>

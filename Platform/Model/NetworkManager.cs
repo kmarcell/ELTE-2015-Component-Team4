@@ -333,7 +333,7 @@ namespace Platform.Model
                         {
                             if (game != null)
                             {
-                                game.Phase = GamePhase.Ended;
+                                game.Phase = GamePhase.Cancelled;
                                 GameStatusReceived(this, new GameEventArgs { Game = game });
                                 GameCancelledEvent(this, new GameEventArgs { Game = game });
                             }

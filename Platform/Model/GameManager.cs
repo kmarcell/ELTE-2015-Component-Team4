@@ -27,7 +27,7 @@ namespace Platform.Model
         /// <summary>
         /// The type of the started game.
         /// </summary>
-        private GameType _MGameType;
+        public GameType MGameType;
         #endregion
 
 
@@ -42,7 +42,7 @@ namespace Platform.Model
             GameGuiList = new List<GTGuiInterface>();
             GameLogicList = new List<GTGameInterface>();
 
-            _MGameType = GameType.Online;
+            MGameType = GameType.Online;
             _MNetworkManager = networkManager;
             _MNetworkManager.GameStatusReceived += RecieveGameStateFromNetwork;
         }
@@ -135,7 +135,7 @@ namespace Platform.Model
                 GameLogicList.Add(gameLogicObject);
             }
 
-            _MGameType = GameType.Online;
+            MGameType = GameType.Online;
             CurrentGame = GameLogicList.First();
             CurrentGame.RegisterGameManager(this);
             CurrentGame.RegisterGui(CurrentGui);
@@ -259,13 +259,19 @@ namespace Platform.Model
             var isMyTurn = eventArgs.Game.PlayerTurn == _MNetworkManager.PlayerName;
             var isWon = eventArgs.Game.Winner != null && (eventArgs.Game.Winner == _MNetworkManager.PlayerName);
 
-
+            if (eventArgs.Game.Phase == GamePhase.Cancelled)
+            {
+                GameEndedEvent(this, new GameEndedEventArgs { IsEnded = false, IsWin = _MNetworkManager.CurrentGame != null && _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });
+            }
             if (eventArgs.Game.Phase == GamePhase.Ended)
             {
                 GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = _MNetworkManager.CurrentGame != null && _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });
             }
 
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, GameType = _MGameType });
+            if (_MNetworkManager.CurrentGame != null) 
+                _MNetworkManager.CurrentGame.Phase = GamePhase.Ended;
+
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, GameType = MGameType });
         }
 
         /// <summary>
@@ -275,7 +281,7 @@ namespace Platform.Model
         /// <param name="eventArgs">the game state represented eventargs with all fields</param>
         public void RecieveGameStateFromLogic(object sender, GameStateChangedEventArgs eventArgs)
         {
-            if (_MGameType != GameType.Online)
+            if (MGameType != GameType.Online)
             {
                 switch (eventArgs.GamePhase)
                 {
@@ -288,7 +294,7 @@ namespace Platform.Model
 
                     case GamePhase.Ended:
                         GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = eventArgs.IsWon });
-                        _MGameType = GameType.Online;
+                        MGameType = GameType.Online;
                         return;
                 }
 
@@ -325,9 +331,9 @@ namespace Platform.Model
         /// <param name="artificialIntelligence">The selected AI, one from the loaded ones.</param>
         public void StartLocalGame(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            _MGameType = GameType.Local;
+            MGameType = GameType.Local;
             CurrentGame.RegisterArtificialIntelligence(artificialIntelligence);
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = _MGameType });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = MGameType });
             GameStartedEvent(this, EventArgs.Empty);
         }
 
@@ -337,10 +343,10 @@ namespace Platform.Model
         /// </summary>
         public void StartAiAiGame()
         {
-            _MGameType = GameType.Ai;
+            MGameType = GameType.Ai;
             var randomToSelectAi = new Random().Next(0, ArtificialIntelligenceList.Count);
             CurrentGame.RegisterArtificialIntelligence(ArtificialIntelligenceList[randomToSelectAi]);
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = _MGameType });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = MGameType });
             GameStartedEvent(this, EventArgs.Empty);
         }
 
@@ -350,9 +356,9 @@ namespace Platform.Model
         /// </summary>
         public void EndLocalGame()
         {
-            _MGameType = GameType.Online;
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, GameType = _MGameType });
-            GameEndedEvent(this, new GameEndedEventArgs{ IsEnded = false, IsWin = false });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, GameType = MGameType });
+            GameEndedEvent(this, new GameEndedEventArgs { IsEnded = false, IsWin = false });
+            MGameType = GameType.Online;
         }
 
         /// <summary>
@@ -361,9 +367,9 @@ namespace Platform.Model
         /// </summary>
         public void EndAiAiGame()
         {
-            _MGameType = GameType.Online;
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, GameType = _MGameType });
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Ended, GameState = null, IsMyTurn = false, IsWon = false, GameType = MGameType });
             GameEndedEvent(this, new GameEndedEventArgs { IsEnded = false, IsWin = false });
+            MGameType = GameType.Online;
         }
 
         /// <summary>
@@ -390,7 +396,7 @@ namespace Platform.Model
 
             var data = File.ReadAllBytes(fileName);
             CurrentGame.LoadGame(data);
-            _MGameType = GameType.Local;
+            MGameType = GameType.Local;
         }
         #endregion
     }

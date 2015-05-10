@@ -16,29 +16,19 @@ namespace PlatformUnitTests
 
             Assert.IsTrue(GameManager.CurrentGame == null, "The current game is not null, adfer creating new instance of Gamemanager.");
 
-            const int firstGameId = 1;
-            const string firstGameName = "1Game";
-            const string firstGameDescription = "1GameDescription";
-            var testGame1 = new TestGame(firstGameId, firstGameName, firstGameDescription);
+            var testGame1 = GetFirstGame();
             GameManager.SetCurrentGame(testGame1);
             Assert.IsTrue(GameManager.CurrentGame != null, "Set current game failed.");
-            Assert.IsTrue(GameManager.CurrentGame.Id == firstGameId, "Set current game faild due to ID mismatch.");
-            Assert.IsTrue(GameManager.CurrentGame.Name == firstGameName, "Set current game failed due to Name mismatch.");
-            Assert.IsTrue(GameManager.CurrentGame.Description == firstGameDescription, "Set current game failed due ti Description mismatch.");
+            Assert.IsTrue(GameManager.CurrentGame.Id == testGame1.Id, "Set current game faild due to ID mismatch.");
+            Assert.IsTrue(GameManager.CurrentGame.Name == testGame1.Name, "Set current game failed due to Name mismatch.");
+            Assert.IsTrue(GameManager.CurrentGame.Description == testGame1.Description, "Set current game failed due ti Description mismatch.");
 
-
-            const int secondGameId = 2;
-            const string secondGameName = "2Game";
-            const string secondGameDescription = "2GameDescription";
-            var testGame2 = new TestGame(secondGameId, secondGameName, secondGameDescription);
+            var testGame2 = GetSecondGame();
             GameManager.SetCurrentGame(testGame2);
             Assert.IsTrue(GameManager.CurrentGame != null, "Set current game failed.");
-            Assert.IsTrue(GameManager.CurrentGame.Id == secondGameId, "Set current game faild due to ID mismatch.");
-            Assert.IsTrue(GameManager.CurrentGame.Name == secondGameName, "Set current game failed due to Name mismatch.");
-            Assert.IsTrue(GameManager.CurrentGame.Description == secondGameDescription, "Set current game failed due ti Description mismatch.");
-
-
-
+            Assert.IsTrue(GameManager.CurrentGame.Id == testGame2.Id, "Set current game faild due to ID mismatch.");
+            Assert.IsTrue(GameManager.CurrentGame.Name == testGame2.Name, "Set current game failed due to Name mismatch.");
+            Assert.IsTrue(GameManager.CurrentGame.Description == testGame2.Description, "Set current game failed due ti Description mismatch.");
         }
     }
 }

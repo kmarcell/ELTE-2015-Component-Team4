@@ -9,9 +9,10 @@ namespace GTMillGameLogic
     public class GTGame : GTGameInterface
     {
         private GTPlatformManagerInterface _PlatformGameManager;
-        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition> AI;
+        private GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition> AI;
         private GTGuiInterface _Gui;
         private readonly GTMillGameLogic _Logic;
+        private GTMillPosition selectedPosition;
 
         public GTGame()
         {
@@ -40,9 +41,8 @@ namespace GTMillGameLogic
 
         public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            //
+            // this.AI = new;
         }
-
 
         byte[,] malomBackGround = { 
                 { 0, 9, 9, 4, 9, 9, 1 }, 
@@ -52,14 +52,21 @@ namespace GTMillGameLogic
                 { 10, 10, 3, 4, 2, 10, 10 }, 
                 { 10, 3, 9, 8, 9, 2, 10 },
                 { 3, 9, 9, 6, 9, 9, 2 }};
-        byte[,] malomField = { 
+
+        byte[,] malomField { 
+            get {
+                byte[,] malomField =
                 { 2, 2, 2, 2, 2, 2, 2 }, 
                 { 2, 2, 2, 2, 2, 2, 2 }, 
                 { 2, 2, 2, 2, 2, 2, 2 },
                 { 2, 2, 2, 2, 2, 2, 2 },
                 { 2, 2, 2, 2, 2, 2, 2 },
                 { 2, 2, 2, 2, 2, 2, 2 },
-                { 2, 2, 2, 2, 2, 2, 2 }};
+                { 2, 2, 2, 2, 2, 2, 2 }
+
+                return malomField;
+            }
+        }
 
 
         public void RegisterGui(GTGuiInterface gui)
@@ -73,11 +80,71 @@ namespace GTMillGameLogic
 
         private void GuiOnFieldClicked(GTGuiInterface gui, int row, int column)
         {
-            if (malomBackGround[row, column] == 9 || malomBackGround[row, column] == 10 || malomBackGround[row, column] == 11)
+            if (malomBackGround[row, column] == 9
+                || malomBackGround[row, column] == 10
+                || malomBackGround[row, column] == 11)
+            {
                 return;
+            }
 
-            malomField[row, column] = (byte)((malomField[row, column] + 1) % 3);
-            gui.SetField(malomField);
+            if (selectedPosition == null) {
+                selectedPosition = convertFromUI(row, column);
+                return;
+            }
+
+            GTMillPosition p = convertFromUI(row, column);
+            GTMillGameElement e = _Logic.getCurrentState().elementAt(p);
+            GTMillGameSpace currentState = (GTMillGameSpace)_Logic.getCurrentState();
+            GTMillGameStep step = new GTMillGameStep(e, selectedPosition, p); 
+            GTMillGameSpace newState = (GTMillGameSpace)currentState.stateWithStep(step);
+            selectedPosition = null;
+
+            List<GTGameSpaceInterface<GTMillGameElement, GTMillPosition>> availableStates = ((GTMillGameStateGenerator)_Logic.getStateGenerator()).availableStatesFrom(currentState, _Logic.nextPlayer, false).Result;
+            bool goodStep = false;
+            foreach (GTMillGameSpace state in availableStates)
+            {
+                if (newState.Equals(state)) {
+                    goodStep = true;
+                }
+            }
+
+            if (!goodStep)
+            {
+                return;
+            }
+
+            _Logic.updateGameSpace(step);
+            _Gui.SetField();
+
+            if (_Logic.isGameOver())
+            {
+                GameStateChangedEventArgs _event = new GameStateChangedEventArgs();
+                _event.GameState = this.SaveGame();
+                _event.IsMyTurn = false;
+                _event.GamePhase = GamePhase.Ended;
+                _event.IsWon = true;
+
+                SendGameState(_event);
+                return;
+            }
+        }
+
+        private GTMillPosition convertFromUI(int row, int column)
+        {
+            int x = column / 3;
+            int y = row / 3;
+
+            int z = 0;
+            if (row == 1 || row == 5 || column == 1 || column == 5)
+            {
+                z = 1;
+            }
+            else if (row == 2 || row == 4 || column == 2 || column == 4)
+            {
+                z = 2;
+            }
+
+            return new GTMillPosition(x, y, z);
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
@@ -126,6 +193,21 @@ namespace GTMillGameLogic
             }
 
             return memoryStream.ToArray(); ;
+        }
+
+        byte[,] convertStateToField(GTMillGameSpace state)
+        {
+            byte[,] field;
+            foreach (KeyValuePair<GTMillPosition, GTMillGameElement> kv in state)
+            {
+                GTMillPosition p = kv.Key;
+                int row;
+                int column;
+
+                throw new NotImplementedException();
+            }
+
+            return field;
         }
     }
 }

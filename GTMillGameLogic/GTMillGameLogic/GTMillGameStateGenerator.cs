@@ -12,21 +12,32 @@ namespace GTMillGameLogic
 
 		public Task<TaskReturnType> availableStatesFrom(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
 		{
-			if (player.figuresRemaining > 0) {
-				// first phase
-				return availableStatesFirstPhase(state, player);
+            return availableStatesFrom(state, player, true);
+		}
 
-			} else if (player.figuresInitial - player.figuresLost > 3) {
-				// second phase
-				return availableStatesSteppingPhase (state, player);
+        public Task<TaskReturnType> availableStatesFrom(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player, bool detectMill)
+        {
 
-			} else {
-				// third phase
-				return availableStatesThirdPhase (state, player);
-			}
-		}	
+            if (player.figuresRemaining > 0)
+            {
+                // first phase
+                return availableStatesFirstPhase(state, player, detectMill);
 
-		private Task<TaskReturnType> availableStatesFirstPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+            }
+            else if (player.figuresInitial - player.figuresLost > 3)
+            {
+                // second phase
+                return availableStatesSteppingPhase(state, player, detectMill);
+
+            }
+            else
+            {
+                // third phase
+                return availableStatesThirdPhase(state, player, detectMill);
+            }
+        }
+
+        private Task<TaskReturnType> availableStatesFirstPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player, bool detectMill)
 		{
 			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
 				TaskReturnType states = new TaskReturnType ();
@@ -41,7 +52,7 @@ namespace GTMillGameLogic
 								GTMillGameElement element = new GTMillGameElement(id, 1, player.id);
 								GTMillGameStep step = new GTMillGameStep(element, GTMillPosition.Nowhere(), p);
 								GTMillGameSpace newState = state.stateWithStep (step) as GTMillGameSpace;
-								if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
+								if (detectMill && GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
 								{
 									foreach (GTMillGameStep removeStep in removeOppenentFigureSteps(newState, player.id)) {
 										states.Add(newState.stateWithStep(removeStep));
@@ -61,7 +72,7 @@ namespace GTMillGameLogic
 			return task;
 		}
 
-        private Task<TaskReturnType> availableStatesSteppingPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+        private Task<TaskReturnType> availableStatesSteppingPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player, bool detectMill)
 		{
 			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
 				
@@ -76,7 +87,7 @@ namespace GTMillGameLogic
 				foreach (GTMillGameStep step in steps) {
 
 					GTMillGameSpace newState = state.stateWithStep (step) as GTMillGameSpace;
-					if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
+                    if (detectMill && GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
                     {
 						foreach (GTMillGameStep removeStep in removeOppenentFigureSteps(newState, player.id)) {
 							states.Add(newState.stateWithStep(removeStep));
@@ -94,7 +105,7 @@ namespace GTMillGameLogic
 			return task;
 		}
 
-		private Task<TaskReturnType> availableStatesThirdPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+        private Task<TaskReturnType> availableStatesThirdPhase(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player, bool detectMill)
 		{
 			Task<TaskReturnType> task = Task<TaskReturnType>.Factory.StartNew (() => {
 				TaskReturnType states = new TaskReturnType ();
@@ -112,7 +123,7 @@ namespace GTMillGameLogic
 										GTMillGameElement element = kv.Value;
 										GTMillGameStep step = new GTMillGameStep(element, kv.Key, p);
 										GTMillGameSpace newState = state.stateWithStep (step) as GTMillGameSpace;
-										if (GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
+                                        if (detectMill && GTMillGameMillDetector.detectMillOnPositionWithStateForUser(step.to, newState, player.id))
 										{
 											foreach (GTMillGameStep removeStep in removeOppenentFigureSteps(newState, player.id)) {
 												states.Add(newState.stateWithStep(removeStep));

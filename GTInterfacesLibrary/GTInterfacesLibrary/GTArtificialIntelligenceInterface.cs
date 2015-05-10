@@ -10,7 +10,7 @@ namespace GTInterfacesLibrary
         Hard
     }
 
-	public interface GTArtificialIntelligenceInterface<E, P> 
+    public interface GTArtificialIntelligenceInterface<E, P> : IGTArtificialIntelligenceInterface
         where E : GTGameSpaceElementInterface 
         where P : IPosition
 	{

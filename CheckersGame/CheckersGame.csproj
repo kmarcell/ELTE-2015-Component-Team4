@@ -52,6 +52,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArtificialIntelligence\ArtificialIntelligence.csproj">
+      <Project>{363b5cae-8425-4125-93b1-58cdf04b2891}</Project>
+      <Name>ArtificialIntelligence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GTInterfacesLibrary\GTInterfacesLibrary\GTInterfacesLibrary.csproj">
       <Project>{cd85d76b-e9dc-4fca-80a9-87a89f8b6c65}</Project>
       <Name>GTInterfacesLibrary</Name>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArtificialIntelligence;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
 using GTInterfacesLibrary.MessageTypes;
@@ -13,7 +14,16 @@ namespace CheckersGame
     public class Game : GTGameInterface
     {
         private GTPlatformManagerInterface PlatformGameManager;
-        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition> AI;
+        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> AI;
+
+
+        private List<GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>> AiList = new List
+            <GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>>
+        {
+            new CorrectAi(),
+            new RandomAI()
+        };
+
         private GTGuiInterface GUI;
         private Logic.Logic logic;
         private Step step;
@@ -45,7 +55,7 @@ namespace CheckersGame
 
         public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            //AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, GTPosition>)artificialIntelligence;
+            AI = AiList.First(x => x.Name == artificialIntelligence.Name);
         }
 
         byte[,] damaBackGround = { 

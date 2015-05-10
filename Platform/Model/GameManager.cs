@@ -157,7 +157,7 @@ namespace Platform.Model
 
                 try
                 {
-                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.Name.Contains("IGTArtificialIntelligenceInterface"))).ToList();
+                    aiType = aiAssembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.Name.Contains("IGTArtificialIntelligenceInterface")) && !x.IsInterface).ToList();
                 }
                 catch (ReflectionTypeLoadException)
                 {

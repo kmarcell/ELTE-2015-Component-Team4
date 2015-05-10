@@ -68,10 +68,14 @@ namespace GTMillGameLogic
 
 		public GTPlayerInterface<GTMillGameElement, GTMillPosition> nextPlayer {
 			get {
-				_nextPlayer = _nextPlayer++ % _players.Count;
 				return _players [_nextPlayer];
 			}
 		}
+
+        public void playerDidStep()
+        {
+            _nextPlayer = _nextPlayer++ % _players.Count;
+        }
 
 		public int gamePhase {
 			get {
@@ -91,14 +95,6 @@ namespace GTMillGameLogic
 				}
 			}
 		}
-
-        // Private Game Management
-
-        private void makeStepWithAI(GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition> ai)
-        {
-            Task<GTGameStepInterface<GTMillGameElement, GTMillPosition>> task = ai.calculateNextStep(_state, this.getStateGenerator(), this.getStateHash());
-            this._state.mutateStateWith(task.Result);
-        }
 	}
 }
 

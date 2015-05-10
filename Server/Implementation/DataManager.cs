@@ -154,7 +154,7 @@ namespace Server.Implementation
                 {
                     if (game.Phase == GamePhase.Opened)
                     {
-                        game.Phase = GamePhase.Playing;
+                        game.Phase = GamePhase.Started;
                         game.SecondPlayer = playerName;
                         game.PlayerTurn = game.FirstPlayer;
                         ServerManager.ServerManagerInstance.MessagePlayer(game.FirstPlayer, MessageCode.JoinAccepted, game);
@@ -202,6 +202,9 @@ namespace Server.Implementation
         {
             lock (game)
             {
+                if(game.Phase == GamePhase.Started)
+                    game.Phase = GamePhase.Playing;
+
                 if (game.Phase == GamePhase.Playing)
                 {
                     WriteLog("Game state changed: {0}", game.ToString());

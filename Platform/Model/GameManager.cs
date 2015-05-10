@@ -264,14 +264,14 @@ namespace Platform.Model
             if (eventArgs.Game.Phase == GamePhase.Cancelled)
             {
                 GameEndedEvent(this, new GameEndedEventArgs { IsEnded = false, IsWin = _MNetworkManager.CurrentGame != null && _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });
+
+                if (_MNetworkManager.CurrentGame != null) 
+                _MNetworkManager.CurrentGame.Phase = GamePhase.Ended;
             }
             if (eventArgs.Game.Phase == GamePhase.Ended)
             {
                 GameEndedEvent(this, new GameEndedEventArgs { IsEnded = true, IsWin = _MNetworkManager.CurrentGame != null && _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });
             }
-
-            if (_MNetworkManager.CurrentGame != null) 
-                _MNetworkManager.CurrentGame.Phase = GamePhase.Ended;
 
             SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = eventArgs.Game.Phase, GameState = eventArgs.Game.GameState, IsMyTurn = isMyTurn, IsWon = isWon, GameType = MGameType });
         }

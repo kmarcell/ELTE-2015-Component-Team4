@@ -30,6 +30,14 @@ namespace GTMillGameLogic
         public void SendGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs)
         {
             GameStateChangedEventArgs eventArgs = new GameStateChangedEventArgs();
+            if (_Logic.isGameOver()) {
+
+                eventArgs.GameState = this.SaveGame();
+                eventArgs.IsMyTurn = false;
+                eventArgs.GamePhase = GamePhase.Ended;
+                eventArgs.IsWon = true;
+            }
+
             SendGameStateChangedEventArg(this, eventArgs);
         }
 
@@ -87,26 +95,52 @@ namespace GTMillGameLogic
                 return;
             }
 
-            if (selectedPosition == null) {
-                selectedPosition = convertFromUI(row, column);
+            GTMillPosition p = convertFromUI(row, column);
+            GTMillGameSpace currentState = (GTMillGameSpace)_Logic.getCurrentState();
+
+            if (!currentState.hasElementAt(p)) {
                 return;
             }
 
-            GTMillPosition p = convertFromUI(row, column);
             GTMillGameElement e = _Logic.getCurrentState().elementAt(p);
-            GTMillGameSpace currentState = (GTMillGameSpace)_Logic.getCurrentState();
-            GTMillGameStep step = new GTMillGameStep(e, selectedPosition, p); 
-            GTMillGameSpace newState = (GTMillGameSpace)currentState.stateWithStep(step);
-            selectedPosition = null;
+            GTMillGameStep step = new GTMillGameStep(e, selectedPosition, p);
 
-            List<GTGameSpaceInterface<GTMillGameElement, GTMillPosition>> availableStates = ((GTMillGameStateGenerator)_Logic.getStateGenerator()).availableStatesFrom(currentState, _Logic.nextPlayer, false).Result;
             bool goodStep = false;
-            foreach (GTMillGameSpace state in availableStates)
+            if (selectedPosition == null) {
+                // selection
+                if (e.owner == _Logic.nextPlayer.id) {
+                    selectedPosition = p;
+                }
+            }
+            else if (selectedPosition.Equals(GTMillPosition.Nowhere()))
             {
-                if (newState.Equals(state)) {
+                // remove after Mill
+                if (e.owner != _Logic.nextPlayer.id)
+                {
+                    selectedPosition = null;
                     goodStep = true;
                 }
             }
+            else
+            {
+                // step
+                GTMillGameSpace newState = (GTMillGameSpace)currentState.stateWithStep(step);
+                selectedPosition = null;
+
+                List<GTGameSpaceInterface<GTMillGameElement, GTMillPosition>> availableStates = ((GTMillGameStateGenerator)_Logic.getStateGenerator()).availableStatesFrom(currentState, _Logic.nextPlayer, false).Result;
+                foreach (GTMillGameSpace state in availableStates)
+                {
+                    if (newState.Equals(state))
+                    {
+                        goodStep = true;
+                    }
+                }
+
+                if (goodStep && GTMillGameMillDetector.detectMillOnPositionWithStateForUser(p, currentState, _Logic.nextPlayer.id)) {
+                    selectedPosition = GTMillPosition.Nowhere();
+                }
+            }
+            
 
             if (!goodStep)
             {
@@ -114,21 +148,28 @@ namespace GTMillGameLogic
             }
 
             _Logic.updateGameSpace(step);
+            currentState = (GTMillGameSpace)_Logic.getCurrentState();
+            _Gui.SetField(convertStateToField(currentState));
+            _Logic.playerDidStep();
 
-            malomField = convertStateToField(newState);
-            _Gui.SetField(malomField);
+            SendGameState(null);
 
-            if (_Logic.isGameOver())
+            stepWithNextUser();
+        }
+
+        private void stepWithNextUser()
+        {
+            if (!_Logic.nextPlayer.isAI)
             {
-                GameStateChangedEventArgs _event = new GameStateChangedEventArgs();
-                _event.GameState = this.SaveGame();
-                _event.IsMyTurn = false;
-                _event.GamePhase = GamePhase.Ended;
-                _event.IsWon = true;
-
-                SendGameState(_event);
                 return;
             }
+
+            GTMillGameSpace state = (GTMillGameSpace)_Logic.nextPlayer.ai.calculateNextStep(_Logic.getCurrentState(), _Logic.getStateGenerator(), _Logic.getStateHash()).Result;
+            _Logic.SetState(state);
+            _Gui.SetField(convertStateToField(state));
+            _Logic.playerDidStep();
+            SendGameState(null);
+            stepWithNextUser();
         }
 
         private GTMillPosition convertFromUI(int row, int column)
@@ -206,7 +247,7 @@ namespace GTMillGameLogic
                 int row = (3-p.z) * p.x + p.z;
                 int column = (3-p.z) * p.y + p.z;
 
-                field[row, column] = (byte)kv.Value.id;
+                field[row, column] = kv.Value.owner == _Logic.nextPlayer.id ? (byte)0 : (byte)1;
             }
 
             return field;

@@ -7,10 +7,25 @@ namespace GTInterfacesLibrary.GameEvents
     /// </summary>
     public enum GamePhase
     {
+        /// <summary>
+        /// Opened is used when the game is created online but no user joined.
+        /// </summary>
         Opened,
+        /// <summary>
+        /// Started is used when the game is started.
+        /// </summary>
         Started,
+        /// <summary>
+        /// Playing is used when the game is started but not finished.
+        /// </summary>
         Playing,
+        /// <summary>
+        /// Ended is used when the game is finished due to win.
+        /// </summary>
         Ended,
+        /// <summary>
+        /// Cancel is used when the game is cancelled.
+        /// </summary>
         Cancelled
     }
 
@@ -19,8 +34,17 @@ namespace GTInterfacesLibrary.GameEvents
     /// </summary>
     public enum GameType
     {
+        /// <summary>
+        /// The Online GameType is used when the user playing against another user.
+        /// </summary>
         Online,
+        /// <summary>
+        /// The local GameType is used when the user playing locally against an AI.
+        /// </summary>
         Local,
+        /// <summary>
+        /// The AI GameTyoe is used then AI is playing against an AI.
+        /// </summary>
         Ai
     }
 

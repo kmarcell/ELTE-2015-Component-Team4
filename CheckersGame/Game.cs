@@ -101,9 +101,14 @@ namespace CheckersGame
             {
                 Position pos = new Position(7 - row, column);
                 step = new Step(step.element, step.from, pos);
-                logic.updateGameSpace(step);
+                if (StepSupervisor.IsValidStep(logic.state, step))
+                {
+                    logic.updateGameSpace(step);
+                    logic.ChangePlayer();
+                    
+                    stepWithNextUser();
+                }
                 step = null;
-                stepWithNextUser();
             }
 
             gui.SetField(StateToBytes(logic.getCurrentState()));
@@ -140,12 +145,12 @@ namespace CheckersGame
 
         private void stepWithNextUser()
         {
-            //logic.ChangePlayer();
             GameSpace state = (GameSpace)logic.getNextState();
             logic.state = state;
             //logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
             //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
             GUI.SetField(StateToBytes(state));
+            //logic.state.nextPlayer = 1 - logic.state.nextPlayer;
         }
 
         public void LoadGame(byte[] gameState)

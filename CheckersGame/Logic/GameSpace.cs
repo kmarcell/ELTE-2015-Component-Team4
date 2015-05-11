@@ -38,6 +38,8 @@ namespace CheckersGame.Logic
             _players.Add(player);
         }
 
+        public bool IsAI = false;
+
         public void mutateStateWith(GTGameStepInterface<Element, Position> step)
         {
             Step s = new Step(step.element, step.from, step.to);
@@ -55,8 +57,6 @@ namespace CheckersGame.Logic
 
             if (StepSupervisor.IsStepToKingsRow(s))
                 step.element.type = 1;
-
-            //nextP = 1 - nextP;
 
             StepSupervisor.RefreshState(this);
         }
@@ -89,11 +89,15 @@ namespace CheckersGame.Logic
         public int nextPlayer
         {
             get { return nextP; }
+            set { nextP = value; }
         }
 
         public void changePlayer()
         {
-            nextP = 1 - nextP;
+            if (IsAI == true)
+                IsAI = false;
+            else
+                IsAI = true;
         }
 
         public GTPlayerInterface<Element, Position> getNextPlayer()

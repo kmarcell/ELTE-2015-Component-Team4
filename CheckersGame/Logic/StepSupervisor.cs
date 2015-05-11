@@ -24,8 +24,16 @@ namespace CheckersGame.Logic
             if (step.element == null)
                 return false;
 
-            //if (state.getNextPlayer().id != step.element.owner)
-                //return false;
+            if (!CurrentState.IsAI)
+            {
+                if (state.nextPlayer != step.element.owner)
+                    return false;
+            }
+            else
+            {
+                if (state.nextPlayer == step.element.owner)
+                    return false;
+            }
 
             if (!state.hasElementAt(step.from))
                 return false;
@@ -82,10 +90,20 @@ namespace CheckersGame.Logic
 
         private static bool IsValidMove(Step step)
         {
-            if (IsDiagonal(step) && IsForward(step) && IsAdjacent(step) && !IsOccupied(step))
-                return true;
+            if (step.to.x == 4 && step.to.y == 0)
+            {
+                if (IsDiagonal(step) && IsForward(step) && IsAdjacent(step) && !IsOccupied(step))
+                    return true;
+                else
+                    return false;
+            }
             else
-                return false;
+            {
+                if (IsDiagonal(step) && IsForward(step) && IsAdjacent(step) && !IsOccupied(step))
+                    return true;
+                else
+                    return false;
+            }
         }
 
         public static bool IsValidCapture(Step step)
@@ -133,19 +151,39 @@ namespace CheckersGame.Logic
             if (IsKing(step.element))
                 return true;
 
-            if (step.element.owner == 1)
+            if (!CurrentState.IsAI)
             {
-                if (step.from.x < step.to.x)
-                    return true;
+                if (step.element.owner == 1)
+                {
+                    if (step.from.x < step.to.x)
+                        return true;
+                    else
+                        return false;
+                }
                 else
-                    return false;
+                {
+                    if (step.from.x > step.to.x)
+                        return true;
+                    else
+                        return false;
+                }
             }
             else
             {
-                if (step.from.x > step.to.x)
-                    return true;
+                if (step.element.owner == 0)
+                {
+                    if (step.from.x > step.to.x)
+                        return true;
+                    else
+                        return false;
+                }
                 else
-                    return false;
+                {
+                    if (step.from.x < step.to.x)
+                        return true;
+                    else
+                        return false;
+                }
             }
         }
 
@@ -197,10 +235,20 @@ namespace CheckersGame.Logic
 
         private static bool IsMine(Element e)
         {
-            if (CurrentState.getNextPlayer().id == e.owner)
-                return true;
+            if (!CurrentState.IsAI)
+            {
+                if (CurrentState.nextPlayer == e.owner)
+                    return true;
+                else
+                    return false;
+            }
             else
-                return false;
+            {
+                if (CurrentState.nextPlayer != e.owner)
+                    return true;
+                else
+                    return false;
+            }
         }
 
         private static Position PositionBehind(Position from, Position to)
@@ -232,12 +280,22 @@ namespace CheckersGame.Logic
 
         public static bool IsStepToKingsRow(Step step)
         {
-            if (step.element.owner == 1 && step.to.x == 7)
-                return true;
+            if (!CurrentState.IsAI)
+            {
+                if (step.element.owner == 1 && step.to.x == 7)
+                    return true;
 
-            if (step.element.owner == 0 && step.to.x == 0)
-                return true;
+                if (step.element.owner == 0 && step.to.x == 0)
+                    return true;
+            }
+            else
+            {
+                if (step.element.owner == 0 && step.to.x == 7)
+                    return true;
 
+                if (step.element.owner == 1 && step.to.x == 0)
+                    return true;
+            }
             return false;
         }
     }

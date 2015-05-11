@@ -32,7 +32,9 @@ namespace CheckersGame.Logic
         public void updateGameSpace(GTGameStepInterface<Element, Position> step)
 		{
             if (StepSupervisor.IsValidStep(state, (Step)step))
-			    state.mutateStateWith(step);
+            {
+                state.mutateStateWith(step);
+            }
 		}
 
         public void addPlayer(GTPlayerInterface<Element, Position> player)

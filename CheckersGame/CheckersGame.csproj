@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,6 +46,7 @@
     <Compile Include="Logic\GameStateGenerator.cs" />
     <Compile Include="Logic\GameStateHash.cs" />
     <Compile Include="Logic\Logic.cs" />
+    <Compile Include="Logic\RandomAI.cs" />
     <Compile Include="Logic\StartingStateBuilder.cs" />
     <Compile Include="Logic\Position.cs" />
     <Compile Include="Logic\Step.cs" />

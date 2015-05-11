@@ -11,6 +11,7 @@ namespace CheckersGame.Logic
     public class Logic: GTGameLogicInterface<Element, Position>
     {
         private List<GTPlayerInterface<Element, Position>> _players = new List<GTPlayerInterface<Element, Position>>();
+        private RandomAI AI;
 
 		public Logic()
         {
@@ -25,6 +26,7 @@ namespace CheckersGame.Logic
 		{
             StartingStateBuilder.BuildStartingState(state);
             StepSupervisor.RefreshState(state);
+            AI = new RandomAI();
 		}
 
         public void updateGameSpace(GTGameStepInterface<Element, Position> step)
@@ -36,6 +38,7 @@ namespace CheckersGame.Logic
         public void addPlayer(GTPlayerInterface<Element, Position> player)
         {
             _players.Add(player);
+            state.addPlayer(player);
         }
 
 		// Output
@@ -48,7 +51,7 @@ namespace CheckersGame.Logic
 
         public GTGameSpaceInterface<Element, Position> getCurrentState()
 		{
-			return state;
+            return state;
 		}
 
 		public GTGameStateGeneratorInterface<Element, Position> getStateGenerator()
@@ -61,6 +64,11 @@ namespace CheckersGame.Logic
 			return new GameStateHash();
 		}
 
+        public void ChangePlayer()
+        {
+            state.changePlayer();
+        }
+
         public GTPlayerInterface<Element, Position> nextPlayer
         {
             get { return _players[state.nextPlayer]; }
@@ -69,6 +77,14 @@ namespace CheckersGame.Logic
         public int gamePhase
         {
             get { return 0; }
+        }
+
+        public GTGameSpaceInterface<Element, Position> getNextState()
+        {
+            return (GTGameSpaceInterface<Element, Position>)AI.calculateNextStep(
+                state,
+                getStateGenerator(),
+                getStateHash()).Result;
         }
     }
 }

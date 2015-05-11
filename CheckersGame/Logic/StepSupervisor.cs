@@ -24,7 +24,7 @@ namespace CheckersGame.Logic
             if (step.element == null)
                 return false;
 
-            if (state.nextPlayer != step.element.owner)
+            if (state.getNextPlayer().id != step.element.owner)
                 return false;
 
             if (!state.hasElementAt(step.from))
@@ -197,7 +197,7 @@ namespace CheckersGame.Logic
 
         private static bool IsMine(Element e)
         {
-            if (CurrentState.nextPlayer == e.owner)
+            if (CurrentState.getNextPlayer().id == e.owner)
                 return true;
             else
                 return false;

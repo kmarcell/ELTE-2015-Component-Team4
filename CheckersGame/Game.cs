@@ -14,14 +14,8 @@ namespace CheckersGame
     public class Game : GTGameInterface
     {
         private GTPlatformManagerInterface PlatformGameManager;
-        private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> AI;
+        //private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> AI;
 
-        private List<GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>> AiList = new List
-            <GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>>
-        {
-            new CorrectAi(),
-            new RandomAI()
-        };
 
         private GTGuiInterface GUI;
         private Logic.Logic logic;
@@ -62,8 +56,7 @@ namespace CheckersGame
 
         public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)AiList.First(x => x.Name == artificialIntelligence.Name);
-            AI.calculateNextStep(null, null, null);
+            //AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)AiList.First(x => x.Name == artificialIntelligence.Name);
         }
 
         byte[,] damaBackGround = { 
@@ -110,6 +103,7 @@ namespace CheckersGame
                 step = new Step(step.element, step.from, pos);
                 logic.updateGameSpace(step);
                 step = null;
+                stepWithNextUser();
             }
 
             gui.SetField(StateToBytes(logic.getCurrentState()));
@@ -122,7 +116,12 @@ namespace CheckersGame
                 if (gameStateChangedEventArgs.GameType == GameType.Local)
                 {
                     logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
-                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 2));
+                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
+                }
+                else if (gameStateChangedEventArgs.GameType == GameType.Online)
+                {
+                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
+                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(2));
                 }
             }
             else if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)
@@ -134,17 +133,21 @@ namespace CheckersGame
                 
                 if (gameStateChangedEventArgs.GameType == GameType.Local)
                 {
-                    GameSpace state = (GameSpace)this.AI.calculateNextStep(
-                        (GTGameSpaceInterface<GTGameSpaceElementInterface, IPosition>)logic.getCurrentState(),
-                        (GTGameStateGeneratorInterface<GTGameSpaceElementInterface, IPosition>)logic.getStateGenerator(),
-                        (GTGameStateHashInterface<GTGameSpaceElementInterface, IPosition>)logic.getStateHash()).Result;
-                    logic.state = state;
-                    GUI.SetField(StateToBytes(state));
-                    //_Logic.playerDidStep();
-                    SendGameState(null);
+                    stepWithNextUser();
                 }
             }
         }
+
+        private void stepWithNextUser()
+        {
+            //logic.ChangePlayer();
+            GameSpace state = (GameSpace)logic.getNextState();
+            logic.state = state;
+            logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
+            logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
+            GUI.SetField(StateToBytes(state));
+        }
+
         public void LoadGame(byte[] gameState)
         {
             throw new NotImplementedException();

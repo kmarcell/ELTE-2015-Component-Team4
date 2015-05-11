@@ -9,6 +9,7 @@ namespace CheckersGame.Logic
     public class GameSpace : GTGameSpaceInterface<Element, Position>
     {
         private Dictionary<Position, Element> elements = new Dictionary<Position, Element>();
+        private List<GTPlayerInterface<Element, Position>> _players = new List<GTPlayerInterface<Element, Position>>();
 
         public bool hasElementAt(Position p)
         {
@@ -26,6 +27,11 @@ namespace CheckersGame.Logic
         public void setElementAt(Position p, Element e)
         {
             elements[p] = e;
+        }
+
+        public void addPlayer(GTPlayerInterface<Element, Position> player)
+        {
+            _players.Add(player);
         }
 
         public void mutateStateWith(GTGameStepInterface<Element, Position> step)
@@ -75,29 +81,20 @@ namespace CheckersGame.Logic
 
         }
 
-        public bool CanCaptureFromState(GameSpace state)
-        {
-            throw new NotImplementedException();
-        }
-
         private int nextP = 1;
         public int nextPlayer
         {
             get { return nextP; }
         }
 
-        public int gamePhase
+        public void changePlayer()
         {
-            get
-            {
-                return 0;
-            }
+            nextP = 1 - nextP;
         }
-
 
         public GTPlayerInterface<Element, Position> getNextPlayer()
         {
-            throw new NotImplementedException();
+            return _players[nextP];
         }
     }
 }

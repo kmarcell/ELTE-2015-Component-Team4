@@ -104,6 +104,7 @@ namespace CheckersGame
                 if (StepSupervisor.IsValidStep(logic.state, step))
                 {
                     logic.updateGameSpace(step);
+                    StepSupervisor.RefreshState(logic.state);
                     logic.ChangePlayer();
                     
                     stepWithNextUser();
@@ -147,6 +148,7 @@ namespace CheckersGame
         {
             GameSpace state = (GameSpace)logic.getNextState();
             logic.state = state;
+            StepSupervisor.RefreshState(logic.state);
             //logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
             //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
             GUI.SetField(StateToBytes(state));

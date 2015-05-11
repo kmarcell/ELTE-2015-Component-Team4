@@ -9,7 +9,11 @@ namespace CheckersGame.Logic
     public class GameSpace : GTGameSpaceInterface<Element, Position>
     {
         private Dictionary<Position, Element> elements = new Dictionary<Position, Element>();
-        private List<GTPlayerInterface<Element, Position>> _players = new List<GTPlayerInterface<Element, Position>>();
+        private List<GTPlayerInterface<Element, Position>> _players = new List<GTPlayerInterface<Element, Position>>()
+        {
+            new GTPlayer<Element, Position>().playerWithRealUser(1),
+            new GTPlayer<Element, Position>().playerWithRealUser(0),
+        };
 
         public bool hasElementAt(Position p)
         {
@@ -52,7 +56,7 @@ namespace CheckersGame.Logic
             if (StepSupervisor.IsStepToKingsRow(s))
                 step.element.type = 1;
 
-            nextP = 1 - nextP;
+            //nextP = 1 - nextP;
 
             StepSupervisor.RefreshState(this);
         }

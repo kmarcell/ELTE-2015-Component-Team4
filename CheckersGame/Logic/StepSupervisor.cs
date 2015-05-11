@@ -24,8 +24,8 @@ namespace CheckersGame.Logic
             if (step.element == null)
                 return false;
 
-            if (state.getNextPlayer().id != step.element.owner)
-                return false;
+            //if (state.getNextPlayer().id != step.element.owner)
+                //return false;
 
             if (!state.hasElementAt(step.from))
                 return false;

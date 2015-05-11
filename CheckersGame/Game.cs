@@ -115,13 +115,13 @@ namespace CheckersGame
             {
                 if (gameStateChangedEventArgs.GameType == GameType.Local)
                 {
-                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
-                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
+                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
+                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
                 }
                 else if (gameStateChangedEventArgs.GameType == GameType.Online)
                 {
-                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
-                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(2));
+                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
+                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(2));
                 }
             }
             else if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)
@@ -143,8 +143,8 @@ namespace CheckersGame
             //logic.ChangePlayer();
             GameSpace state = (GameSpace)logic.getNextState();
             logic.state = state;
-            logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
-            logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
+            //logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
+            //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 0));
             GUI.SetField(StateToBytes(state));
         }
 

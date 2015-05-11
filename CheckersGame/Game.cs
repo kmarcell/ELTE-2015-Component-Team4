@@ -16,7 +16,6 @@ namespace CheckersGame
         private GTPlatformManagerInterface PlatformGameManager;
         private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> AI;
 
-
         private List<GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>> AiList = new List
             <GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>>
         {
@@ -44,6 +43,14 @@ namespace CheckersGame
         public void SendGameState(GameStateChangedEventArgs currentGameStateChangedEventArgs)
         {
             GameStateChangedEventArgs eventArgs = new GameStateChangedEventArgs();
+            if (logic.isGameOver())
+            {
+                //eventArgs.GameState = this.SaveGame();
+                eventArgs.IsMyTurn = false;
+                eventArgs.GamePhase = GamePhase.Ended;
+                eventArgs.IsWon = true;
+            }
+
             SendGameStateChangedEventArg(this, eventArgs);
         }
 
@@ -55,7 +62,8 @@ namespace CheckersGame
 
         public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
-            AI = AiList.First(x => x.Name == artificialIntelligence.Name);
+            AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)AiList.First(x => x.Name == artificialIntelligence.Name);
+            AI.calculateNextStep(null, null, null);
         }
 
         byte[,] damaBackGround = { 
@@ -114,17 +122,26 @@ namespace CheckersGame
                 if (gameStateChangedEventArgs.GameType == GameType.Local)
                 {
                     logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
-                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(this.AI, 2));
+                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(null, 2));
                 }
-                else if (gameStateChangedEventArgs.GameType == GameType.Ai)
+            }
+            else if (gameStateChangedEventArgs.GamePhase == GamePhase.Playing)
+            {
+                //LoadGame(gameStateChangedEventArgs.GameState);
+                GameSpace currentState = (GameSpace)logic.getCurrentState();
+                GUI.SetField(StateToBytes(currentState));
+                //logic.nextPlayer;
+                
+                if (gameStateChangedEventArgs.GameType == GameType.Local)
                 {
-                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(this.AI, 1));
-                    //logic.addPlayer(new GTPlayer<Element, Position>().playerWithAI(this.AI, 2));
-                }
-                else if (gameStateChangedEventArgs.GameType == GameType.Online)
-                {
-                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(1));
-                    logic.addPlayer(new GTPlayer<Element, Position>().playerWithRealUser(2));
+                    GameSpace state = (GameSpace)this.AI.calculateNextStep(
+                        (GTGameSpaceInterface<GTGameSpaceElementInterface, IPosition>)logic.getCurrentState(),
+                        (GTGameStateGeneratorInterface<GTGameSpaceElementInterface, IPosition>)logic.getStateGenerator(),
+                        (GTGameStateHashInterface<GTGameSpaceElementInterface, IPosition>)logic.getStateHash()).Result;
+                    logic.state = state;
+                    GUI.SetField(StateToBytes(state));
+                    //_Logic.playerDidStep();
+                    SendGameState(null);
                 }
             }
         }

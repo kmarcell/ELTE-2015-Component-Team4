@@ -25,6 +25,11 @@ namespace ArtificialIntelligence
 
             List<GTGameSpaceInterface<GTGameSpaceElementInterface, IPosition>> states = listTask.Result;
 
+            if (states.Count == 0)
+            {
+                throw new Exception("There is no more state");
+            }
+
             return states[rnd.Next(states.Count)];
         }
 

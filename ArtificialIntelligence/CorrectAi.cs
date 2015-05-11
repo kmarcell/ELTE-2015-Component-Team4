@@ -16,7 +16,8 @@ namespace ArtificialIntelligence
                               GTGameStateGeneratorInterface<GTGameSpaceElementInterface, IPosition> generator,
                               GTGameStateHashInterface<GTGameSpaceElementInterface, IPosition> hash)
         {
-            TaskReturnType best= null;
+
+            TaskReturnType best = null;
             int bestValue = int.MinValue;
             GTPlayerInterface<GTGameSpaceElementInterface, IPosition> actualPlayer = gameSpace.getNextPlayer();
 
@@ -26,6 +27,10 @@ namespace ArtificialIntelligence
 
             List<GTGameSpaceInterface<GTGameSpaceElementInterface, IPosition>> states = listTask.Result;
 
+            if (states.Count == 0)
+            {
+                throw new Exception("There is no more state");
+            }
             foreach (TaskReturnType item in states)
             {
                 int current = hash.evaluateState(item, actualPlayer);
@@ -37,6 +42,10 @@ namespace ArtificialIntelligence
             }
 
             return best;
+
+
+
+
         }
 
         public string Name

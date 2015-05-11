@@ -11,7 +11,10 @@ namespace CheckersGame.Logic
     public class Logic: GTGameLogicInterface<Element, Position>
     {
         private List<GTPlayerInterface<Element, Position>> _players = new List<GTPlayerInterface<Element, Position>>();
-        private RandomAI AI;
+        private RandomAI RandomAI = new RandomAI();
+        private CorrectAi CorrectAI = new CorrectAi();
+        private AlphaBetaAi AlphaBetaAI = new AlphaBetaAi();
+        public String AIName;
 
 		public Logic()
         {
@@ -26,8 +29,7 @@ namespace CheckersGame.Logic
 		{
             StartingStateBuilder.BuildStartingState(state);
             StepSupervisor.RefreshState(state);
-            AI = new RandomAI();
-		}
+ 		}
 
         public void updateGameSpace(GTGameStepInterface<Element, Position> step)
 		{
@@ -83,10 +85,17 @@ namespace CheckersGame.Logic
 
         public GTGameSpaceInterface<Element, Position> getNextState()
         {
-            return (GTGameSpaceInterface<Element, Position>)AI.calculateNextStep(
-                state,
-                getStateGenerator(),
-                getStateHash()).Result;
+            switch (AIName)
+            {
+                case "RandomAi":
+                    return (GTGameSpaceInterface<Element, Position>)RandomAI.calculateNextStep(state, getStateGenerator(), getStateHash()).Result;
+                case "CorrectAi":
+                    return (GTGameSpaceInterface<Element, Position>)CorrectAI.calculateNextStep(state, getStateGenerator(), getStateHash()).Result;
+                case "AlphaBetaAi":
+                    return (GTGameSpaceInterface<Element, Position>)AlphaBetaAI.calculateNextStep(state, getStateGenerator(), getStateHash()).Result;
+                default:
+                    return (GTGameSpaceInterface<Element, Position>)RandomAI.calculateNextStep(state, getStateGenerator(), getStateHash()).Result;
+            }
         }
     }
 }

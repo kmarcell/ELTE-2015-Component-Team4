@@ -56,7 +56,7 @@ namespace CheckersGame
 
         public void RegisterArtificialIntelligence(String artificialIntelligenceName)
         {
-            //AI = (GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition>)AiList.First(x => x.Name == artificialIntelligence.Name);
+            logic.AIName = artificialIntelligenceName;
         }
 
         byte[,] damaBackGround = { 

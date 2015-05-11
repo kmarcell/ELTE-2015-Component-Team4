@@ -46,6 +46,10 @@ namespace CheckersGame.Logic
             if (s.IsCapture())
             {
                 Position pos = StepSupervisor.CapturedElementPos(s);
+                if (pos == null)
+                {
+                    Position pb = StepSupervisor.CapturedElementPos(s);
+                }
                 elements.Remove(pos);
 
                 //if (StepSupervisor.CanCapture())
@@ -57,8 +61,6 @@ namespace CheckersGame.Logic
 
             if (StepSupervisor.IsStepToKingsRow(s))
                 step.element.type = 1;
-
-            StepSupervisor.RefreshState(this);
         }
 
         public GTGameSpaceInterface<Element, Position> stateWithStep(GTGameStepInterface<Element, Position> step)

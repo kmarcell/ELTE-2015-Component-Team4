@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
+    <Compile Include="Logic\AlphaBetaAi.cs" />
+    <Compile Include="Logic\CorrectAI.cs" />
     <Compile Include="Logic\Element.cs" />
     <Compile Include="Logic\GameSpace.cs" />
     <Compile Include="Logic\GameStateGenerator.cs" />

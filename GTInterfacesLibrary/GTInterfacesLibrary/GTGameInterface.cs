@@ -27,8 +27,8 @@ namespace GTInterfacesLibrary
         /// <summary>
         ///  The function where the platform can register the currently selected AI for the game.
         /// </summary>
-        /// <param name="artificialIntelligence">The currently loaded/selected AI</param>
-        void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence);
+        /// <param name="artificialIntelligenceName">The currently selected name of AI</param>
+        void RegisterArtificialIntelligence(String artificialIntelligenceName);
 
         void RegisterGui(GTGuiInterface gui);
 

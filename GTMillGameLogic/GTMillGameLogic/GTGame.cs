@@ -47,7 +47,7 @@ namespace GTMillGameLogic
             _PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;
         }
 
-        public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
+        public void RegisterArtificialIntelligence(String artificialIntelligenceName)
         {
             // this.AI = new;
         }

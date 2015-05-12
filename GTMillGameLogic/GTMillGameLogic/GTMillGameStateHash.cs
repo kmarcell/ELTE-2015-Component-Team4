@@ -48,8 +48,8 @@ namespace GTMillGameLogic
         private GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state;
         private GTPlayerInterface<GTMillGameElement, GTMillPosition> player;
 
-        private List<KeyValuePair<GTMillPosition, GTMillGameElement>> opponentElements;
-        private List<KeyValuePair<GTMillPosition, GTMillGameElement>> ownElements;
+        public List<KeyValuePair<GTMillPosition, GTMillGameElement>> opponentElements;
+        public List<KeyValuePair<GTMillPosition, GTMillGameElement>> ownElements;
 
         private HashSet<GTMillGameElement> horizontalMorrises;
         private HashSet<GTMillGameElement> verticalMorrises;
@@ -63,12 +63,12 @@ namespace GTMillGameLogic
         private HashSet<GTMillGameElement> vertical3Pieces;
         private HashSet<GTMillGameElement> diagonal3Pieces;
 
-        int morrises;
-        int twoPiecesConfiguration;
-        int threePiecesConfiguration;
-        int blockedOpponents;
-        bool winningConfiguration;
-        bool losingConfiguration;
+        public int morrises;
+        public int twoPiecesConfiguration;
+        public int threePiecesConfiguration;
+        public int blockedOpponents;
+        public bool winningConfiguration;
+        public bool losingConfiguration;
 
         /**
          * True if we can jump in the given direction from the given position

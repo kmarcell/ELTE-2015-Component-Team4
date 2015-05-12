@@ -231,10 +231,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(1, 0, 0), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1 
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -256,10 +257,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -281,10 +283,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(1, 0, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -306,10 +309,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(0, 1, 0), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -331,10 +335,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(0, 2, 0), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -356,10 +361,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 1, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(0, 2, 0), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -381,9 +387,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(0, 0, 1), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
+                hash.twoPiecesConfiguration == 0
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -405,9 +413,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 0, 0), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(0, 0, 2), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
+                hash.twoPiecesConfiguration == 0
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -429,9 +439,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(0, 0, 1), new GTMillGameElement(1, 1, 1));
             state1.setElementAt(new GTMillPosition(0, 0, 2), new GTMillGameElement(2, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
+                hash.twoPiecesConfiguration == 0
+                && hash.ownElements.Count == 2
             );
         }
 
@@ -460,10 +472,9 @@ namespace UnitTests
             int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
-                    + GTMillGameStateHash.phase1Coefficients.threePiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.ownElements.Count == 3
+                && hash.threePiecesConfiguration == 1
             );
         }
 
@@ -489,9 +500,8 @@ namespace UnitTests
             int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 2
+                hash.twoPiecesConfiguration == 2
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -517,10 +527,9 @@ namespace UnitTests
             int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
-                    + GTMillGameStateHash.phase1Coefficients.threePiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.ownElements.Count == 3
+                && hash.threePiecesConfiguration == 1
             );
         }
 
@@ -546,9 +555,8 @@ namespace UnitTests
             int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 2
+                hash.twoPiecesConfiguration == 2
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -574,10 +582,9 @@ namespace UnitTests
             int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 1
-                    + GTMillGameStateHash.phase1Coefficients.threePiecesConfiguration * 1
+                hash.twoPiecesConfiguration == 1
+                && hash.threePiecesConfiguration == 1
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -603,9 +610,8 @@ namespace UnitTests
             int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-                    + GTMillGameStateHash.phase1Coefficients.twoPiecesConfiguration * 2
+                hash.twoPiecesConfiguration == 2
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -632,13 +638,12 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(3, 1, 1));
             state1.setElementAt(new GTMillPosition(1, 0, 1), new GTMillGameElement(4, 1, 1));
 
-            int factor =  hash.evaluateState(state1, ownPlayer);
+            int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-                    + GTMillGameStateHash.phase1Coefficients.opponentElementsNumber * 1
-                    + GTMillGameStateHash.phase1Coefficients.blockedOpponents * 1
+                hash.opponentElements.Count == 1
+                && hash.ownElements.Count == 3
+                && hash.blockedOpponents == 1
             );
         }
 
@@ -664,10 +669,9 @@ namespace UnitTests
             int factor = hash.evaluateState(state1, ownPlayer);
 
             Assert.IsTrue(
-                factor
-                    == GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 2
-                    + GTMillGameStateHash.phase1Coefficients.opponentElementsNumber * 1
-                    + GTMillGameStateHash.phase1Coefficients.blockedOpponents * 1
+                hash.opponentElements.Count == 1
+                && hash.ownElements.Count == 2
+                && hash.blockedOpponents == 1
             );
         }
 
@@ -693,10 +697,11 @@ namespace UnitTests
             state1.setElementAt(new GTMillPosition(1, 0, 0), new GTMillGameElement(2, 1, 1));
             state1.setElementAt(new GTMillPosition(2, 0, 0), new GTMillGameElement(3, 1, 1));
 
+            int factor = hash.evaluateState(state1, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state1, ownPlayer) 
-                    == GTMillGameStateHash.phase1Coefficients.morrisesNumber * 1 
-                    +  GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                hash.morrises == 1
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -718,10 +723,11 @@ namespace UnitTests
             state2.setElementAt(new GTMillPosition(1, 0, 1), new GTMillGameElement(5, 1, 1));
             state2.setElementAt(new GTMillPosition(2, 0, 1), new GTMillGameElement(6, 1, 1));
 
+            int factor = hash.evaluateState(state2, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state2, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.morrisesNumber * 1
-                    + GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                hash.morrises == 1
+                && hash.ownElements.Count == 3
             );
 
             GTMillGameSpace state3 = new GTMillGameSpace();
@@ -729,10 +735,11 @@ namespace UnitTests
             state3.setElementAt(new GTMillPosition(1, 0, 2), new GTMillGameElement(8, 1, 1));
             state3.setElementAt(new GTMillPosition(2, 0, 2), new GTMillGameElement(9, 1, 1));
 
+            int factor2 = hash.evaluateState(state3, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state3, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.morrisesNumber * 1
-                    + GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                hash.morrises == 1
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -755,10 +762,11 @@ namespace UnitTests
             state4.setElementAt(new GTMillPosition(1, 2, 0), new GTMillGameElement(11, 1, 1));
             state4.setElementAt(new GTMillPosition(2, 2, 0), new GTMillGameElement(12, 1, 1));
 
+            int factor2 = hash.evaluateState(state4, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state4, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.morrisesNumber * 1
-                    + GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                hash.morrises == 1
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -780,10 +788,11 @@ namespace UnitTests
             state5.setElementAt(new GTMillPosition(1, 2, 1), new GTMillGameElement(14, 1, 1));
             state5.setElementAt(new GTMillPosition(2, 2, 1), new GTMillGameElement(15, 1, 1));
 
+            int factor2 = hash.evaluateState(state5, ownPlayer);
+
             Assert.IsTrue(
-                hash.evaluateState(state5, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.morrisesNumber * 1
-                    + GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
+                hash.morrises == 1
+                && hash.ownElements.Count == 3
             );
         }
 
@@ -805,12 +814,12 @@ namespace UnitTests
             state6.setElementAt(new GTMillPosition(1, 2, 2), new GTMillGameElement(17, 1, 1));
             state6.setElementAt(new GTMillPosition(2, 2, 2), new GTMillGameElement(18, 1, 1));
 
-            Assert.IsTrue(
-                hash.evaluateState(state6, ownPlayer)
-                    == GTMillGameStateHash.phase1Coefficients.morrisesNumber * 1
-                    + GTMillGameStateHash.phase1Coefficients.ownElementsNumber * 3
-            );
+            int factor2 = hash.evaluateState(state6, ownPlayer);
 
+            Assert.IsTrue(
+                hash.morrises == 1
+                && hash.ownElements.Count == 3
+            );
         }
 
         [TestMethod()]
@@ -831,12 +840,65 @@ namespace UnitTests
             state8.setElementAt(new GTMillPosition(0, 2, 0), new GTMillGameElement(10, 1, 2));
             state8.setElementAt(new GTMillPosition(1, 2, 0), new GTMillGameElement(11, 1, 2));
             state8.setElementAt(new GTMillPosition(2, 2, 0), new GTMillGameElement(12, 1, 2));
-            
+
+            int factor2 = hash.evaluateState(state8, ownPlayer);
+
+            Assert.IsTrue(
+                hash.opponentElements.Count == 3
+            );
+        }
+
+        [TestMethod()]
+        public void TestCaseWinningConfiguration()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Own player
+            GTMillGameSpace state8 = new GTMillGameSpace();
+            state8.setElementAt(new GTMillPosition(0, 2, 0), new GTMillGameElement(10, 1, 1));
+            state8.setElementAt(new GTMillPosition(1, 2, 0), new GTMillGameElement(11, 1, 1));
+            state8.setElementAt(new GTMillPosition(2, 2, 0), new GTMillGameElement(12, 1, 1));
+
             int factor = hash.evaluateState(state8, ownPlayer);
 
             Assert.IsTrue(
                 factor
-                    == GTMillGameStateHash.phase1Coefficients.opponentElementsNumber * 3
+                    == Int32.MaxValue
+            );
+        }
+
+        [TestMethod()]
+        public void TestCaseLosingConfiguration()
+        {
+            GTMillGameStateHash hash = new GTMillGameStateHash();
+
+            GTPlayer<GTMillGameElement, GTMillPosition> ownPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            ownPlayer.id = 1;
+            ownPlayer.figuresRemaining = 3;
+
+            GTPlayer<GTMillGameElement, GTMillPosition> opponentPlayer = new GTPlayer<GTMillGameElement, GTMillPosition>();
+            opponentPlayer.id = 1;
+            opponentPlayer.figuresRemaining = 3;
+
+            //Own player
+            GTMillGameSpace state8 = new GTMillGameSpace();
+            state8.setElementAt(new GTMillPosition(0, 2, 0), new GTMillGameElement(10, 1, 2));
+            state8.setElementAt(new GTMillPosition(1, 2, 0), new GTMillGameElement(11, 1, 2));
+            state8.setElementAt(new GTMillPosition(2, 2, 0), new GTMillGameElement(12, 1, 2));
+
+            int factor = hash.evaluateState(state8, ownPlayer);
+
+            Assert.IsTrue(
+                factor
+                    == Int32.MinValue
             );
         }
     }

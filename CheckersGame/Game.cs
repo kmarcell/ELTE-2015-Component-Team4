@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Threading;
 using ArtificialIntelligence;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
@@ -97,6 +98,7 @@ namespace CheckersGame
                 {
                     logic.updateGameSpace(step);
                     gui.SetField(StateToField(logic.getCurrentState()));
+                    Dispatcher.CurrentDispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
                     if (GameOver())
                         return;
 
@@ -154,6 +156,8 @@ namespace CheckersGame
                         nextP = 1 - nextP;
                         logic.ChangePlayer();
                         StepSupervisor.RefreshState(logic.state);
+                        Dispatcher.CurrentDispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+                        Thread.Sleep(1000);
                     }
                 }
             }

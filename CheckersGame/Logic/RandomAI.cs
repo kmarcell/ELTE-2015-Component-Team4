@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using GTInterfacesLibrary;
 
 namespace CheckersGame.Logic
@@ -18,9 +19,8 @@ namespace CheckersGame.Logic
         {
 
             Random rnd = new Random();
-
             Task<List<TaskReturnType>> listTask = generator.availableStatesFrom(gameSpace, gameSpace.getNextPlayer());
-
+            
             //await listTask;
 
             List<GTGameSpaceInterface<Element, Position>> states = listTask.Result;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using ArtificialIntelligence;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
@@ -140,6 +141,21 @@ namespace CheckersGame
                 logic.AIName = AIName;
                 GUI.SetFieldBackground(damaBackGround);
                 GUI.SetField(StateToField(logic.getCurrentState()));
+
+                if (actualState.GameType == GameType.Ai)
+                {
+                    logic.ChangePlayer();
+                    logic.AIName = "RandomAi";
+                    int nextP = 1;
+                    while (!GameOver())
+                    {                       
+                        stepWithNextUser();
+                        logic.state.nextPlayer = nextP;
+                        nextP = 1 - nextP;
+                        logic.ChangePlayer();
+                        StepSupervisor.RefreshState(logic.state);
+                    }
+                }
             }
             else if (actualState.GamePhase == GamePhase.Ended)
             {

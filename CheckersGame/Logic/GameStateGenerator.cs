@@ -44,6 +44,10 @@ namespace CheckersGame.Logic
                         continue;
 
                     Step step = new Step(state.elementAt(position), position, new Position(i, j));
+                    if (step.element.owner == 1 && step.from.x == 2 && step.from.y == 0 && step.to.x == 3 && step.to.y == 1)
+                    {
+                        int g = 0;
+                    }
                     if (!StepSupervisor.IsValidStep(state, step))
                         continue;
                     else

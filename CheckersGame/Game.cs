@@ -14,11 +14,9 @@ namespace CheckersGame
     public class Game : GTGameInterface
     {
         private GTPlatformManagerInterface PlatformGameManager;
-        //private GTArtificialIntelligenceInterface<GTGameSpaceElementInterface, IPosition> AI;
-
-
         private GTGuiInterface GUI;
         private Logic.Logic logic;
+        private string AIName;
         private Step step;
         private GameStateChangedEventArgs actualState;
 
@@ -48,7 +46,8 @@ namespace CheckersGame
 
         public void RegisterArtificialIntelligence(String artificialIntelligenceName)
         {
-            logic.AIName = artificialIntelligenceName;
+            AIName = artificialIntelligenceName;
+            logic.AIName = AIName;
         }
 
         byte[,] damaBackGround = { 
@@ -73,9 +72,6 @@ namespace CheckersGame
         public void RegisterGui(GTGuiInterface gui)
         {
             GUI = gui;
-
-            //GUI.SetFieldBackground(damaBackGround);
-            //GUI.SetField(StateToField(logic.getCurrentState()));
             GUI.FieldClicked += GuiOnFieldClicked;
         }
 
@@ -141,6 +137,7 @@ namespace CheckersGame
             if (actualState.GamePhase == GamePhase.Started)
             {
                 logic = new Logic.Logic();
+                logic.AIName = AIName;
                 GUI.SetFieldBackground(damaBackGround);
                 GUI.SetField(StateToField(logic.getCurrentState()));
             }

@@ -52,11 +52,11 @@ namespace CheckersGame.Logic
         private GTGameSpaceInterface<Element, Position> state;
         private GTPlayerInterface<Element,Position> player;
 
-        private List<KeyValuePair<Position, Element>> opponentElements;
-        private List<KeyValuePair<Position, Element>> ownElements;
+        private List<KeyValuePair<Position, Element>> opponentElements = new List<KeyValuePair<Position, Element>>();
+        private List<KeyValuePair<Position, Element>> ownElements = new List<KeyValuePair<Position, Element>>();
 
-        private List<KeyValuePair<Position, Element>> opponentKings;
-        private List<KeyValuePair<Position, Element>> ownKings;
+        private List<KeyValuePair<Position, Element>> opponentKings = new List<KeyValuePair<Position, Element>>();
+        private List<KeyValuePair<Position, Element>> ownKings = new List<KeyValuePair<Position,Element>>();
 
         int opponentHitCount;
         int ownHitCount;

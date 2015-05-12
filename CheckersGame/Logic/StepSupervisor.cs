@@ -280,22 +280,10 @@ namespace CheckersGame.Logic
 
         public static bool IsStepToKingsRow(Step step)
         {
-            if (!CurrentState.IsAI)
-            {
-                if (step.element.owner == 1 && step.to.x == 7)
+            if (step.element.owner == 1 && step.to.x == 7)
                     return true;
-
-                if (step.element.owner == 0 && step.to.x == 0)
+            if (step.element.owner == 0 && step.to.x == 0)
                     return true;
-            }
-            else
-            {
-                if (step.element.owner == 0 && step.to.x == 7)
-                    return true;
-
-                if (step.element.owner == 1 && step.to.x == 0)
-                    return true;
-            }
             return false;
         }
     }

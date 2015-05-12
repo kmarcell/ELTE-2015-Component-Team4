@@ -89,30 +89,40 @@ namespace CheckersGame
 
         private void GuiOnFieldClicked(GTGuiInterface gui, int row, int column)
         {
-            if (step == null)
+            if (!logic.isGameOver())
             {
-                Position pos = new Position(7 - row, column);
-                if (logic.getCurrentState().hasElementAt(pos))
+                if (step == null)
                 {
-                    step = new Step(logic.getCurrentState().elementAt(pos), pos, null);
+                    Position pos = new Position(7 - row, column);
+                    if (logic.getCurrentState().hasElementAt(pos))
+                    {
+                        step = new Step(logic.getCurrentState().elementAt(pos), pos, null);
+                    }
                 }
+                else
+                {
+                    Position pos = new Position(7 - row, column);
+                    step = new Step(step.element, step.from, pos);
+                    if (StepSupervisor.IsValidStep(logic.state, step))
+                    {
+                        logic.updateGameSpace(step);
+                        StepSupervisor.RefreshState(logic.state);
+                        logic.ChangePlayer();
+
+                        stepWithNextUser();
+                    }
+                    step = null;
+                }
+
+                gui.SetField(StateToBytes(logic.getCurrentState()));
             }
             else
             {
-                Position pos = new Position(7 - row, column);
-                step = new Step(step.element, step.from, pos);
-                if (StepSupervisor.IsValidStep(logic.state, step))
-                {
-                    logic.updateGameSpace(step);
-                    StepSupervisor.RefreshState(logic.state);
-                    logic.ChangePlayer();
-                    
-                    stepWithNextUser();
-                }
-                step = null;
+                GameStateChangedEventArgs eventArgs = new GameStateChangedEventArgs();
+                eventArgs.GamePhase = GamePhase.Ended;
+                eventArgs.IsWon = true;
+                SendGameState(eventArgs);
             }
-
-            gui.SetField(StateToBytes(logic.getCurrentState()));
         }
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)

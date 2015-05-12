@@ -7,59 +7,46 @@ using System.Linq;
 
 namespace GTMillGameLogic
 {
-    public struct GTMillGameStateHashCoefficients {
-        //int closedMorrises;
+    public struct GTMillGameStateHashCoefficients
+    {
         public int morrisesNumber;
         public int blockedOpponents;
         public int ownElementsNumber;
         public int opponentElementsNumber;
         public int twoPiecesConfiguration;
         public int threePiecesConfiguration;
-        public int openedMorrises;
-        public int doubleMorrises;
-        public int winningConfiguration;
-        public int losingConfiguration;
 
         public GTMillGameStateHashCoefficients(
-            //int _closedMorrises, 
-            int _morrisesNumber, 
+            int _morrisesNumber,
             int _blockedOpponents,
             int _ownElementsNumber,
-            int _opponentElementsNumber, 
-            int _twoPiecesConfiguration, 
-            int _threePiecesConfiguration, 
-            int _openedMorrises,
-            int _doubleMorrises,
-            int _winningConfiguration,
-            int _losingConfiguration
-        ) {
-            //closedMorrises = _closedMorrises;
+            int _opponentElementsNumber,
+            int _twoPiecesConfiguration,
+            int _threePiecesConfiguration
+        )
+        {
             morrisesNumber = _morrisesNumber;
             blockedOpponents = _blockedOpponents;
             ownElementsNumber = _ownElementsNumber;
             opponentElementsNumber = _opponentElementsNumber;
             twoPiecesConfiguration = _twoPiecesConfiguration;
             threePiecesConfiguration = _threePiecesConfiguration;
-            openedMorrises = _openedMorrises;
-            doubleMorrises = _doubleMorrises;
-            winningConfiguration = _winningConfiguration;
-            losingConfiguration = _losingConfiguration;
         }
     }
 
-	public class GTMillGameStateHash : GTGameStateHashInterface<GTMillGameElement, GTMillPosition>
-	{
-        public static GTMillGameStateHashCoefficients phase1Coefficients 
-            = new GTMillGameStateHashCoefficients(11, 10, 12,13,14,15,16,17,100,-100);
+    public class GTMillGameStateHash : GTGameStateHashInterface<GTMillGameElement, GTMillPosition>
+    {
+        public static GTMillGameStateHashCoefficients phase1Coefficients
+            = new GTMillGameStateHashCoefficients(37, 4, 14, -14, 20, 25);
 
         public static GTMillGameStateHashCoefficients phase2Coefficients
-            = new GTMillGameStateHashCoefficients(2, 10, 3, 4, 5, 6, 7, 8, 100, -100);
+            = new GTMillGameStateHashCoefficients(43, 11, 8, -8, 20, 25);
 
         public static GTMillGameStateHashCoefficients phase3Coefficients
-            = new GTMillGameStateHashCoefficients(10, 10, 11, 12, 13, 14, 15, 16, 100, -100);
+            = new GTMillGameStateHashCoefficients(20, 0, 10, -10, 10, 15);
 
         private GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state;
-		private GTPlayerInterface<GTMillGameElement, GTMillPosition> player;
+        private GTPlayerInterface<GTMillGameElement, GTMillPosition> player;
 
         private List<KeyValuePair<GTMillPosition, GTMillGameElement>> opponentElements;
         private List<KeyValuePair<GTMillPosition, GTMillGameElement>> ownElements;
@@ -80,6 +67,8 @@ namespace GTMillGameLogic
         int twoPiecesConfiguration;
         int threePiecesConfiguration;
         int blockedOpponents;
+        bool winningConfiguration;
+        bool losingConfiguration;
 
         /**
          * True if we can jump in the given direction from the given position
@@ -93,7 +82,7 @@ namespace GTMillGameLogic
                     || (position.x == 2 && position.y == 2)
                     || (position.x == 0 && position.y == 2)
                     || (position.x == 2 && position.y == 0)) //we can only jump diagonal from there
-            ); 
+            );
         }
 
         /**
@@ -120,7 +109,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.x) == 1;
 
-							    if (element.owner == this.player.id)
+                                if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -146,7 +135,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.y) == 1;
 
-							    if (element.owner == this.player.id)
+                                if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -172,7 +161,7 @@ namespace GTMillGameLogic
                                 GTMillGameElement element = state.elementAt(pos);
                                 bool direct = Math.Abs(i - position.z) == 1;
 
-							    if (element.owner == this.player.id)
+                                if (element.owner == this.player.id)
                                 {
                                     ownNeighbours.Add(new Tuple<GTMillGameElement, bool>(element, direct));
                                 }
@@ -203,7 +192,7 @@ namespace GTMillGameLogic
         private void checkMorris(int direction, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours)
         {
             //there is a morris
-            if (neighbours.Item1.Count == 3 )
+            if (neighbours.Item1.Count == 3)
             {
                 switch (direction)
                 {
@@ -214,7 +203,7 @@ namespace GTMillGameLogic
                             {
                                 this.horizontalMorrises.Add(element.Item1);
                             }
-                             
+
                             this.morrises++;
                         }
 
@@ -278,7 +267,7 @@ namespace GTMillGameLogic
                                 {
                                     Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> ortogonalNeighbours
                                         = this.getNeighbours(i, freePos);
-                                    List<Tuple<GTMillGameElement, bool>> ownOrtogonalNeighbours 
+                                    List<Tuple<GTMillGameElement, bool>> ownOrtogonalNeighbours
                                         = new List<Tuple<GTMillGameElement, bool>>(ortogonalNeighbours.Item1.Where(item => item.Item2));
 
                                     if (ownOrtogonalNeighbours.Count > 0)
@@ -395,7 +384,7 @@ namespace GTMillGameLogic
          **/
         private bool isBlocked(int direction, GTMillPosition position, Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours)
         {
-            List<Tuple<GTMillGameElement, bool>> ownNeighbours 
+            List<Tuple<GTMillGameElement, bool>> ownNeighbours
                 = new List<Tuple<GTMillGameElement, bool>>(neighbours.Item1.Where(item => item.Item2));
 
             bool blocked = true;
@@ -421,7 +410,7 @@ namespace GTMillGameLogic
 
             foreach (KeyValuePair<GTMillPosition, GTMillGameElement> element in state)
             {
-				if (element.Value.owner == this.player.id)
+                if (element.Value.owner == this.player.id)
                 {
                     this.ownElements.Add(element);
                 }
@@ -436,13 +425,13 @@ namespace GTMillGameLogic
                 for (int direction = 0; direction < 3; ++direction)
                 {
                     //if possible to jump this direction
-                    if (this.isValidDirection(direction, element.Key)) 
+                    if (this.isValidDirection(direction, element.Key))
                     {
                         Tuple<List<Tuple<GTMillGameElement, bool>>, List<Tuple<GTMillGameElement, bool>>, List<GTMillPosition>> neighbours
                                = this.getNeighbours(direction, element.Key);
 
                         //if the next player has element at the position
-						if (element.Value.owner == this.player.id)
+                        if (element.Value.owner == this.player.id)
                         {
                             //checking morrises
                             this.checkMorris(direction, neighbours);
@@ -457,17 +446,17 @@ namespace GTMillGameLogic
                     }
                 }
 
-				if (blocked && element.Value.owner != this.player.id)
+                if (blocked && element.Value.owner != this.player.id)
                 {
                     this.blockedOpponents++;
                 }
             }
         }
 
-		public int evaluateState(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
+        public int evaluateState(GTGameSpaceInterface<GTMillGameElement, GTMillPosition> state, GTPlayerInterface<GTMillGameElement, GTMillPosition> player)
         {
             this.state = state;
-			this.player = player;
+            this.player = player;
 
             this.morrises = 0;
             this.twoPiecesConfiguration = 0;
@@ -491,6 +480,19 @@ namespace GTMillGameLogic
 
             this.evaulate();
 
+            this.winningConfiguration = (this.ownElements.Count >= 3 && this.opponentElements.Count < 3);
+            this.losingConfiguration = (this.ownElements.Count < 3 && this.opponentElements.Count >= 3);
+
+            if (this.winningConfiguration)
+            {
+                return Int32.MaxValue;
+            }
+
+            if (this.losingConfiguration)
+            {
+                return Int32.MinValue;
+            }
+
             int factor = 0;
             if (player.figuresRemaining > 0)
             {
@@ -501,9 +503,6 @@ namespace GTMillGameLogic
                 factor += phase1Coefficients.ownElementsNumber * this.ownElements.Count;
                 factor += phase1Coefficients.twoPiecesConfiguration * this.twoPiecesConfiguration;
                 factor += phase1Coefficients.threePiecesConfiguration * this.threePiecesConfiguration;
-
-                return factor;
-
             }
             else if (player.figuresInitial - player.figuresLost > 3)
             {
@@ -512,25 +511,20 @@ namespace GTMillGameLogic
                 factor += phase2Coefficients.blockedOpponents * this.blockedOpponents;
                 factor += phase2Coefficients.opponentElementsNumber * this.opponentElements.Count;
                 factor += phase2Coefficients.ownElementsNumber * this.ownElements.Count;
-                //opened morris
-                //double morris
-                //winning configuration
-
-                return factor;
-
+                factor += phase2Coefficients.twoPiecesConfiguration * this.twoPiecesConfiguration;
+                factor += phase2Coefficients.threePiecesConfiguration * this.threePiecesConfiguration;
             }
             else
             {
                 // third phase
-                factor += phase3Coefficients.morrisesNumber * this.morrises;                  
+                factor += phase3Coefficients.morrisesNumber * this.morrises;
                 factor += phase3Coefficients.twoPiecesConfiguration * this.twoPiecesConfiguration;
                 factor += phase3Coefficients.threePiecesConfiguration * this.threePiecesConfiguration;
-                //winning configuration
-
-                return factor;
             }
+
+            return factor;
         }
-	}
+    }
 
 }
 

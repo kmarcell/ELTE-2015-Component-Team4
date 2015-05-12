@@ -71,6 +71,68 @@ namespace CheckersGame.Logic
             return false;
         }
 
+        public static bool IsGameOver()
+        {
+            var myElements = CurrentState.GetElements().Where(x => IsMine(x.Value));
+            var opponentElements = CurrentState.GetElements().Where(x => !IsMine(x.Value));
+
+            if (myElements.Count() == 0)
+                return true;
+            if (opponentElements.Count() == 0)
+                return true;
+            
+            foreach (KeyValuePair<Position, Element> mine in myElements)
+            {
+                foreach (KeyValuePair<Position, Element> opponent in opponentElements)
+                {
+                    if (CanStep(mine))
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static int GetWinner()
+        {
+            var myElements = CurrentState.GetElements().Where(x => IsMine(x.Value));
+            var opponentElements = CurrentState.GetElements().Where(x => !IsMine(x.Value));
+
+            foreach (KeyValuePair<Position, Element> mine in myElements)
+            {
+                foreach (KeyValuePair<Position, Element> opponent in opponentElements)
+                {
+                    if (CanStep(mine))
+                        return 1;
+                }
+            }
+
+            return 0;
+        }
+
+        private static bool CanStep(KeyValuePair<Position, Element> mine)
+        {
+            List<Step> steps = new List<Step>();
+
+            for (int i = StepSupervisor.BoardMinIndex; i <= StepSupervisor.BoardMaxIndex; i++)
+            {
+                for (int j = StepSupervisor.BoardMinIndex; j <= StepSupervisor.BoardMaxIndex; j++)
+                {
+                    if (!CurrentState.hasElementAt(mine.Key))
+                        continue;
+
+                    Step step = new Step(CurrentState.elementAt(mine.Key), mine.Key, new Position(i, j));
+                    if (!StepSupervisor.IsValidStep(CurrentState, step))
+                        continue;
+                    else
+                        steps.Add(step);
+                }
+            }
+
+            return steps.Count() != 0;
+
+        }
+
         private static bool CanCaptureElement(KeyValuePair<Position, Element> mine, KeyValuePair<Position, Element> opponent)
         {
             if (!IsDiagonal(mine.Key, opponent.Key) || !IsAdjacent(mine.Key, opponent.Key))
@@ -90,20 +152,10 @@ namespace CheckersGame.Logic
 
         private static bool IsValidMove(Step step)
         {
-            if (step.to.x == 4 && step.to.y == 0)
-            {
-                if (IsDiagonal(step) && IsForward(step) && IsAdjacent(step) && !IsOccupied(step))
-                    return true;
-                else
-                    return false;
-            }
+            if (IsDiagonal(step) && IsForward(step) && IsAdjacent(step) && !IsOccupied(step))
+                return true;
             else
-            {
-                if (IsDiagonal(step) && IsForward(step) && IsAdjacent(step) && !IsOccupied(step))
-                    return true;
-                else
-                    return false;
-            }
+                return false;
         }
 
         public static bool IsValidCapture(Step step)

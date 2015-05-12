@@ -48,10 +48,33 @@ namespace CheckersGame.Logic
 		// Output
 		public Boolean isGameOver()
 		{
-            int whiteCount = state.Count(x => x.Value.owner == 1);
-            int blackCount = state.Count(x => x.Value.owner == 0);
-            return (whiteCount == 0 || blackCount == 0);
+            if (WhiteCount() == 0 || BlackCount() == 0)
+                return true;
+            
+            if (StepSupervisor.IsGameOver())
+                return true;
+            else
+                return false;
 		}
+
+        public int getWinner()
+        {
+            if (WhiteCount() == 0)
+                return 0;
+            if (BlackCount() == 0)
+                return 1;
+            return StepSupervisor.GetWinner();
+        }
+
+        public int WhiteCount()
+        {
+            return state.Count(x => x.Value.owner == 1);
+        }
+
+        public int BlackCount()
+        {
+            return state.Count(x => x.Value.owner == 0); ;
+        }
 
         public GTGameSpaceInterface<Element, Position> getCurrentState()
 		{

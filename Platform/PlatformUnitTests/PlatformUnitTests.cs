@@ -53,6 +53,16 @@ namespace PlatformUnitTests
                 PlatformGameManager = platformGameManager;
             }
 
+            public void UnRegisterGameManager()
+            {
+                PlatformGameManager = null;
+            }
+
+            public void RegisterArtificialIntelligence(string artificialIntelligenceName)
+            {
+                throw new NotImplementedException();
+            }
+
             public void RegisterArtificialIntelligence(IGTArtificialIntelligenceInterface artificialIntelligence)
             {
                 //

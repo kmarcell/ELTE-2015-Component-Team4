@@ -236,7 +236,8 @@ namespace Platform.Model
         /// <param name="game">The currently selected GameLogic.</param>
         public void SetCurrentGame(GTGameInterface game)
         {
-            CurrentGame.UnRegisterGameManager();
+            if(CurrentGame != null)
+                CurrentGame.UnRegisterGameManager();
 
             CurrentGame = game;
             CurrentGame.RegisterGameManager(this);
@@ -346,7 +347,9 @@ namespace Platform.Model
         public void StartLocalGame(IGTArtificialIntelligenceInterface artificialIntelligence)
         {
             MGameType = GameType.Local;
-            CurrentGame.RegisterArtificialIntelligence(artificialIntelligence.Name);
+            if(artificialIntelligence != null)
+                CurrentGame.RegisterArtificialIntelligence(artificialIntelligence.Name);
+            
             SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = MGameType });
             GameStartedEvent(this, EventArgs.Empty);
         }

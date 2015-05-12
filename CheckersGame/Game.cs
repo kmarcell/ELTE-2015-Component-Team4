@@ -46,6 +46,12 @@ namespace CheckersGame
             PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;
         }
 
+        public void UnRegisterGameManager()
+        {
+            PlatformGameManager.SendGameStateChangedEvent -= RecieveGameState;
+            PlatformGameManager = null;
+        }
+
         public void RegisterArtificialIntelligence(String artificialIntelligenceName)
         {
             AIName = artificialIntelligenceName;

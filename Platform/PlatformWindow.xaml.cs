@@ -534,6 +534,12 @@ namespace Platform
             
             _MGameManager.InitializeGameLogic(gameLogicDirectory);
 
+            if (!_MGameManager.GameLogicList.Any())
+            {
+                MessageBox.Show("GameLogic could not be loaded, GameLogic in the dlls could not be found, game not possible!", "Platform", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             foreach (var gtGameLogicInterface in _MGameManager.GameLogicList)
             {
                 var menuItem = new MenuItem
@@ -585,9 +591,9 @@ namespace Platform
             };
 
             _MGameManager.InitializeGui(_GuiList);
-            GameContentControl.Content = _GuiList.First();
+            _MCurrenGui = CreateSelectedGui(_GuiList.First().GuiName);
+            GameContentControl.Content = _MCurrenGui;
             GameContentControl.Width = GameContentControl.Height = 500;
-            _MCurrenGui = _GuiList.First();
             
             foreach (var gameGui in _MGameManager.GameGuiList)
             {

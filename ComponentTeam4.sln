@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform", "Platform\Platform.csproj", "{B8F21F68-414C-4525-9765-34479994C7FE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -43,7 +43,6 @@ Global
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD85D76B-E9DC-4FCA-80A9-87A89F8B6C65}.Release|Any CPU.Build.0 = Release|Any CPU
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{317B8772-6AF4-4F18-8AED-DB22A5E6303F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4DFD987-1215-49B1-91C4-6B9FC0DBD941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

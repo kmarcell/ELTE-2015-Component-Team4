@@ -47,6 +47,12 @@ namespace GTMillGameLogic
             _PlatformGameManager = platformGameManager;
             _PlatformGameManager.SendGameStateChangedEvent += RecieveGameState;
         }
+        
+        public void UnRegisterGameManager()
+        {
+            _PlatformGameManager.SendGameStateChangedEvent -= RecieveGameState;
+            _PlatformGameManager = null;
+        }
 
         public void RegisterArtificialIntelligence(String artificialIntelligenceName)
         {

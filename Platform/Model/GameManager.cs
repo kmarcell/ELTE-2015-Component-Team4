@@ -135,6 +135,9 @@ namespace Platform.Model
                 GameLogicList.Add(gameLogicObject);
             }
 
+            if (!GameLogicList.Any())
+                return;
+
             MGameType = GameType.Online;
             CurrentGame = GameLogicList.First();
             CurrentGame.RegisterGameManager(this);
@@ -233,6 +236,8 @@ namespace Platform.Model
         /// <param name="game">The currently selected GameLogic.</param>
         public void SetCurrentGame(GTGameInterface game)
         {
+            CurrentGame.UnRegisterGameManager();
+
             CurrentGame = game;
             CurrentGame.RegisterGameManager(this);
             CurrentGame.SendGameStateChangedEventArg += RecieveGameStateFromLogic;
@@ -260,6 +265,11 @@ namespace Platform.Model
         {
             var isMyTurn = eventArgs.Game.PlayerTurn == _MNetworkManager.PlayerName;
             var isWon = eventArgs.Game.Winner != null && (eventArgs.Game.Winner == _MNetworkManager.PlayerName);
+
+            if (eventArgs.Game.Phase == GamePhase.Started)
+            {
+                CurrentGame.RegisterGui(CurrentGui);
+            }
 
             if (eventArgs.Game.Phase == GamePhase.Cancelled)
             {
@@ -303,6 +313,8 @@ namespace Platform.Model
                 return;
             }
 
+            if (_MNetworkManager.CurrentGame == null)
+                return;
             
             // if online game, send it to the server
             _MNetworkManager.CurrentGame.GameState = eventArgs.GameState;

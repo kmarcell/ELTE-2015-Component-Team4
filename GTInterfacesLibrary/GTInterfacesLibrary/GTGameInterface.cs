@@ -18,18 +18,30 @@ namespace GTInterfacesLibrary
         /// <summary>
         /// The function where the platform can register its game manager after loading the dll <see cref="GTPlatformManagerInterface"/>.
         /// <remarks>
-        /// In this function game has to connect to SendGameStateChangedEvent event of platform game manager <see cref="GameStateChangedEventArgs"/>.
+        /// In this function game has to subscribe to SendGameStateChangedEvent event of platform game manager <see cref="GameStateChangedEventArgs"/>.
         /// </remarks>
         /// </summary>
-        /// <param name="platformGameManager"></param>
+        /// <param name="platformGameManager">The platform game manager object.</param>
         void RegisterGameManager(GTPlatformManagerInterface platformGameManager);
+
+        /// <summary>
+        /// The function where the platform can unregister its game manager after selecting different game.
+        /// <remarks>
+        /// In this function game has to unsubscribe to SendGameStateChangedEvent event of platform game manager <see cref="GameStateChangedEventArgs"/>.
+        /// </remarks>
+        /// </summary>
+        void UnRegisterGameManager();
 
         /// <summary>
         ///  The function where the platform can register the currently selected AI for the game.
         /// </summary>
         /// <param name="artificialIntelligenceName">The currently selected name of AI</param>
         void RegisterArtificialIntelligence(String artificialIntelligenceName);
-
+        
+        /// <summary>
+        ///  The function where the platform can register the currently selected UI for the game.
+        /// </summary>
+        /// <param name="gui">The currently selected name of UI</param>
         void RegisterGui(GTGuiInterface gui);
 
         /// <summary>

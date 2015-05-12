@@ -20,6 +20,7 @@ namespace CheckersGame
         private GTGuiInterface GUI;
         private Logic.Logic logic;
         private Step step;
+        private GameStateChangedEventArgs actualState;
 
 		public Game()
         {
@@ -73,13 +74,16 @@ namespace CheckersGame
         {
             GUI = gui;
 
-            GUI.SetFieldBackground(damaBackGround);
-            GUI.SetField(StateToField(logic.getCurrentState()));
+            //GUI.SetFieldBackground(damaBackGround);
+            //GUI.SetField(StateToField(logic.getCurrentState()));
             GUI.FieldClicked += GuiOnFieldClicked;
         }
 
         private void GuiOnFieldClicked(GTGuiInterface gui, int row, int column)
         {
+            if (actualState == null)
+                return;
+
             if (step == null)
             {
                 Position pos = new Position(7 - row, column);
@@ -132,7 +136,17 @@ namespace CheckersGame
 
         public void RecieveGameState(object sender, GameStateChangedEventArgs gameStateChangedEventArgs)
         {
+            actualState = gameStateChangedEventArgs;
 
+            if (actualState.GamePhase == GamePhase.Started)
+            {
+                logic = new Logic.Logic();
+                GUI.SetFieldBackground(damaBackGround);
+                GUI.SetField(StateToField(logic.getCurrentState()));
+            }
+            else if (actualState.GamePhase == GamePhase.Ended)
+            {
+            }
         }
 
         private void stepWithNextUser()

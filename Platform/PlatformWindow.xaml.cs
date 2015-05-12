@@ -590,10 +590,11 @@ namespace Platform
                 darkGui
             };
 
+
             _MGameManager.InitializeGui(_GuiList);
-            _MCurrenGui = CreateSelectedGui(_GuiList.First().GuiName);
-            GameContentControl.Content = _MCurrenGui;
+            GameContentControl.Content = _GuiList.First();
             GameContentControl.Width = GameContentControl.Height = 500;
+            _MCurrenGui = _GuiList.First();
             
             foreach (var gameGui in _MGameManager.GameGuiList)
             {

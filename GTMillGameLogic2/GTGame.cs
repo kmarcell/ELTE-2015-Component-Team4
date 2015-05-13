@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using GTInterfacesLibrary;
 using GTInterfacesLibrary.GameEvents;
-using ArtificialIntelligence;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace GTMillGameLogic
 {
     public class GTGame : GTGameInterface
     {
         private GTPlatformManagerInterface _PlatformGameManager;
-        private GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition> AI;
         private GTGuiInterface _Gui;
         private readonly GTMillGameLogic _Logic;
+        private RandomAI _RandomAI = new RandomAI();
+        private CorrectAi _CorrectAI = new CorrectAi();
+        private AlphaBetaAi _AlphaBetaAI = new AlphaBetaAi();
         private GTMillPosition selectedPosition;
+        private string AIName;
 
         public GTGame()
         {
@@ -56,7 +60,10 @@ namespace GTMillGameLogic
 
         public void RegisterArtificialIntelligence(String artificialIntelligenceName)
         {
-            // this.AI = new;
+            AIName = artificialIntelligenceName;
+            _AlphaBetaAI._Logic = this._Logic;
+            _CorrectAI._Logic = this._Logic;
+            _RandomAI._Logic = this._Logic;
         }
 
         byte[,] malomBackGround = { 
@@ -101,24 +108,35 @@ namespace GTMillGameLogic
 
             GTMillPosition p = convertFromUI(row, column);
             GTMillGameSpace currentState = (GTMillGameSpace)_Logic.getCurrentState();
-
-            if (!currentState.hasElementAt(p)) {
-                return;
-            }
-
-            GTMillGameElement e = _Logic.getCurrentState().elementAt(p);
-            GTMillGameStep step = new GTMillGameStep(e, selectedPosition, p);
+            GTMillGameStep step = new GTMillGameStep(new GTMillGameElement(1, 1, _Logic.nextPlayer.id), GTMillPosition.Nowhere(), GTMillPosition.Nowhere());
 
             bool goodStep = false;
-            if (selectedPosition == null) {
-                // selection
-                if (e.owner == _Logic.nextPlayer.id) {
-                    selectedPosition = p;
+            int gamePhase = _Logic.gamePhase;
+            if (_Logic.gamePhase == 0)
+            {
+                if (!currentState.hasElementAt(p))
+                {
+                    goodStep = true;
+                    step = new GTMillGameStep(new GTMillGameElement(1, 1, _Logic.nextPlayer.id), GTMillPosition.Nowhere(), p);
                 }
+            } else if (selectedPosition == null) {
+                // selection
+                if (currentState.hasElementAt(p))
+                {
+                    GTMillGameElement e = _Logic.getCurrentState().elementAt(p);
+                    step = new GTMillGameStep(e, selectedPosition, p);
+                    if (e.owner == _Logic.nextPlayer.id)
+                    {
+                        selectedPosition = p;
+                    }
+                }
+                
             }
             else if (selectedPosition.Equals(GTMillPosition.Nowhere()))
             {
                 // remove after Mill
+                GTMillGameElement e = _Logic.getCurrentState().elementAt(p);
+                step = new GTMillGameStep(e, selectedPosition, p);
                 if (e.owner != _Logic.nextPlayer.id)
                 {
                     selectedPosition = null;
@@ -128,6 +146,8 @@ namespace GTMillGameLogic
             else
             {
                 // step
+                GTMillGameElement e = _Logic.getCurrentState().elementAt(p);
+                step = new GTMillGameStep(e, selectedPosition, p);
                 GTMillGameSpace newState = (GTMillGameSpace)currentState.stateWithStep(step);
                 selectedPosition = null;
 
@@ -144,7 +164,6 @@ namespace GTMillGameLogic
                     selectedPosition = GTMillPosition.Nowhere();
                 }
             }
-            
 
             if (!goodStep)
             {
@@ -154,6 +173,8 @@ namespace GTMillGameLogic
             _Logic.updateGameSpace(step);
             currentState = (GTMillGameSpace)_Logic.getCurrentState();
             _Gui.SetField(convertStateToField(currentState));
+            Dispatcher.CurrentDispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+            Thread.Sleep(1000);
             _Logic.playerDidStep();
 
             SendGameState(null);
@@ -168,9 +189,11 @@ namespace GTMillGameLogic
                 return;
             }
 
-            GTMillGameSpace state = (GTMillGameSpace)this.AI.calculateNextStep(_Logic.getCurrentState(), _Logic.getStateGenerator(), _Logic.getStateHash()).Result;
+            GTMillGameSpace state = (GTMillGameSpace)getNextState();
+            Thread.Sleep(100);
             _Logic.SetState(state);
             _Gui.SetField(convertStateToField(state));
+            Dispatcher.CurrentDispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
             _Logic.playerDidStep();
             SendGameState(null);
             stepWithNextUser();
@@ -206,22 +229,42 @@ namespace GTMillGameLogic
             }
             if (gameStateChangedEventArgs.GamePhase == GamePhase.Started)
             {
-                this.AI = (GTArtificialIntelligenceInterface<GTMillGameElement, GTMillPosition>)new CorrectAi();
-
+                GTPlayerInterface<GTMillGameElement, GTMillPosition> p;
                 if (gameStateChangedEventArgs.GameType == GameType.Local)
                 {
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1));
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 2));
+                    p = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1);
+                    p.figuresInitial = 9;
+                    p.figuresRemaining = 9;
+                    _Logic.addPlayer(p);
+
+                    p = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(null, 2);
+                    _Logic.addPlayer(p);
+                    p.figuresInitial = 9;
+                    p.figuresRemaining = 9;
                 }
                 else if (gameStateChangedEventArgs.GameType == GameType.Ai)
                 {
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 1));
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(this.AI, 2));
+                    p = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(null, 1);
+                    _Logic.addPlayer(p);
+                    p.figuresInitial = 9;
+                    p.figuresRemaining = 9;
+
+                    p = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithAI(null, 2);
+                    _Logic.addPlayer(p);
+                    p.figuresInitial = 9;
+                    p.figuresRemaining = 9;
                 }
                 else if (gameStateChangedEventArgs.GameType == GameType.Online)
                 {
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1));
-                    _Logic.addPlayer(new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(2));
+                    p = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(1);
+                    p.figuresInitial = 9;
+                    p.figuresRemaining = 9;
+                    _Logic.addPlayer(p);
+
+                    p = new GTPlayer<GTMillGameElement, GTMillPosition>().playerWithRealUser(2);
+                    p.figuresInitial = 9;
+                    p.figuresRemaining = 9;
+                    _Logic.addPlayer(p);
                 }
 
                 stepWithNextUser();
@@ -282,6 +325,26 @@ namespace GTMillGameLogic
             }
 
             return field;
+        }
+
+        public GTGameSpaceInterface<GTMillGameElement, GTMillPosition> getNextState()
+        {
+            GTMillGameStateGenerator _generator = (GTMillGameStateGenerator)_Logic.getStateGenerator();
+            GTMillGameStateHash _hash = (GTMillGameStateHash)_Logic.getStateHash();
+            GTMillGameSpace _state = (GTMillGameSpace)_Logic.getCurrentState();
+
+            switch (AIName)
+            {
+                case "RandomAi":
+                    
+                    return (GTGameSpaceInterface<GTMillGameElement, GTMillPosition>)_RandomAI.calculateNextStep(_state, _generator, _hash).Result;
+                case "CorrectAi":
+                    return (GTGameSpaceInterface<GTMillGameElement, GTMillPosition>)_CorrectAI.calculateNextStep(_state, _generator, _hash).Result;
+                case "AlphaBetaAi":
+                    return (GTGameSpaceInterface<GTMillGameElement, GTMillPosition>)_AlphaBetaAI.calculateNextStep(_state, _generator, _hash).Result;
+                default:
+                    return (GTGameSpaceInterface<GTMillGameElement, GTMillPosition>)_RandomAI.calculateNextStep(_state, _generator, _hash).Result;
+            }
         }
     }
 }

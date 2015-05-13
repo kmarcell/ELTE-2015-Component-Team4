@@ -79,7 +79,7 @@ namespace GTMillGameLogic
 
         public void playerDidStep()
         {
-            _nextPlayer = _nextPlayer++ % _players.Count;
+            _nextPlayer = (_nextPlayer+1) % _players.Count;
         }
 
 		public int gamePhase {

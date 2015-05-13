@@ -54,64 +54,76 @@ namespace GUIImplementation
         {
             int row = field.GetLength(0);
             int col = field.GetLength(1);
-            int height = (int)Height / row;
-            int width = (int)Width / col;
-            for (int i = 0; i < row; ++i)
+
+            Dispatcher.Invoke(() =>
             {
-                for (int j = 0; j < col; ++j)
+                int height = (int) Height/row;
+                int width = (int) Width/col;
+                for (int i = 0; i < row; ++i)
                 {
-                    ExtendedImage label = (ExtendedImage)this.field[i][j];
-                    label.Stretch = Stretch.Fill;
-                    label.StretchDirection = StretchDirection.Both;
-                    label.Height = height;
-                    label.Width = width;
-                    label.Source = new BitmapImage(GetImageURI(false,field[i,j]));
-                    Canvas.SetTop(label, i * height);
-                    Canvas.SetLeft(label, j * width);
+                    for (int j = 0; j < col; ++j)
+                    {
+                        ExtendedImage label = (ExtendedImage) this.field[i][j];
+                        label.Stretch = Stretch.Fill;
+                        label.StretchDirection = StretchDirection.Both;
+                        label.Height = height;
+                        label.Width = width;
+                        label.Source = new BitmapImage(GetImageURI(false, field[i, j]));
+                        Canvas.SetTop(label, i*height);
+                        Canvas.SetLeft(label, j*width);
+                    }
                 }
-            }            
+            });
         }
 
         private void DeleteField()
         {
-            for (int i = 0; i < field.Count; ++i)
+            Dispatcher.Invoke(() =>
             {
-                for (int j = 0; j < field[i].Count; ++j)
+                for (int i = 0; i < field.Count; ++i)
                 {
-                    
-                    this.RemoveVisualChild(field[i][j]);
-                    field[i][j] = null;
+                    for (int j = 0; j < field[i].Count; ++j)
+                    {
+
+                        this.RemoveVisualChild(field[i][j]);
+                        field[i][j] = null;
+                    }
+                    field[i] = null;
                 }
-                field[i] = null;
-            }
-            field = null;
+                field = null;
+            });
         }
 
         private void CreateField(byte[,] field)
         {
             int row = field.GetLength(0);
             int col = field.GetLength(1);
-            int height = (int)Height / row;
-            int width = (int)Width / col;
-            this.field = new List<List<Image>>(row); 
-            for (int i = 0; i < row; ++i)
+
+            Dispatcher.Invoke(() =>
             {
-                List<Image> rowList = new List<Image>(col);
-                this.field.Add(rowList);
-                for (int j = 0; j < col; ++j)
+                int height = (int) Height/row;
+                int width = (int) Width/col;
+                this.field = new List<List<Image>>(row);
+                for (int i = 0; i < row; ++i)
                 {
-                    ExtendedImage label = new ExtendedImage();
-                    rowList.Add(label);
-                    label.Row = i;
-                    label.Column = j;
-                    grid.Children.Add(label);
-                    label.MouseLeftButtonUp += new MouseButtonEventHandler(delegate(Object o, MouseButtonEventArgs a)
+                    List<Image> rowList = new List<Image>(col);
+                    this.field.Add(rowList);
+                    for (int j = 0; j < col; ++j)
                     {
-                        ExtendedImage img = (ExtendedImage)a.Source;
-                        FieldClicked(this, img.Row, img.Column);
-                    });
+                        ExtendedImage label = new ExtendedImage();
+                        rowList.Add(label);
+                        label.Row = i;
+                        label.Column = j;
+                        grid.Children.Add(label);
+                        label.MouseLeftButtonUp +=
+                            new MouseButtonEventHandler(delegate(Object o, MouseButtonEventArgs a)
+                            {
+                                ExtendedImage img = (ExtendedImage) a.Source;
+                                FieldClicked(this, img.Row, img.Column);
+                            });
+                    }
                 }
-            }
+            });
         }
 
         void label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -122,82 +134,96 @@ namespace GUIImplementation
 
         public void SetFieldBackground(byte[,] field)
         {
-            if (field != null && this.field != null)
+            Dispatcher.Invoke(() =>
             {
-                if (field.GetLength(0) == this.background.Count() && field.GetLength(1) == this.background.Count())
+                if (field != null && this.field != null)
                 {
+                    if (field.GetLength(0) == this.background.Count() && field.GetLength(1) == this.background.Count())
+                    {
 
+                    }
+                    else
+                    {
+                        DeleteBackground();
+                        CreateBackGround(field);
+                    }
                 }
                 else
                 {
-                    DeleteBackground();
                     CreateBackGround(field);
                 }
-            }
-            else
-            {
-                CreateBackGround(field);
-            }
-            RefreshBackGround(field);
+                RefreshBackGround(field);
+            });
         }
 
         public virtual string GuiName { get { throw new NotImplementedException(); } }
 
         private void DeleteBackground()
         {
-            for (int i = 0; i < background.Count; ++i)
+            Dispatcher.Invoke(() =>
             {
-                for (int j = 0; j < background[i].Count; ++j)
+                for (int i = 0; i < background.Count; ++i)
                 {
+                    for (int j = 0; j < background[i].Count; ++j)
+                    {
 
-                    this.RemoveVisualChild(background[i][j]);
-                    background[i][j] = null;
+                        this.RemoveVisualChild(background[i][j]);
+                        background[i][j] = null;
+                    }
+                    background[i] = null;
                 }
-                background[i] = null;
-            }
-            background = null;
+                background = null;
+            });
         }
 
         private void CreateBackGround(byte[,] field)
         {
             int row = field.GetLength(0);
             int col = field.GetLength(1);
-            int height = (int)Height / row;
-            int width  = (int)Width / col;
-            this.background = new List<List<Image>>(row);
-            for (int i = 0; i < row; ++i)
+
+            Dispatcher.Invoke(() =>
             {
-                List<Image> rowList = new List<Image>(col);
-                this.background.Add(rowList);
-                for (int j = 0; j < col; ++j)
+                int height = (int)Height / row;
+                int width = (int)Width / col;
+                this.background = new List<List<Image>>(row);
+                for (int i = 0; i < row; ++i)
                 {
-                    System.Windows.Controls.Image label = new System.Windows.Controls.Image();
-                    rowList.Add(label);
-                    grid.Children.Add(label);
+                    List<Image> rowList = new List<Image>(col);
+                    this.background.Add(rowList);
+                    for (int j = 0; j < col; ++j)
+                    {
+                        System.Windows.Controls.Image label = new System.Windows.Controls.Image();
+                        rowList.Add(label);
+                        grid.Children.Add(label);
+                    }
                 }
-            }
+            });
         }
 
         private void RefreshBackGround(byte[,] field)
         {
             int row = field.GetLength(0);
             int col = field.GetLength(1);
-            int height = (int)Height / row;
-            int width = (int)Width / col;
-            for (int i = 0; i < row; ++i)
+
+            Dispatcher.Invoke(() =>
             {
-                for (int j = 0; j < col; ++j)
+                int height = (int) Height/row;
+                int width = (int) Width/col;
+                for (int i = 0; i < row; ++i)
                 {
-                    System.Windows.Controls.Image label = this.background[i][j];
-                    label.Stretch = Stretch.Fill;
-                    label.StretchDirection = StretchDirection.Both;
-                    label.Height = height;
-                    label.Width = width;
-                    label.Source = new BitmapImage(GetImageURI(true,field[i,j]));
-                    Canvas.SetTop(label, i * height);
-                    Canvas.SetLeft(label, j * width);
+                    for (int j = 0; j < col; ++j)
+                    {
+                        System.Windows.Controls.Image label = this.background[i][j];
+                        label.Stretch = Stretch.Fill;
+                        label.StretchDirection = StretchDirection.Both;
+                        label.Height = height;
+                        label.Width = width;
+                        label.Source = new BitmapImage(GetImageURI(true, field[i, j]));
+                        Canvas.SetTop(label, i*height);
+                        Canvas.SetLeft(label, j*width);
+                    }
                 }
-            }            
+            });
         }
     }
 }

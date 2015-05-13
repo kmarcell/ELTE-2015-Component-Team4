@@ -280,7 +280,10 @@ namespace Platform
         {
             Dispatcher.Invoke(() =>
             {
-                PrintStatusBarMessage("Game started.");
+                if(_IsAiAiGameStarted)
+                    PrintStatusBarMessage("Ai game started with random selected AI: {0}.", _MGameManager.MCurrentAiName);
+                else
+                    PrintStatusBarMessage("Local game started.");
 
                 CreateOnlineGameMenuItem.IsEnabled = false;
                 ConnectOnlineGameMenuItem.IsEnabled = false;
@@ -306,11 +309,14 @@ namespace Platform
 
             if (eventArgs.IsEnded && eventArgs.IsWin)
             {
-                MessageBox.Show("Game finished. Congratulation you won!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);     
+
+                if (!_IsAiAiGameStarted)
+                    MessageBox.Show("Game finished. Congratulation you won!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);     
             }
             else if (eventArgs.IsEnded)
             {
-                MessageBox.Show("Game finished. You lost!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (!_IsAiAiGameStarted)
+                    MessageBox.Show("Game finished. You lost!", "Platform", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {

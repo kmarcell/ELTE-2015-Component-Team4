@@ -28,6 +28,11 @@ namespace Platform.Model
         /// The type of the started game.
         /// </summary>
         public GameType MGameType;
+
+        /// <summary>
+        /// The CurrentAi name for AI-AI game.
+        /// </summary>
+        public String MCurrentAiName;
         #endregion
 
 
@@ -267,11 +272,6 @@ namespace Platform.Model
             var isMyTurn = eventArgs.Game.PlayerTurn == _MNetworkManager.PlayerName;
             var isWon = eventArgs.Game.Winner != null && (eventArgs.Game.Winner == _MNetworkManager.PlayerName);
 
-            if (eventArgs.Game.Phase == GamePhase.Started)
-            {
-                CurrentGame.RegisterGui(CurrentGui);
-            }
-
             if (eventArgs.Game.Phase == GamePhase.Cancelled)
             {
                 GameEndedEvent(this, new GameEndedEventArgs { IsEnded = false, IsWin = _MNetworkManager.CurrentGame != null && _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });
@@ -362,9 +362,10 @@ namespace Platform.Model
         {
             MGameType = GameType.Ai;
             var randomToSelectAi = new Random().Next(0, ArtificialIntelligenceList.Count);
-            CurrentGame.RegisterArtificialIntelligence(ArtificialIntelligenceList[randomToSelectAi].Name);
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = MGameType });
+            MCurrentAiName = ArtificialIntelligenceList[randomToSelectAi].Name;
+            CurrentGame.RegisterArtificialIntelligence(MCurrentAiName);
             GameStartedEvent(this, EventArgs.Empty);
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = MGameType });
         }
 
         /// <summary>

@@ -80,6 +80,8 @@ namespace CheckersGame
         public void RegisterGui(GTGuiInterface gui)
         {
             GUI = gui;
+            GUI.SetFieldBackground(damaBackGround);
+            GUI.SetField(StateToField(logic.getCurrentState()));
             GUI.FieldClicked += GuiOnFieldClicked;
         }
 
@@ -131,10 +133,22 @@ namespace CheckersGame
                     eventArgs.IsWon = false;
                 eventArgs.GameState = StateToBytes(logic.getCurrentState());
                 SendGameState(eventArgs);
+
+                logic = new Logic.Logic();
+                logic.AIName = AIName;
+                GUI.SetFieldBackground(damaBackGround);
+                GUI.SetField(StateToField(logic.getCurrentState()));
                 return true;
             }
             else
             {
+                var eventArgs = new GameStateChangedEventArgs
+                {
+                    GamePhase = GamePhase.Playing,
+                    IsWon = false,
+                    GameState = StateToBytes(logic.getCurrentState())
+                };
+                SendGameState(eventArgs);
                 return false;
             }
         }
@@ -145,6 +159,7 @@ namespace CheckersGame
 
             if (actualState.GamePhase == GamePhase.Started)
             {
+                IsCancelled = false;
                 logic = new Logic.Logic();
                 logic.AIName = AIName;
                 GUI.SetFieldBackground(damaBackGround);
@@ -153,9 +168,9 @@ namespace CheckersGame
                 if (actualState.GameType == GameType.Ai)
                 {
                     logic.ChangePlayer();
-                    logic.AIName = "RandomAi";
+                    logic.AIName = AIName;
                     int nextP = 1;
-                    while (!GameOver())
+                    while (!GameOver() && !IsCancelled)
                     {                       
                         stepWithNextUser();
                         logic.state.nextPlayer = nextP;
@@ -169,8 +184,20 @@ namespace CheckersGame
             }
             else if (actualState.GamePhase == GamePhase.Ended)
             {
+                IsCancelled = true;
+                actualState = null;
+                logic = new Logic.Logic();
+                logic.AIName = AIName;
+                GUI.SetFieldBackground(damaBackGround);
+                GUI.SetField(StateToField(logic.getCurrentState()));
+            }
+            else if (actualState.GamePhase == GamePhase.Playing)
+            {
+
             }
         }
+
+        private Boolean IsCancelled = false;
 
         private void stepWithNextUser()
         {

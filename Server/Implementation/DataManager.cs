@@ -114,6 +114,13 @@ namespace Server.Implementation
             {
                 _OnlinePlayers.Remove(playerName);
                 WriteLog("Logout player accepted: {0}, deleted from OnlinePlayers.", playerName);
+
+                var openedGameByUser = _OnlineGames.FirstOrDefault(game => game.FirstPlayer == playerName && game.Phase == GamePhase.Opened);
+                if (openedGameByUser != null)
+                {
+                    _OnlineGames.Remove(openedGameByUser);
+                    WriteLog("Opened game by player: {0}, deleted from OnlineGames.", playerName);
+                }
             }
         }
 

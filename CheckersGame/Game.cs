@@ -142,6 +142,13 @@ namespace CheckersGame
             }
             else
             {
+                var eventArgs = new GameStateChangedEventArgs
+                {
+                    GamePhase = GamePhase.Playing,
+                    IsWon = false,
+                    GameState = StateToBytes(logic.getCurrentState())
+                };
+                SendGameState(eventArgs);
                 return false;
             }
         }
@@ -183,6 +190,10 @@ namespace CheckersGame
                 logic.AIName = AIName;
                 GUI.SetFieldBackground(damaBackGround);
                 GUI.SetField(StateToField(logic.getCurrentState()));
+            }
+            else if (actualState.GamePhase == GamePhase.Playing)
+            {
+
             }
         }
 

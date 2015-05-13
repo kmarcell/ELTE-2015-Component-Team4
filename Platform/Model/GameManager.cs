@@ -267,11 +267,6 @@ namespace Platform.Model
             var isMyTurn = eventArgs.Game.PlayerTurn == _MNetworkManager.PlayerName;
             var isWon = eventArgs.Game.Winner != null && (eventArgs.Game.Winner == _MNetworkManager.PlayerName);
 
-            if (eventArgs.Game.Phase == GamePhase.Started)
-            {
-                CurrentGame.RegisterGui(CurrentGui);
-            }
-
             if (eventArgs.Game.Phase == GamePhase.Cancelled)
             {
                 GameEndedEvent(this, new GameEndedEventArgs { IsEnded = false, IsWin = _MNetworkManager.CurrentGame != null && _MNetworkManager.CurrentGame.Winner == _MNetworkManager.PlayerName });

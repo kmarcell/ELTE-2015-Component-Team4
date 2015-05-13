@@ -218,6 +218,7 @@ namespace Server.Implementation
         /// <param name="game">The game with the new state.</param>
         public void SendGameState(Game game)
         {
+            CurrentGame = game;
             if (CurrentGame != null && CurrentGame.Phase == GamePhase.Playing)
             {
                 DataManager.DataManagerInstance.ChangeGameState(Player, game);

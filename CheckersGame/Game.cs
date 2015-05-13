@@ -168,7 +168,7 @@ namespace CheckersGame
                 if (actualState.GameType == GameType.Ai)
                 {
                     logic.ChangePlayer();
-                    logic.AIName = "RandomAi";
+                    logic.AIName = AIName;
                     int nextP = 1;
                     while (!GameOver() && !IsCancelled)
                     {                       

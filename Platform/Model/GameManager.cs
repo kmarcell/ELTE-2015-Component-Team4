@@ -363,8 +363,8 @@ namespace Platform.Model
             MGameType = GameType.Ai;
             var randomToSelectAi = new Random().Next(0, ArtificialIntelligenceList.Count);
             CurrentGame.RegisterArtificialIntelligence(ArtificialIntelligenceList[randomToSelectAi].Name);
-            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = MGameType });
             GameStartedEvent(this, EventArgs.Empty);
+            SendGameStateChangedEvent(this, new GameStateChangedEventArgs { GamePhase = GamePhase.Started, GameState = null, IsMyTurn = true, IsWon = false, GameType = MGameType });
         }
 
         /// <summary>

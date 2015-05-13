@@ -80,6 +80,8 @@ namespace CheckersGame
         public void RegisterGui(GTGuiInterface gui)
         {
             GUI = gui;
+            GUI.SetFieldBackground(damaBackGround);
+            GUI.SetField(StateToField(logic.getCurrentState()));
             GUI.FieldClicked += GuiOnFieldClicked;
         }
 
@@ -131,6 +133,11 @@ namespace CheckersGame
                     eventArgs.IsWon = false;
                 eventArgs.GameState = StateToBytes(logic.getCurrentState());
                 SendGameState(eventArgs);
+
+                logic = new Logic.Logic();
+                logic.AIName = AIName;
+                GUI.SetFieldBackground(damaBackGround);
+                GUI.SetField(StateToField(logic.getCurrentState()));
                 return true;
             }
             else
@@ -145,6 +152,7 @@ namespace CheckersGame
 
             if (actualState.GamePhase == GamePhase.Started)
             {
+                IsCancelled = false;
                 logic = new Logic.Logic();
                 logic.AIName = AIName;
                 GUI.SetFieldBackground(damaBackGround);
@@ -155,7 +163,7 @@ namespace CheckersGame
                     logic.ChangePlayer();
                     logic.AIName = "RandomAi";
                     int nextP = 1;
-                    while (!GameOver())
+                    while (!GameOver() && !IsCancelled)
                     {                       
                         stepWithNextUser();
                         logic.state.nextPlayer = nextP;
@@ -169,8 +177,16 @@ namespace CheckersGame
             }
             else if (actualState.GamePhase == GamePhase.Ended)
             {
+                IsCancelled = true;
+                actualState = null;
+                logic = new Logic.Logic();
+                logic.AIName = AIName;
+                GUI.SetFieldBackground(damaBackGround);
+                GUI.SetField(StateToField(logic.getCurrentState()));
             }
         }
+
+        private Boolean IsCancelled = false;
 
         private void stepWithNextUser()
         {

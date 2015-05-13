@@ -290,7 +290,7 @@ namespace Platform
                 LeaveOnlineGameMenuItem.IsEnabled = false;
                 MenuServerConnectMenuItem.IsEnabled = false;
                 MenuServerDisconnectMenuItem.IsEnabled = false;
-                SaveGameMenuItem.IsEnabled = true;
+                SaveGameMenuItem.IsEnabled = !_IsAiAiGameStarted;
                 LoadGameMenuItem.IsEnabled = false;
                 EndGameMenuItem.IsEnabled = !_IsAiAiGameStarted;
                 StartGameMenuItem.IsEnabled = false;

@@ -648,10 +648,17 @@ namespace Platform
                 File.Create(LogfileName);
             }
 
-            using (var fileStream = new FileStream(LogfileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
-            using (var streamWriter = new StreamWriter(fileStream))
+            try
             {
-                streamWriter.WriteLine("{0} {1}", LogMessagePrefix, string.Format(message, messageParams));
+                using (var fileStream = new FileStream(LogfileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                using (var streamWriter = new StreamWriter(fileStream))
+                {
+                    streamWriter.WriteLine("{0} {1}", LogMessagePrefix, string.Format(message, messageParams));
+                }
+            }
+            catch (Exception)
+            {
+                
             }
         }
         #endregion

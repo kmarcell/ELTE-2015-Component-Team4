@@ -179,11 +179,12 @@ namespace GTMillGameLogic
             _Logic.updateGameSpace(step);
             currentState = (GTMillGameSpace)_Logic.getCurrentState();
             _Gui.SetField(convertStateToField(currentState));
+
             Dispatcher.CurrentDispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
             Thread.Sleep(1000);
-            _Logic.playerDidStep();
 
-            SendGameState(null);
+			SendGameState(null);
+            _Logic.playerDidStep();
 
             stepWithNextUser();
         }
@@ -200,8 +201,10 @@ namespace GTMillGameLogic
             _Logic.SetState(state);
             _Gui.SetField(convertStateToField(state));
             Dispatcher.CurrentDispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+
+			SendGameState(null);
             _Logic.playerDidStep();
-            SendGameState(null);
+            
             stepWithNextUser();
         }
 

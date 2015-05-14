@@ -36,10 +36,16 @@ namespace GTMillGameLogic
         {
             GameStateChangedEventArgs eventArgs = new GameStateChangedEventArgs();
             if (_Logic.isGameOver()) {
-
                 eventArgs.GameState = this.SaveGame();
                 eventArgs.IsMyTurn = false;
                 eventArgs.GamePhase = GamePhase.Ended;
+                eventArgs.IsWon = true;
+            }
+            else
+            {
+                eventArgs.GameState = this.SaveGame();
+                eventArgs.IsMyTurn = false;
+                eventArgs.GamePhase = GamePhase.Playing;
                 eventArgs.IsWon = true;
             }
 

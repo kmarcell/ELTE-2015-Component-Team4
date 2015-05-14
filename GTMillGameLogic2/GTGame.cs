@@ -233,6 +233,7 @@ namespace GTMillGameLogic
                 _Logic.playerDidStep();
                 stepWithNextUser();
             }
+
             if (gameStateChangedEventArgs.GamePhase == GamePhase.Started)
             {
                 GTPlayerInterface<GTMillGameElement, GTMillPosition> p;
@@ -324,8 +325,8 @@ namespace GTMillGameLogic
             foreach (KeyValuePair<GTMillPosition, GTMillGameElement> kv in state)
             {
                 GTMillPosition p = kv.Key;
-                int row = (3-p.z) * p.x + p.z;
-                int column = (3-p.z) * p.y + p.z;
+				int row = (3 * p.y) + (p.z - (p.y * p.z));
+				int column = (3 * p.x) + (p.z - (p.x * p.z));
 
                 field[row, column] = kv.Value.owner == _Logic.nextPlayer.id ? (byte)0 : (byte)1;
             }
